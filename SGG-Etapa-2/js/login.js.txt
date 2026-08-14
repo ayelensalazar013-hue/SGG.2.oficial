@@ -1,0 +1,227 @@
+// ==========================================
+// 1. USUARIOS DE PRUEBA
+// ==========================================
+
+// Mantenemos los usuarios que ya tenías originalmente.
+// Se guardan dentro del mismo array usuarios_sgg.
+
+function prepararUsuariosDePrueba() {
+
+    let usuarios = JSON.parse(localStorage.getItem("usuarios_sgg")) || [];
+
+    const alumnoExiste = usuarios.some(u => u.usuario === "alumno");
+    const profesorExiste = usuarios.some(u => u.usuario === "profesor");
+
+    if (!alumnoExiste) {
+        usuarios.push({
+            nombre: "Alumno",
+            apellido: "Prueba",
+            fechaNacimiento: "2000-01-01",
+            email: "alumno@sgg.com",
+            usuario: "alumno",
+            clave: "1234"
+        });
+    }
+
+    if (!profesorExiste) {
+        usuarios.push({
+            nombre: "Profesor",
+            apellido: "Prueba",
+            fechaNacimiento: "2000-01-01",
+            email: "profesor@sgg.com",
+            usuario: "profesor",
+            clave: "5678"
+        });
+    }
+
+    localStorage.setItem("usuarios_sgg", JSON.stringify(usuarios));
+}
+
+prepararUsuariosDePrueba();
+
+
+// ==========================================
+// 2. VARIABLES PARA LOS INTENTOS
+// ==========================================
+
+let intentosFallidos = 0;
+let bloqueado = false;
+
+
+// ==========================================
+// 3. LOGIN
+// ==========================================
+
+function login() {
+
+    if (bloqueado) {
+        return;
+    }
+
+    const userIngresado =
+        document.getElementById("usuario").value.trim();
+
+    const passIngresada =
+        document.getElementById("password").value;
+
+    const mensaje =
+        document.getElementById("mensaje");
+
+    const botonLogin =
+        document.getElementById("btn-login");
+
+
+    // Obtenemos los usuarios guardados
+    const usuarios =
+        JSON.parse(localStorage.getItem("usuarios_sgg")) || [];
+
+
+    // Buscamos usuario y contraseña
+    const usuarioValido = usuarios.find(
+        u =>
+            u.usuario === userIngresado &&
+            u.clave === passIngresada
+    );
+
+
+    if (usuarioValido) {
+
+        // Login correcto
+        intentosFallidos = 0;
+
+        mensaje.style.color = "green";
+        mensaje.innerText = "Login correcto";
+
+        // Guardamos el usuario que inició sesión
+        localStorage.setItem(
+            "usuarioLogueado",
+            userIngresado
+        );
+
+    } else {
+
+        // Login incorrecto
+        intentosFallidos++;
+
+        mensaje.style.color = "red";
+
+        if (intentosFallidos >= 3) {
+
+            bloqueado = true;
+
+            botonLogin.disabled = true;
+
+            mensaje.innerText =
+                "3 intentos incorrectos. Esperá 30 segundos.";
+
+            setTimeout(function () {
+
+                bloqueado = false;
+                intentosFallidos = 0;
+
+                botonLogin.disabled = false;
+
+                mensaje.innerText = "";
+
+            }, 30000);
+
+        } else {
+
+            mensaje.innerText =
+                "Datos incorrectos. Intento " +
+                intentosFallidos +
+                " de 3.";
+        }
+    }
+}
+
+
+// ==========================================
+// 4. CAMBIAR TEMA
+// ==========================================
+
+function cambiarTema() {
+
+    const temaActual =
+        document.body.getAttribute("data-tema");
+
+    if (temaActual === "oscuro") {
+
+        document.body.removeAttribute("data-tema");
+
+        localStorage.setItem(
+            "temaGuardado",
+            "claro"
+        );
+
+    } else {
+
+        document.body.setAttribute(
+            "data-tema",
+            "oscuro"
+        );
+
+        localStorage.setItem(
+            "temaGuardado",
+            "oscuro"
+        );
+    }
+}
+
+
+// ==========================================
+// 5. CARGAR TEMA GUARDADO
+// ==========================================
+
+function cargarTema() {
+
+    const temaGuardado =
+        localStorage.getItem("temaGuardado");
+
+    if (temaGuardado === "oscuro") {
+
+        document.body.setAttribute(
+            "data-tema",
+            "oscuro"
+        );
+
+    } else {
+
+        document.body.removeAttribute(
+            "data-tema"
+        );
+    }
+}
+
+
+// ==========================================
+// 6. MOSTRAR / OCULTAR CONTRASEÑA
+// ==========================================
+
+function mostrarOcultarPassword(idCampo, boton) {
+
+    const campo =
+        document.getElementById(idCampo);
+
+    if (campo.type === "password") {
+
+        campo.type = "text";
+        boton.innerText = "Ocultar";
+
+    } else {
+
+        campo.type = "password";
+        boton.innerText = "Mostrar";
+    }
+}
+
+
+// ==========================================
+// 7. AL CARGAR LA PÁGINA
+// ==========================================
+
+window.onload = function () {
+
+    cargarTema();
+
+};

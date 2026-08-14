@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Login - SGG</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body>
+
+    <!-- BOTÓN PARA CAMBIAR EL TEMA -->
+
+    <button id="btn-tema" onclick="cambiarTema()">
+        Cambiar Modo
+    </button>
+
+
+    <!-- LOGIN -->
+
+    <div class="login">
+
+        <h2>Iniciar Sesión</h2>
+
+
+        <!-- USUARIO -->
+
+        <input
+            type="text"
+            id="usuario"
+            placeholder="Nombre de Usuario"
+        >
+
+        <br><br>
+
+
+        <!-- CONTRASEÑA -->
+
+        <div class="contenedor-password">
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Contraseña"
+            >
+
+            <button
+                type="button"
+                class="btn-ver-password"
+                onclick="mostrarOcultarPassword('password', this)"
+            >
+                Mostrar
+            </button>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- BOTÓN INGRESAR -->
+
+        <button
+            id="btn-login"
+            onclick="login()"
+        >
+            Ingresar
+        </button>
+
+
+        <!-- MENSAJE -->
+
+        <p id="mensaje"></p>
+
+
+        <!-- NAVEGACIÓN -->
+
+        <div class="navegacion">
+
+            <a href="registro.html">
+                Crear una cuenta
+            </a>
+
+            <a href="recuperar.html">
+                ¿Olvidaste tu contraseña?
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/login.js"></script>
+
+</body>
+
+</html>

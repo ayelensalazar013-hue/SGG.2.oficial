@@ -1,0 +1,294 @@
+// ==========================================
+// 1. CAMBIAR TEMA
+// ==========================================
+
+function cambiarTema() {
+
+    const temaActual =
+        document.body.getAttribute("data-tema");
+
+    if (temaActual === "oscuro") {
+
+        document.body.removeAttribute("data-tema");
+
+        localStorage.setItem(
+            "temaGuardado",
+            "claro"
+        );
+
+    } else {
+
+        document.body.setAttribute(
+            "data-tema",
+            "oscuro"
+        );
+
+        localStorage.setItem(
+            "temaGuardado",
+            "oscuro"
+        );
+    }
+}
+
+
+// ==========================================
+// 2. CARGAR TEMA
+// ==========================================
+
+function cargarTema() {
+
+    const temaGuardado =
+        localStorage.getItem("temaGuardado");
+
+    if (temaGuardado === "oscuro") {
+
+        document.body.setAttribute(
+            "data-tema",
+            "oscuro"
+        );
+    }
+}
+
+
+// ==========================================
+// 3. MOSTRAR / OCULTAR CONTRASEÑA
+// ==========================================
+
+function mostrarOcultarPassword(idCampo, boton) {
+
+    const campo =
+        document.getElementById(idCampo);
+
+    if (campo.type === "password") {
+
+        campo.type = "text";
+        boton.innerText = "Ocultar";
+
+    } else {
+
+        campo.type = "password";
+        boton.innerText = "Mostrar";
+    }
+}
+
+
+// ==========================================
+// 4. VALIDAR CONTRASEÑA
+// ==========================================
+
+function validarPassword(password) {
+
+    const minimo8 =
+        password.length >= 8;
+
+    const mayuscula =
+        /[A-Z]/.test(password);
+
+    const minuscula =
+        /[a-z]/.test(password);
+
+    const numero =
+        /[0-9]/.test(password);
+
+    const especial =
+        /[^A-Za-z0-9]/.test(password);
+
+
+    document.getElementById("req-longitud").className =
+        minimo8 ? "requisito-si" : "requisito-no";
+
+    document.getElementById("req-mayuscula").className =
+        mayuscula ? "requisito-si" : "requisito-no";
+
+    document.getElementById("req-minuscula").className =
+        minuscula ? "requisito-si" : "requisito-no";
+
+    document.getElementById("req-numero").className =
+        numero ? "requisito-si" : "requisito-no";
+
+    document.getElementById("req-especial").className =
+        especial ? "requisito-si" : "requisito-no";
+
+
+    document.getElementById("req-longitud").innerText =
+        (minimo8 ? "✓ " : "✗ ") +
+        "Mínimo 8 caracteres";
+
+    document.getElementById("req-mayuscula").innerText =
+        (mayuscula ? "✓ " : "✗ ") +
+        "Al menos 1 letra mayúscula";
+
+    document.getElementById("req-minuscula").innerText =
+        (minuscula ? "✓ " : "✗ ") +
+        "Al menos 1 letra minúscula";
+
+    document.getElementById("req-numero").innerText =
+        (numero ? "✓ " : "✗ ") +
+        "Al menos 1 número";
+
+    document.getElementById("req-especial").innerText =
+        (especial ? "✓ " : "✗ ") +
+        "Al menos 1 carácter especial";
+
+
+    return (
+        minimo8 &&
+        mayuscula &&
+        minuscula &&
+        numero &&
+        especial
+    );
+}
+
+
+// ==========================================
+// 5. CAMBIAR CONTRASEÑA
+// ==========================================
+
+function recuperarClave(event) {
+
+    event.preventDefault();
+
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const repetirPassword =
+        document.getElementById("repetirPassword").value;
+
+    const mensaje =
+        document.getElementById("mensaje");
+
+
+    // Obtener usuarios
+    let usuarios =
+        JSON.parse(localStorage.getItem("usuarios_sgg")) || [];
+
+
+    // Buscar usuario por email
+    const indiceUsuario =
+        usuarios.findIndex(
+            u =>
+                u.email.toLowerCase() ===
+                email.toLowerCase()
+        );
+
+
+    if (indiceUsuario === -1) {
+
+        mensaje.style.color = "red";
+        mensaje.innerText =
+            "No existe un usuario registrado con ese correo.";
+
+        return;
+    }
+
+
+    // Validar contraseña
+    if (!validarPassword(password)) {
+
+        mensaje.style.color = "red";
+        mensaje.innerText =
+            "La contraseña no cumple todos los requisitos.";
+
+        return;
+    }
+
+
+    // Confirmar contraseña
+    if (password !== repetirPassword) {
+
+        mensaje.style.color = "red";
+        mensaje.innerText =
+            "Las contraseñas no coinciden.";
+
+        return;
+    }
+
+
+    // No permitir repetir contraseña actual
+    if (usuarios[indiceUsuario].clave === password) {
+
+        mensaje.style.color = "red";
+        mensaje.innerText =
+            "La nueva contraseña debe ser diferente a la actual.";
+
+        return;
+    }
+
+
+    // Cambiar contraseña
+    usuarios[indiceUsuario].clave =
+        password;
+
+
+    // Guardar nuevamente
+    localStorage.setItem(
+        "usuarios_sgg",
+        JSON.stringify(usuarios)
+    );
+
+
+    mensaje.style.color = "green";
+    mensaje.innerText =
+        "Contraseña actualizada correctamente.";
+}
+
+
+// ==========================================
+// 6. VALIDACIÓN EN TIEMPO REAL
+// ==========================================
+
+function configurarValidacionPassword() {
+
+    const password =
+        document.getElementById("password");
+
+    const repetir =
+        document.getElementById("repetirPassword");
+
+    const boton =
+        document.getElementById("btn-recuperar");
+
+
+    function actualizar() {
+
+        const passwordValida =
+            validarPassword(password.value);
+
+        const contraseñasIguales =
+            password.value === repetir.value &&
+            repetir.value !== "";
+
+
+        boton.disabled =
+            !(passwordValida && contraseñasIguales);
+    }
+
+
+    password.addEventListener(
+        "input",
+        actualizar
+    );
+
+    repetir.addEventListener(
+        "input",
+        actualizar
+    );
+}
+
+
+// ==========================================
+// 7. AL CARGAR
+// ==========================================
+
+window.onload = function () {
+
+    cargarTema();
+
+    configurarValidacionPassword();
+
+};

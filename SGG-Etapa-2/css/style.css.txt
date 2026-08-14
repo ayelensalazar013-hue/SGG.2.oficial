@@ -1,0 +1,247 @@
+/* =========================================
+   COLORES - MODO DÍA
+========================================= */
+
+:root {
+    --fondo-pantalla: #e6e6e6;
+    --fondo-login: #ffffff;
+    --color-texto: #111111;
+    --color-violeta: #7b2cbf;
+    --color-borde: #555555;
+    --color-error: #d00000;
+    --color-correcto: #008000;
+}
+
+
+/* =========================================
+   COLORES - MODO NOCHE
+========================================= */
+
+[data-tema="oscuro"] {
+    --fondo-pantalla: #121212;
+    --fondo-login: #242424;
+    --color-texto: #ffffff;
+    --color-violeta: #9d4edd;
+    --color-borde: #aaaaaa;
+    --color-error: #ff4d4d;
+    --color-correcto: #00ff66;
+}
+
+
+/* =========================================
+   CONFIGURACIÓN GENERAL
+========================================= */
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+
+    font-family: Arial, sans-serif;
+
+    background-color: var(--fondo-pantalla);
+    color: var(--color-texto);
+
+    transition: background-color 0.3s, color 0.3s;
+}
+
+
+/* =========================================
+   CONTENEDOR DE FORMULARIOS
+========================================= */
+
+.login {
+    width: 350px;
+    max-width: 90%;
+
+    background-color: var(--fondo-login);
+
+    padding: 30px;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+
+    transition: background-color 0.3s, color 0.3s;
+}
+
+
+/* =========================================
+   TÍTULOS
+========================================= */
+
+h1,
+h2,
+h3 {
+    margin-top: 0;
+}
+
+
+/* =========================================
+   CAMPOS DE TEXTO
+========================================= */
+
+input {
+    width: 100%;
+    padding: 12px;
+
+    margin-top: 5px;
+
+    box-sizing: border-box;
+
+    border: 2px solid var(--color-borde);
+    border-radius: 6px;
+
+    background-color: var(--fondo-login);
+    color: var(--color-texto);
+
+    font-size: 15px;
+}
+
+
+/* =========================================
+   BOTONES
+========================================= */
+
+button {
+    padding: 12px 20px;
+
+    background-color: var(--color-violeta);
+    color: white;
+
+    border: 2px solid var(--color-violeta);
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+button:disabled {
+    background-color: #777777;
+    border-color: #777777;
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   BOTÓN CAMBIAR TEMA
+========================================= */
+
+#btn-tema {
+    margin-bottom: 20px;
+
+    width: 150px;
+}
+
+
+/* =========================================
+   MENSAJES
+========================================= */
+
+#mensaje {
+    font-weight: bold;
+}
+
+
+/* =========================================
+   MENSAJES DE ERROR Y CORRECTO
+========================================= */
+
+.error {
+    color: var(--color-error);
+    font-weight: bold;
+}
+
+.correcto {
+    color: var(--color-correcto);
+    font-weight: bold;
+}
+
+
+/* =========================================
+   REQUISITOS DE CONTRASEÑA
+========================================= */
+
+.requisito {
+    text-align: left;
+    margin: 5px 0;
+
+    font-size: 14px;
+}
+
+.requisito.incorrecto {
+    color: var(--color-error);
+}
+
+.requisito.correcto {
+    color: var(--color-correcto);
+}
+
+
+/* =========================================
+   ENLACES
+========================================= */
+
+a {
+    color: var(--color-violeta);
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   CAMPOS CON BOTÓN VER CONTRASEÑA
+========================================= */
+
+.contenedor-password {
+    position: relative;
+    width: 100%;
+}
+
+.contenedor-password input {
+    padding-right: 50px;
+}
+
+.btn-ver-password {
+    position: absolute;
+
+    right: 5px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: auto;
+
+    padding: 6px 8px;
+
+    background-color: transparent;
+    color: var(--color-texto);
+
+    border: none;
+
+    font-size: 13px;
+}
+
+.btn-ver-password:hover {
+    background-color: transparent;
+    opacity: 0.7;
+}
