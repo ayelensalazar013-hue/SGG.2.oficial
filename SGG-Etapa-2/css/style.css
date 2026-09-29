@@ -1,132 +1,120 @@
 /* =========================================
-   COLORES - MODO DÍA
+   VARIABLES Y TEMAS (DÍA / NOCHE)
 ========================================= */
+
+/* Modo Día (Por defecto) */
 :root {
     --fondo-pantalla: #e6e6e6;
-    --fondo-login: #ffffff;
+    --fondo-card: #ffffff;
     --color-texto: #111111;
     --color-violeta: #7b2cbf;
-    --color-borde: #555555;
+    --color-borde: #cccccc;
     --color-error: #d00000;
     --color-correcto: #008000;
 }
 
-/* =========================================
-   COLORES - MODO NOCHE
-========================================= */
+/* Modo Noche (Se activa dinámicamente) */
 [data-tema="oscuro"] {
     --fondo-pantalla: #121212;
-    --fondo-login: #242424;
+    --fondo-card: #242424;
     --color-texto: #ffffff;
     --color-violeta: #9d4edd;
-    --color-borde: #aaaaaa;
+    --color-borde: #444444;
     --color-error: #ff4d4d;
     --color-correcto: #00ff66;
 }
 
 /* =========================================
-   CONFIGURACIÓN GENERAL Y CENTRADO ABSOLUTO
+   RESET Y CENTRADO EN PANTALLA COMPLETA
 ========================================= */
+
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    margin: 0;
     padding: 20px;
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     background-color: var(--fondo-pantalla);
     color: var(--color-texto);
     transition: background-color 0.3s, color 0.3s;
 }
 
-.contenedor-principal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 380px;
+/* =========================================
+   BOTÓN SUPERIOR DE CAMBIO DE TEMA
+========================================= */
+
+#btn-tema {
+    margin-bottom: 20px;
+    padding: 10px 18px;
+    background-color: var(--color-violeta);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+#btn-tema:hover {
+    opacity: 0.85;
 }
 
 /* =========================================
-   CONTENEDOR / CARD DE LOGIN
+   TARJETA CONTENEDORA (CARD DE LOGIN)
 ========================================= */
+
 .login {
     width: 100%;
-    background-color: var(--fondo-login);
-    padding: 30px 25px;
+    max-width: 360px;
+    background-color: var(--fondo-card);
+    padding: 35px 30px;
     border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, color 0.3s;
 }
 
 h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    font-size: 22px;
 }
 
 /* =========================================
-   CAMPOS Y ENTRADAS DE TEXTO
+   CAMPOS DE ENTRADA (INPUTS)
 ========================================= */
-.campo {
-    margin-bottom: 15px;
-    width: 100%;
-}
 
-input {
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"] {
     width: 100%;
     padding: 12px;
     border: 2px solid var(--color-borde);
     border-radius: 6px;
-    background-color: var(--fondo-login);
+    background-color: var(--fondo-card);
     color: var(--color-texto);
     font-size: 15px;
     outline: none;
+    transition: border-color 0.2s;
 }
 
 input:focus {
     border-color: var(--color-violeta);
 }
 
-/* =========================================
-   BOTONES Y ACCIONES
-========================================= */
-button {
-    padding: 12px 20px;
-    background-color: var(--color-violeta);
-    color: white;
-    border: 2px solid var(--color-violeta);
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-button:hover {
-    opacity: 0.85;
-}
-
-.btn-submit {
-    width: 100%;
-    margin-top: 10px;
-}
-
-#btn-tema {
-    margin-bottom: 15px;
-    width: 160px;
-}
-
-/* =========================================
-   CAMPO CONTRASEÑA CON BOTÓN VER
-========================================= */
+/* Contenedor del campo con botón mostrar/ocultar */
 .contenedor-password {
     position: relative;
+    width: 100%;
 }
 
 .contenedor-password input {
@@ -135,50 +123,60 @@ button:hover {
 
 .btn-ver-password {
     position: absolute;
-    right: 6px;
+    right: 8px;
     top: 50%;
     transform: translateY(-50%);
-    width: auto;
-    padding: 6px 10px;
-    background-color: transparent;
-    color: var(--color-texto);
+    background: transparent;
     border: none;
+    color: var(--color-violeta);
+    font-weight: bold;
     font-size: 13px;
+    cursor: pointer;
+    padding: 4px 6px;
 }
 
 .btn-ver-password:hover {
-    background-color: transparent;
-    opacity: 0.7;
-}
-
-/* =========================================
-   ENLACES Y NAVEGACIÓN
-========================================= */
-.navegacion {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-a {
-    color: var(--color-violeta);
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-a:hover {
     text-decoration: underline;
 }
 
 /* =========================================
-   MENSAJES DE ESTADO Y VALIDACIÓN
+   BOTÓN PRINCIPAL (INGRESAR / REGISTRAR)
 ========================================= */
-#mensaje {
-    font-weight: bold;
+
+#btn-login,
+.btn-submit {
+    width: 100%;
+    padding: 12px;
     margin-top: 15px;
-    margin-bottom: 0;
+    background-color: var(--color-violeta);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+#btn-login:hover,
+.btn-submit:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    background-color: #777777 !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* =========================================
+   MENSAJES DE ESTADO Y FEEDBACK
+========================================= */
+
+#mensaje {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 .error {
@@ -187,4 +185,41 @@ a:hover {
 
 .correcto {
     color: var(--color-correcto);
+}
+
+/* Lista de requisitos de contraseña */
+.requisito {
+    text-align: left;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.requisito.incorrecto {
+    color: var(--color-error);
+}
+
+.requisito.correcto {
+    color: var(--color-correcto);
+}
+
+/* =========================================
+   NAVEGACIÓN Y ENLACES
+========================================= */
+
+.navegacion {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+a {
+    color: var(--color-violeta);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
 }
