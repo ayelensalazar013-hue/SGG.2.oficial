@@ -6,33 +6,181 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SGG</title>
 
-    <!-- Ruta corregida apuntando a la carpeta css -->
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* =========================================
+           ESTILOS Y CENTRADO COMPLETO
+        ========================================= */
+
+        :root {
+            --fondo-pantalla: #e6e6e6;
+            --fondo-card: #ffffff;
+            --color-texto: #111111;
+            --color-violeta: #7b2cbf;
+            --color-borde: #cccccc;
+        }
+
+        [data-tema="oscuro"] {
+            --fondo-pantalla: #121212;
+            --fondo-card: #242424;
+            --color-texto: #ffffff;
+            --color-violeta: #9d4edd;
+            --color-borde: #444444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--fondo-pantalla);
+            color: var(--color-texto);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #btn-tema {
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            background-color: var(--color-violeta);
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login {
+            width: 100%;
+            max-width: 360px;
+            background-color: var(--fondo-card);
+            padding: 35px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .campo {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--color-borde);
+            border-radius: 6px;
+            background-color: var(--fondo-card);
+            color: var(--color-texto);
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--color-violeta);
+        }
+
+        .contenedor-password {
+            position: relative;
+            width: 100%;
+        }
+
+        .contenedor-password input {
+            padding-right: 75px;
+        }
+
+        .btn-ver-password {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--color-violeta);
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        #btn-login {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: var(--color-violeta);
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #btn-login:hover, #btn-tema:hover {
+            opacity: 0.88;
+        }
+
+        #mensaje {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .navegacion {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        a {
+            color: var(--color-violeta);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- BOTÓN PARA CAMBIAR EL TEMA -->
+    <!-- BOTÓN TEMA -->
     <button id="btn-tema" onclick="cambiarTema()">
         Cambiar Modo
     </button>
 
-    <!-- LOGIN -->
+    <!-- CONTAINER CENTRADO -->
     <div class="login">
 
         <h2>Iniciar Sesión</h2>
 
         <!-- USUARIO -->
-        <input 
-            type="text" 
-            id="usuario" 
-            placeholder="Nombre de Usuario"
-        >
-
-        <br><br>
+        <div class="campo">
+            <input 
+                type="text" 
+                id="usuario" 
+                placeholder="Nombre de Usuario"
+            >
+        </div>
 
         <!-- CONTRASEÑA -->
-        <div class="contenedor-password">
+        <div class="campo contenedor-password">
             <input 
                 type="password" 
                 id="password" 
@@ -47,8 +195,6 @@
             </button>
         </div>
 
-        <br><br>
-
         <!-- BOTÓN INGRESAR -->
         <button 
             id="btn-login" 
@@ -57,10 +203,9 @@
             Ingresar
         </button>
 
-        <!-- MENSAJE -->
         <p id="mensaje"></p>
 
-        <!-- NAVEGACIÓN -->
+        <!-- ENLACES -->
         <div class="navegacion">
             <a href="registro.html">Crear una cuenta</a>
             <a href="recuperar.html">¿Olvidaste tu contraseña?</a>
@@ -68,7 +213,7 @@
 
     </div>
 
-    <!-- Ruta corregida apuntando a la carpeta js -->
+    <!-- JAVASCRIPT CON RUTA A CARPETA JS -->
     <script src="js/login.js"></script>
 
 </body>
