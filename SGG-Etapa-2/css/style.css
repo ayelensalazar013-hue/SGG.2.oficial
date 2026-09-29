@@ -1,7 +1,6 @@
 /* =========================================
    COLORES - MODO DÍA
 ========================================= */
-
 :root {
     --fondo-pantalla: #e6e6e6;
     --fondo-login: #ffffff;
@@ -12,11 +11,9 @@
     --color-correcto: #008000;
 }
 
-
 /* =========================================
    COLORES - MODO NOCHE
 ========================================= */
-
 [data-tema="oscuro"] {
     --fondo-pantalla: #121212;
     --fondo-login: #242424;
@@ -27,104 +24,87 @@
     --color-correcto: #00ff66;
 }
 
-
 /* =========================================
-   CONFIGURACIÓN GENERAL
+   CONFIGURACIÓN GENERAL Y CENTRADO ABSOLUTO
 ========================================= */
+* {
+    box-sizing: border-box;
+}
 
 body {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-
     min-height: 100vh;
     margin: 0;
     padding: 20px;
-    box-sizing: border-box;
-
     font-family: Arial, sans-serif;
-
     background-color: var(--fondo-pantalla);
     color: var(--color-texto);
-
     transition: background-color 0.3s, color 0.3s;
 }
 
+.contenedor-principal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 380px;
+}
 
 /* =========================================
-   CONTENEDOR DE FORMULARIOS
+   CONTENEDOR / CARD DE LOGIN
 ========================================= */
-
 .login {
-    width: 350px;
-    max-width: 90%;
-
+    width: 100%;
     background-color: var(--fondo-login);
-
-    padding: 30px;
-
+    padding: 30px 25px;
     border-radius: 12px;
-
     text-align: center;
-
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, color 0.3s;
 }
 
-
-/* =========================================
-   TÍTULOS
-========================================= */
-
-h1,
-h2,
-h3 {
+h2 {
     margin-top: 0;
+    margin-bottom: 20px;
 }
 
-
 /* =========================================
-   CAMPOS DE TEXTO
+   CAMPOS Y ENTRADAS DE TEXTO
 ========================================= */
+.campo {
+    margin-bottom: 15px;
+    width: 100%;
+}
 
 input {
     width: 100%;
     padding: 12px;
-
-    margin-top: 5px;
-
-    box-sizing: border-box;
-
     border: 2px solid var(--color-borde);
     border-radius: 6px;
-
     background-color: var(--fondo-login);
     color: var(--color-texto);
-
     font-size: 15px;
+    outline: none;
 }
 
+input:focus {
+    border-color: var(--color-violeta);
+}
 
 /* =========================================
-   BOTONES
+   BOTONES Y ACCIONES
 ========================================= */
-
 button {
     padding: 12px 20px;
-
     background-color: var(--color-violeta);
     color: white;
-
     border: 2px solid var(--color-violeta);
     border-radius: 6px;
-
     cursor: pointer;
-
     font-size: 15px;
     font-weight: bold;
-
     transition: 0.2s;
 }
 
@@ -132,116 +112,79 @@ button:hover {
     opacity: 0.85;
 }
 
-button:disabled {
-    background-color: #777777;
-    border-color: #777777;
-    cursor: not-allowed;
+.btn-submit {
+    width: 100%;
+    margin-top: 10px;
 }
-
-
-/* =========================================
-   BOTÓN CAMBIAR TEMA
-========================================= */
 
 #btn-tema {
-    margin-bottom: 20px;
-
-    width: 150px;
+    margin-bottom: 15px;
+    width: 160px;
 }
-
 
 /* =========================================
-   MENSAJES
+   CAMPO CONTRASEÑA CON BOTÓN VER
 ========================================= */
-
-#mensaje {
-    font-weight: bold;
-}
-
-
-/* =========================================
-   MENSAJES DE ERROR Y CORRECTO
-========================================= */
-
-.error {
-    color: var(--color-error);
-    font-weight: bold;
-}
-
-.correcto {
-    color: var(--color-correcto);
-    font-weight: bold;
-}
-
-
-/* =========================================
-   REQUISITOS DE CONTRASEÑA
-========================================= */
-
-.requisito {
-    text-align: left;
-    margin: 5px 0;
-
-    font-size: 14px;
-}
-
-.requisito.incorrecto {
-    color: var(--color-error);
-}
-
-.requisito.correcto {
-    color: var(--color-correcto);
-}
-
-
-/* =========================================
-   ENLACES
-========================================= */
-
-a {
-    color: var(--color-violeta);
-    font-weight: bold;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-
-/* =========================================
-   CAMPOS CON BOTÓN VER CONTRASEÑA
-========================================= */
-
 .contenedor-password {
     position: relative;
-    width: 100%;
 }
 
 .contenedor-password input {
-    padding-right: 50px;
+    padding-right: 75px;
 }
 
 .btn-ver-password {
     position: absolute;
-
-    right: 5px;
+    right: 6px;
     top: 50%;
-
     transform: translateY(-50%);
-
     width: auto;
-
-    padding: 6px 8px;
-
+    padding: 6px 10px;
     background-color: transparent;
     color: var(--color-texto);
-
     border: none;
-
     font-size: 13px;
 }
 
 .btn-ver-password:hover {
     background-color: transparent;
     opacity: 0.7;
+}
+
+/* =========================================
+   ENLACES Y NAVEGACIÓN
+========================================= */
+.navegacion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+a {
+    color: var(--color-violeta);
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   MENSAJES DE ESTADO Y VALIDACIÓN
+========================================= */
+#mensaje {
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.error {
+    color: var(--color-error);
+}
+
+.correcto {
+    color: var(--color-correcto);
 }
