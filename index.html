@@ -23,6 +23,9 @@
 
             <button type="submit" class="btn-principal">Ingresar</button>
 
+            <!-- LÍNEA DIVISORIA Y BOTONES -->
+            <hr class="divisoria">
+
             <div class="links-container">
                 <a href="registro.html" class="btn-enlace">Crear una cuenta</a>
                 <a href="recuperar.html" class="btn-enlace">¿Olvidaste tu contraseña?</a>
@@ -31,13 +34,13 @@
     </div>
 
     <script>
-        // Cambiar modo claro / oscuro
         const btnTema = document.getElementById('btn-tema');
-        btnTema.addEventListener('click', () => {
-            document.body.classList.toggle('modo-oscuro');
-        });
+        if (btnTema) {
+            btnTema.addEventListener('click', () => {
+                document.body.classList.toggle('modo-oscuro');
+            });
+        }
 
-        // Mostrar u ocultar contraseña
         function togglePassword(idInput) {
             const input = document.getElementById(idInput);
             if (input.type === "password") {
