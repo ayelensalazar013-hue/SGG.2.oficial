@@ -173,7 +173,7 @@ button[type="submit"]:hover, .btn-principal:hover {
     background-color: var(--primary-btn-hover) !important;
 }
 
-/* LÍNEA DIVISORIA ENTRE EL BOTÓN PRINCIPAL Y NAVEGACIÓN */
+/* LÍNEA DIVISORIA DE SEPARACIÓN */
 .divisoria {
     border: none;
     border-top: 1.5px solid var(--border-color);
