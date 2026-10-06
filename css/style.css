@@ -4,8 +4,8 @@
 :root {
     --bg-color: #f7f4ef;          /* Fondo general beige suave */
     --card-bg: #ffffff;           /* Tarjeta blanca */
-    --text-primary: #2b231d;      /* Marrón café muy oscuro para lectura clara */
-    --text-secondary: #5c4f45;    /* Marrón medio para etiquetas */
+    --text-primary: #2b231d;      /* Marrón café muy oscuro */
+    --text-secondary: #5c4f45;    /* Marrón medio */
     --border-color: #e2d9cd;      /* Bordes tono arena */
     --primary-btn: #8c6d53;       /* Botón principal marrón cálido */
     --primary-btn-hover: #735740; /* Marrón más intenso */
@@ -26,7 +26,7 @@ body.modo-oscuro {
 }
 
 /* ===================================================
-   ESTRUCTURA Y CENTRADO COMPLETO DE PANTALLA
+   ESTRUCTURA Y CENTRADO DE PANTALLA
    =================================================== */
 * {
     box-sizing: border-box;
@@ -51,41 +51,37 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* ===================================================
-   BOTÓN MODO CLARO / OSCURO
-   =================================================== */
-.btn-tema, #btn-tema, button:contains("Cambiar Modo") {
+/* Botón Cambiar Modo arriba a la derecha */
+.btn-tema, #btn-tema, button#btn-tema {
     position: fixed;
     top: 20px;
     right: 20px;
     background-color: var(--primary-btn) !important;
     color: #ffffff !important;
     border: none;
-    padding: 10px 18px;
+    padding: 8px 16px;
     border-radius: 20px;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
     z-index: 1000;
+    width: auto !important;
 }
 
 .btn-tema:hover, #btn-tema:hover {
     background-color: var(--primary-btn-hover) !important;
 }
 
-/* ===================================================
-   TARJETA CONTENEDORA
-   =================================================== */
-.container, .formulario, main, form, div[class*="card"], div[class*="box"] {
+/* Tarjeta contenedora principal */
+.container, .formulario, main, form {
     background-color: var(--card-bg);
     width: 100%;
-    max-width: 460px;
+    max-width: 450px;
     padding: 35px 30px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
     box-shadow: 0 8px 24px rgba(43, 35, 29, 0.08);
     margin: auto;
-    text-align: left;
 }
 
 /* Títulos */
@@ -129,56 +125,68 @@ input:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(179, 146, 116, 0.2);
 }
 
-/* ===================================================
-   ANULACIÓN DE BOTONES MORADOS (Fuerza color Marrón)
-   =================================================== */
-button, 
-input[type="submit"], 
-.btn, 
-.btn-primary, 
-.button, 
-[class*="btn"] {
+/* Botón principal (Ingresar, Crear Cuenta, Cambiar Contraseña) */
+button[type="submit"], .btn-principal, form button:not(.btn-mostrar):not(#btn-tema) {
+    width: 100%;
     background-color: var(--primary-btn) !important;
     color: #ffffff !important;
     font-size: 1rem;
     font-weight: 700;
-    padding: 12px 20px;
+    padding: 13px;
     border: none !important;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
-    width: 100%;
+    margin-top: 25px;
     display: block;
-    text-align: center;
     transition: background-color 0.2s ease;
 }
 
-button:hover, 
-input[type="submit"]:hover, 
-.btn:hover, 
-.btn-primary:hover, 
-.button:hover, 
-[class*="btn"]:hover {
+button[type="submit"]:hover, .btn-principal:hover {
     background-color: var(--primary-btn-hover) !important;
 }
 
-/* Enlaces del formulario */
-a, .link, span.toggle-password, [class*="mostrar"] {
+/* Arreglo para botones "Mostrar" contraseña dentro del formulario */
+.btn-mostrar, span.mostrar, button.mostrar {
+    background: transparent !important;
+    color: var(--primary-btn) !important;
+    border: none !important;
+    font-weight: 600;
+    cursor: pointer;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 6px 0 10px 0 !important;
+    display: inline-block !important;
+    font-size: 0.9rem;
+    box-shadow: none !important;
+}
+
+.btn-mostrar:hover, span.mostrar:hover {
+    color: var(--primary-btn-hover) !important;
+    text-decoration: underline;
+}
+
+/* ===================================================
+   SEPARACIÓN Y ESTILO DE ENLACES INFERIORES
+   =================================================== */
+.links-container {
+    text-align: center;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+}
+
+a {
     color: var(--primary-btn) !important;
     font-weight: 600;
     text-decoration: none;
     display: inline-block;
-    margin-top: 12px;
 }
 
 a:hover {
     color: var(--primary-btn-hover) !important;
     text-decoration: underline;
-}
-
-.links-container, div:has(> a) {
-    text-align: center;
-    margin-top: 15px;
 }
 
 ul {
