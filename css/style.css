@@ -1,19 +1,18 @@
 /* ===================================================
-   PALETA DE COLORES NEUTROS Y MARRONES CLAROS (Elegantes y de Alta Lectura)
+   PALETA DE COLORES NEUTROS Y MARRONES CLAROS
    =================================================== */
 :root {
-    --bg-color: #f7f4ef;          /* Fondo general beige suave/arena */
-    --card-bg: #ffffff;           /* Tarjeta blanca para máximo contraste */
-    --text-primary: #2b231d;      /* Marrón café muy oscuro para textos (lectura clara y nítida) */
-    --text-secondary: #5c4f45;    /* Marrón medio para etiquetas/labels */
-    --border-color: #e2d9cd;      /* Bordes sutiles en tono arena/marrón suave */
-    --primary-btn: #8c6d53;       /* Botón principal marrón cálido suave */
-    --primary-btn-hover: #735740; /* Marrón más intenso al pasar el cursor */
-    --input-bg: #faf8f5;          /* Fondo de inputs ligeramente cálido */
-    --focus-ring: #b39274;        /* Resaltado de campos activos */
+    --bg-color: #f7f4ef;          /* Fondo general beige suave */
+    --card-bg: #ffffff;           /* Tarjeta blanca */
+    --text-primary: #2b231d;      /* Marrón café muy oscuro para lectura clara */
+    --text-secondary: #5c4f45;    /* Marrón medio para etiquetas */
+    --border-color: #e2d9cd;      /* Bordes tono arena */
+    --primary-btn: #8c6d53;       /* Botón principal marrón cálido */
+    --primary-btn-hover: #735740; /* Marrón más intenso */
+    --input-bg: #faf8f5;          /* Fondo de inputs */
+    --focus-ring: #b39274;        /* Resaltado de campos */
 }
 
-/* Modo Oscuro Cálido (Opcional, manteniendo tonos café/marrón) */
 body.modo-oscuro {
     --bg-color: #1f1b18;
     --card-bg: #2d2621;
@@ -27,7 +26,7 @@ body.modo-oscuro {
 }
 
 /* ===================================================
-   ESTRUTURA GENERAL Y CENTRADO DE PANTALLA
+   ESTRUCTURA Y CENTRADO COMPLETO DE PANTALLA
    =================================================== */
 * {
     box-sizing: border-box;
@@ -36,10 +35,14 @@ body.modo-oscuro {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-primary);
+html, body {
+    width: 100%;
     min-height: 100vh;
+}
+
+body {
+    background-color: var(--bg-color) !important;
+    color: var(--text-primary);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,50 +51,53 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Botón Cambiar Modo en la esquina superior */
-.btn-tema, #btn-tema {
-    position: absolute;
+/* ===================================================
+   BOTÓN MODO CLARO / OSCURO
+   =================================================== */
+.btn-tema, #btn-tema, button:contains("Cambiar Modo") {
+    position: fixed;
     top: 20px;
     right: 20px;
-    background-color: var(--primary-btn);
-    color: #ffffff;
+    background-color: var(--primary-btn) !important;
+    color: #ffffff !important;
     border: none;
-    padding: 8px 16px;
+    padding: 10px 18px;
     border-radius: 20px;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    z-index: 1000;
 }
 
 .btn-tema:hover, #btn-tema:hover {
-    background-color: var(--primary-btn-hover);
+    background-color: var(--primary-btn-hover) !important;
 }
 
 /* ===================================================
-   TARJETA Y FORMULARIO CENTRADO
+   TARJETA CONTENEDORA
    =================================================== */
-.container, .formulario, main {
+.container, .formulario, main, form, div[class*="card"], div[class*="box"] {
     background-color: var(--card-bg);
     width: 100%;
-    max-width: 480px; /* Ancho cómodo y centrado */
+    max-width: 460px;
     padding: 35px 30px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 8px 24px rgba(43, 35, 29, 0.06);
+    box-shadow: 0 8px 24px rgba(43, 35, 29, 0.08);
     margin: auto;
+    text-align: left;
 }
 
 /* Títulos */
 h1, h2, h3 {
     text-align: center;
-    color: var(--text-primary);
+    color: var(--text-primary) !important;
     font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 25px;
 }
 
-/* Campos de Entrada / Inputs */
+/* Labels e Inputs */
 label {
     display: block;
     font-size: 0.95rem;
@@ -115,66 +121,70 @@ select {
     border: 1.5px solid var(--border-color);
     border-radius: 8px;
     outline: none;
-    transition: all 0.2s ease;
 }
 
 input:focus, select:focus {
-    border-color: var(--focus-ring);
+    border-color: var(--focus-ring) !important;
     background-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(179, 146, 116, 0.2);
 }
 
-/* Botones Principales del Formulario */
-button[type="submit"], .btn-principal {
-    width: 100%;
-    background-color: var(--primary-btn);
-    color: #ffffff;
+/* ===================================================
+   ANULACIÓN DE BOTONES MORADOS (Fuerza color Marrón)
+   =================================================== */
+button, 
+input[type="submit"], 
+.btn, 
+.btn-primary, 
+.button, 
+[class*="btn"] {
+    background-color: var(--primary-btn) !important;
+    color: #ffffff !important;
     font-size: 1rem;
     font-weight: 700;
-    padding: 13px;
-    border: none;
+    padding: 12px 20px;
+    border: none !important;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 25px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 20px;
+    width: 100%;
+    display: block;
+    text-align: center;
+    transition: background-color 0.2s ease;
 }
 
-button[type="submit"]:hover, .btn-principal:hover {
-    background-color: var(--primary-btn-hover);
+button:hover, 
+input[type="submit"]:hover, 
+.btn:hover, 
+.btn-primary:hover, 
+.button:hover, 
+[class*="btn"]:hover {
+    background-color: var(--primary-btn-hover) !important;
 }
 
-button[type="submit"]:active, .btn-principal:active {
-    transform: scale(0.99);
-}
-
-/* Enlaces (Volver al Login, Crear Cuenta, etc.) */
-a {
-    color: var(--primary-btn);
+/* Enlaces del formulario */
+a, .link, span.toggle-password, [class*="mostrar"] {
+    color: var(--primary-btn) !important;
     font-weight: 600;
     text-decoration: none;
     display: inline-block;
     margin-top: 12px;
-    transition: color 0.2s ease;
 }
 
 a:hover {
-    color: var(--primary-btn-hover);
+    color: var(--primary-btn-hover) !important;
     text-decoration: underline;
 }
 
-.links-container {
+.links-container, div:has(> a) {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
-/* Lista de requisitos de contraseña */
 ul {
-    margin-top: 10px;
+    margin-top: 12px;
     padding-left: 20px;
     color: var(--text-secondary);
     font-size: 0.88rem;
     line-height: 1.5;
 }
-
-
-
