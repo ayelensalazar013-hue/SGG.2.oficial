@@ -24,16 +24,22 @@
             <button type="submit" class="btn-principal">Ingresar</button>
 
             <div class="links-container">
-                <a href="registro.html">Crear una cuenta</a>
-                <a href="recuperar.html">¿Olvidaste tu contraseña?</a>
+                <a href="registro.html" class="btn-enlace">Crear una cuenta</a>
+                <a href="recuperar.html" class="btn-enlace">¿Olvidaste tu contraseña?</a>
             </div>
         </form>
     </div>
 
-    <script src="js/login.js"></script>
     <script>
-        function togglePassword(id) {
-            const input = document.getElementById(id);
+        // Cambiar modo claro / oscuro
+        const btnTema = document.getElementById('btn-tema');
+        btnTema.addEventListener('click', () => {
+            document.body.classList.toggle('modo-oscuro');
+        });
+
+        // Mostrar u ocultar contraseña
+        function togglePassword(idInput) {
+            const input = document.getElementById(idInput);
             if (input.type === "password") {
                 input.type = "text";
             } else {
