@@ -1,225 +1,177 @@
-/* =========================================
-   VARIABLES Y TEMAS (DÍA / NOCHE)
-========================================= */
-
-/* Modo Día (Por defecto) */
+/* ===================================================
+   PALETA DE COLORES NEUTROS Y MARRONES CLAROS (Elegantes y de Alta Lectura)
+   =================================================== */
 :root {
-    --fondo-pantalla: #e6e6e6;
-    --fondo-card: #ffffff;
-    --color-texto: #111111;
-    --color-violeta: #7b2cbf;
-    --color-borde: #cccccc;
-    --color-error: #d00000;
-    --color-correcto: #008000;
+    --bg-color: #f7f4ef;          /* Fondo general beige suave/arena */
+    --card-bg: #ffffff;           /* Tarjeta blanca para máximo contraste */
+    --text-primary: #2b231d;      /* Marrón café muy oscuro para textos (lectura clara y nítida) */
+    --text-secondary: #5c4f45;    /* Marrón medio para etiquetas/labels */
+    --border-color: #e2d9cd;      /* Bordes sutiles en tono arena/marrón suave */
+    --primary-btn: #8c6d53;       /* Botón principal marrón cálido suave */
+    --primary-btn-hover: #735740; /* Marrón más intenso al pasar el cursor */
+    --input-bg: #faf8f5;          /* Fondo de inputs ligeramente cálido */
+    --focus-ring: #b39274;        /* Resaltado de campos activos */
 }
 
-/* Modo Noche (Se activa dinámicamente) */
-[data-tema="oscuro"] {
-    --fondo-pantalla: #121212;
-    --fondo-card: #242424;
-    --color-texto: #ffffff;
-    --color-violeta: #9d4edd;
-    --color-borde: #444444;
-    --color-error: #ff4d4d;
-    --color-correcto: #00ff66;
+/* Modo Oscuro Cálido (Opcional, manteniendo tonos café/marrón) */
+body.modo-oscuro {
+    --bg-color: #1f1b18;
+    --card-bg: #2d2621;
+    --text-primary: #f2ebd9;
+    --text-secondary: #d1c4b2;
+    --border-color: #423730;
+    --primary-btn: #a68568;
+    --primary-btn-hover: #bd9a7c;
+    --input-bg: #241e1a;
+    --focus-ring: #d9b898;
 }
 
-/* =========================================
-   RESET Y CENTRADO EN PANTALLA COMPLETA
-========================================= */
-
+/* ===================================================
+   ESTRUTURA GENERAL Y CENTRADO DE PANTALLA
+   =================================================== */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
     padding: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: var(--fondo-pantalla);
-    color: var(--color-texto);
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* =========================================
-   BOTÓN SUPERIOR DE CAMBIO DE TEMA
-========================================= */
-
-#btn-tema {
-    margin-bottom: 20px;
-    padding: 10px 18px;
-    background-color: var(--color-violeta);
+/* Botón Cambiar Modo en la esquina superior */
+.btn-tema, #btn-tema {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--primary-btn);
     color: #ffffff;
     border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease;
 }
 
-#btn-tema:hover {
-    opacity: 0.85;
+.btn-tema:hover, #btn-tema:hover {
+    background-color: var(--primary-btn-hover);
 }
 
-/* =========================================
-   TARJETA CONTENEDORA (CARD DE LOGIN)
-========================================= */
-
-.login {
+/* ===================================================
+   TARJETA Y FORMULARIO CENTRADO
+   =================================================== */
+.container, .formulario, main {
+    background-color: var(--card-bg);
     width: 100%;
-    max-width: 360px;
-    background-color: var(--fondo-card);
+    max-width: 480px; /* Ancho cómodo y centrado */
     padding: 35px 30px;
     border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 24px rgba(43, 35, 29, 0.06);
+    margin: auto;
+}
+
+/* Títulos */
+h1, h2, h3 {
     text-align: center;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-h2 {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    font-weight: 700;
     margin-bottom: 25px;
-    font-size: 22px;
 }
 
-/* =========================================
-   CAMPOS DE ENTRADA (INPUTS)
-========================================= */
+/* Campos de Entrada / Inputs */
+label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    margin-top: 15px;
+}
 
 input[type="text"],
-input[type="password"],
 input[type="email"],
-input[type="date"] {
+input[type="password"],
+input[type="date"],
+input[type="number"],
+select {
     width: 100%;
-    padding: 12px;
-    border: 2px solid var(--color-borde);
-    border-radius: 6px;
-    background-color: var(--fondo-card);
-    color: var(--color-texto);
-    font-size: 15px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    background-color: var(--input-bg);
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
     outline: none;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
 }
 
-input:focus {
-    border-color: var(--color-violeta);
+input:focus, select:focus {
+    border-color: var(--focus-ring);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(179, 146, 116, 0.2);
 }
 
-/* Contenedor del campo con botón mostrar/ocultar */
-.contenedor-password {
-    position: relative;
+/* Botones Principales del Formulario */
+button[type="submit"], .btn-principal {
     width: 100%;
-}
-
-.contenedor-password input {
-    padding-right: 75px;
-}
-
-.btn-ver-password {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    color: var(--color-violeta);
-    font-weight: bold;
-    font-size: 13px;
-    cursor: pointer;
-    padding: 4px 6px;
-}
-
-.btn-ver-password:hover {
-    text-decoration: underline;
-}
-
-/* =========================================
-   BOTÓN PRINCIPAL (INGRESAR / REGISTRAR)
-========================================= */
-
-#btn-login,
-.btn-submit {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    background-color: var(--color-violeta);
+    background-color: var(--primary-btn);
     color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 13px;
     border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: bold;
+    border-radius: 8px;
     cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-#btn-login:hover,
-.btn-submit:hover {
-    opacity: 0.9;
-}
-
-button:disabled {
-    background-color: #777777 !important;
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-/* =========================================
-   MENSAJES DE ESTADO Y FEEDBACK
-========================================= */
-
-#mensaje {
-    margin-top: 15px;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.error {
-    color: var(--color-error);
-}
-
-.correcto {
-    color: var(--color-correcto);
-}
-
-/* Lista de requisitos de contraseña */
-.requisito {
-    text-align: left;
-    font-size: 13px;
-    margin-top: 5px;
-}
-
-.requisito.incorrecto {
-    color: var(--color-error);
-}
-
-.requisito.correcto {
-    color: var(--color-correcto);
-}
-
-/* =========================================
-   NAVEGACIÓN Y ENLACES
-========================================= */
-
-.navegacion {
     margin-top: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+button[type="submit"]:hover, .btn-principal:hover {
+    background-color: var(--primary-btn-hover);
+}
+
+button[type="submit"]:active, .btn-principal:active {
+    transform: scale(0.99);
+}
+
+/* Enlaces (Volver al Login, Crear Cuenta, etc.) */
 a {
-    color: var(--color-violeta);
+    color: var(--primary-btn);
+    font-weight: 600;
     text-decoration: none;
-    font-size: 14px;
-    font-weight: bold;
+    display: inline-block;
+    margin-top: 12px;
+    transition: color 0.2s ease;
 }
 
 a:hover {
+    color: var(--primary-btn-hover);
     text-decoration: underline;
+}
+
+.links-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Lista de requisitos de contraseña */
+ul {
+    margin-top: 10px;
+    padding-left: 20px;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.5;
 }
