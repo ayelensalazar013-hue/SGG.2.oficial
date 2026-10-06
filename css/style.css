@@ -151,7 +151,7 @@ button[type="submit"]:hover, .btn-principal:hover {
     background-color: var(--primary-btn-hover) !important;
 }
 
-/* Botón MOSTRAR Contraseña (Con texto blanco de alto contraste) */
+/* Botón MOSTRAR Contraseña */
 .btn-mostrar {
     width: 100%;
     background-color: var(--primary-btn) !important;
@@ -174,33 +174,33 @@ button[type="submit"]:hover, .btn-principal:hover {
 }
 
 /* ===================================================
-   BOTONES SECUNDARIOS UNOS DEBAJO DE OTROS
+   BOTONES SECUNDARIOS DENTRO DE LA TARJETA
    =================================================== */
 .links-container {
     margin-top: 25px;
     display: flex;
-    flex-direction: column; /* Apilados verticalmente */
-    gap: 12px;             /* Separación entre botones */
+    flex-direction: column; /* Apilados uno abajo del otro */
+    gap: 12px;             /* Espacio de separación entre botones */
 }
 
-.btn-enlace {
-    display: block;
-    width: 100%;
+a.btn-enlace, .btn-enlace {
+    display: block !important;
+    width: 100% !important;
     text-align: center;
-    background-color: var(--sec-btn-bg);
+    background-color: var(--sec-btn-bg) !important;
     color: var(--sec-btn-text) !important;
     padding: 12px 15px;
     border-radius: 8px;
     font-weight: 700;
     font-size: 0.95rem;
-    text-decoration: none;
+    text-decoration: none !important;
     border: 1px solid var(--border-color);
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.btn-enlace:hover {
-    background-color: var(--sec-btn-hover);
-    text-decoration: none;
+a.btn-enlace:hover, .btn-enlace:hover {
+    background-color: var(--sec-btn-hover) !important;
+    text-decoration: none !important;
 }
 
 ul {
