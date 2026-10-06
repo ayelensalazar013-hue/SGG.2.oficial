@@ -173,14 +173,18 @@ button[type="submit"]:hover, .btn-principal:hover {
     background-color: var(--primary-btn-hover) !important;
 }
 
-/* ===================================================
-   BOTONES SECUNDARIOS DENTRO DE LA TARJETA
-   =================================================== */
+/* LÍNEA DIVISORIA ENTRE EL BOTÓN PRINCIPAL Y NAVEGACIÓN */
+.divisoria {
+    border: none;
+    border-top: 1.5px solid var(--border-color);
+    margin: 25px 0 20px 0;
+}
+
+/* BOTONES SECUNDARIOS DENTRO DE LA TARJETA */
 .links-container {
-    margin-top: 25px;
     display: flex;
-    flex-direction: column; /* Apilados uno abajo del otro */
-    gap: 12px;             /* Espacio de separación entre botones */
+    flex-direction: column;
+    gap: 12px;
 }
 
 a.btn-enlace, .btn-enlace {
