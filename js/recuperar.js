@@ -1,86 +1,96 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('form-registro');
-    const inputPass = document.getElementById('password');
-    const inputFecha = document.getElementById('fecha');
-    const inputNombre = document.getElementById('nombre');
-    const inputApellido = document.getElementById('apellido');
+    const form = document.getElementById('form-recuperar');
     const inputEmail = document.getElementById('email');
+    const inputPass = document.getElementById('password');
+    const inputConfirmPass = document.getElementById('confirm-password');
+    const msgBox = document.getElementById('mensaje-error');
 
-    // Identificar los 5 ítems de la lista de contraseña
-    const listaItems = document.querySelectorAll('.container ul li');
+    // Requisitos visuales
+    const reqMin = document.getElementById('req-min');
+    const reqMayus = document.getElementById('req-mayus');
+    const reqMinus = document.getElementById('req-minus');
+    const reqNum = document.getElementById('req-num');
+    const reqEsp = document.getElementById('req-esp');
 
-    if (inputPass && listaItems.length >= 5) {
-        inputPass.addEventListener('input', () => {
-            const pass = inputPass.value;
-
-            // Reglas de validación
-            const tieneMin8 = pass.length >= 8;
-            const tieneMayus = /[A-Z]/.test(pass);
-            const tieneMinus = /[a-z]/.test(pass);
-            const tieneNum = /[0-9]/.test(pass);
-            const tieneEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(pass);
-
-            // Actualizar Visualización
-            actualizarRequisito(listaItems[0], tieneMin8, "Mínimo 8 caracteres");
-            actualizarRequisito(listaItems[1], tieneMayus, "Al menos 1 letra mayúscula");
-            actualizarRequisito(listaItems[2], tieneMinus, "Al menos 1 letra minúscula");
-            actualizarRequisito(listaItems[3], tieneNum, "Al menos 1 número");
-            actualizarRequisito(listaItems[4], tieneEspecial, "Al menos 1 carácter especial");
-        });
-    }
-
-    function actualizarRequisito(elemento, seCumple, texto) {
-        if (seCumple) {
-            elemento.textContent = `✔ ${texto}`;
-            elemento.style.color = "green";
+    function actualizarEstado(elemento, condicion, texto) {
+        if (condicion) {
+            elemento.textContent = `✓ ${texto}`;
+            elemento.style.color = "#2e7d32"; // Verde
             elemento.style.fontWeight = "bold";
         } else {
             elemento.textContent = `✘ ${texto}`;
-            element.style.color = "red";
+            elemento.style.color = "#c62828"; // Rojo
             elemento.style.fontWeight = "normal";
         }
     }
 
-    // Evento al enviar el formulario (Registrarse)
+    // Evaluación en tiempo real mientras escribe la nueva contraseña
+    if (inputPass) {
+        inputPass.addEventListener('input', () => {
+            const pass = inputPass.value;
+            actualizarEstado(reqMin, pass.length >= 8, "Mínimo 8 caracteres");
+            actualizarEstado(reqMayus, /[A-Z]/.test(pass), "Al menos 1 letra mayúscula");
+            actualizarEstado(reqMinus, /[a-z]/.test(pass), "Al menos 1 letra minúscula");
+            actualizarEstado(reqNum, /[0-9]/.test(pass), "Al menos 1 número");
+            actualizarEstado(reqEsp, /[!@#$%^&*(),.?":{}|<>]/.test(pass), "Al menos 1 carácter especial");
+        });
+    }
+
+    // Al presionar "Actualizar Contraseña"
     form.addEventListener('submit', (e) => {
-        e.preventDefault(); // EVITA QUE SE BORRE TODO Y SE RECARGUE LA PÁGINA
+        e.preventDefault();
+        msgBox.textContent = "";
 
-        // 1. Validar Nombre y Apellido (sin números ni símbolos)
-        const regexLetras = /^[a-zA-AáéíóúÁÉÍÓÚñÑ\s]+$/;
-        if (!regexLetras.test(inputNombre.value.trim()) || !regexLetras.test(inputApellido.value.trim())) {
-            alert("El Nombre y Apellido solo deben contener letras.");
+        const email = inputEmail.value.trim();
+        const newPass = inputPass.value;
+        const confirmPass = inputConfirmPass.value;
+
+        // 1. Validar que las dos contraseñas coincidan
+        if (newPass !== confirmPass) {
+            msgBox.style.color = "#c62828";
+            msgBox.textContent = "Las contraseñas no coinciden. Por favor, verifícalas.";
             return;
         }
 
-        // 2. Validar Edad Mayor o Igual a 14 años
-        const fechaNac = new Date(inputFecha.value);
-        const hoy = new Date();
-        let edad = hoy.getFullYear() - fechaNac.getFullYear();
-        const mes = hoy.getMonth() - fechaNac.getMonth();
-        if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
-            edad--;
-        }
+        // 2. Validar que cumpla las 5 reglas
+        const cumpleMin = newPass.length >= 8;
+        const cumpleMayus = /[A-Z]/.test(newPass);
+        const cumpleMinus = /[a-z]/.test(newPass);
+        const cumpleNum = /[0-9]/.test(newPass);
+        const cumpleEsp = /[!@#$%^&*(),.?":{}|<>]/.test(newPass);
 
-        if (edad < 14) {
-            alert("Debes ser mayor de 14 años para registrarte en el sistema.");
+        if (!cumpleMin || !cumpleMayus || !cumpleMinus || !cumpleNum || !cumpleEsp) {
+            msgBox.style.color = "#c62828";
+            msgBox.textContent = "La contraseña nueva debe cumplir con todos los requisitos en verde.";
             return;
         }
 
-        // 3. Validar Contraseña Completa
-        const pass = inputPass.value;
-        const passValida = pass.length >= 8 && 
-                           /[A-Z]/.test(pass) && 
-                           /[a-z]/.test(pass) && 
-                           /[0-9]/.test(pass) && 
-                           /[!@#$%^&*(),.?":{}|<>]/.test(pass);
+        // 3. Buscar usuario en localStorage
+        let usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
+        const index = usuarios.findIndex(u => u.email === email);
 
-        if (!passValida) {
-            alert("La contraseña debe cumplir con TODOS los requisitos indicados en rojo.");
+        if (index === -1) {
+            msgBox.style.color = "#c62828";
+            msgBox.textContent = "El correo electrónico no se encuentra registrado.";
             return;
         }
 
-        // Si todo pasa con éxito:
-        alert("¡Registro exitoso! Redirigiendo al Login...");
-        window.location.href = "index.html";
+        // 4. Validar que la nueva contraseña no sea la contraseña actual
+        if (usuarios[index].password === newPass) {
+            msgBox.style.color = "#c62828";
+            msgBox.textContent = "La nueva contraseña no puede ser igual a la contraseña actual.";
+            return;
+        }
+
+        // 5. Actualizar la contraseña
+        usuarios[index].password = newPass;
+        localStorage.setItem('usuarios_sgg', JSON.stringify(usuarios));
+
+        msgBox.style.color = "#2e7d32";
+        msgBox.textContent = "¡Contraseña actualizada con éxito! Redirigiendo al Login...";
+
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 1500);
     });
 });
