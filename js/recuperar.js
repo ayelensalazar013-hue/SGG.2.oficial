@@ -1,294 +1,86 @@
-// ==========================================
-// 1. CAMBIAR TEMA
-// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('form-registro');
+    const inputPass = document.getElementById('password');
+    const inputFecha = document.getElementById('fecha');
+    const inputNombre = document.getElementById('nombre');
+    const inputApellido = document.getElementById('apellido');
+    const inputEmail = document.getElementById('email');
 
-function cambiarTema() {
+    // Identificar los 5 ítems de la lista de contraseña
+    const listaItems = document.querySelectorAll('.container ul li');
 
-    const temaActual =
-        document.body.getAttribute("data-tema");
+    if (inputPass && listaItems.length >= 5) {
+        inputPass.addEventListener('input', () => {
+            const pass = inputPass.value;
 
-    if (temaActual === "oscuro") {
+            // Reglas de validación
+            const tieneMin8 = pass.length >= 8;
+            const tieneMayus = /[A-Z]/.test(pass);
+            const tieneMinus = /[a-z]/.test(pass);
+            const tieneNum = /[0-9]/.test(pass);
+            const tieneEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(pass);
 
-        document.body.removeAttribute("data-tema");
-
-        localStorage.setItem(
-            "temaGuardado",
-            "claro"
-        );
-
-    } else {
-
-        document.body.setAttribute(
-            "data-tema",
-            "oscuro"
-        );
-
-        localStorage.setItem(
-            "temaGuardado",
-            "oscuro"
-        );
-    }
-}
-
-
-// ==========================================
-// 2. CARGAR TEMA
-// ==========================================
-
-function cargarTema() {
-
-    const temaGuardado =
-        localStorage.getItem("temaGuardado");
-
-    if (temaGuardado === "oscuro") {
-
-        document.body.setAttribute(
-            "data-tema",
-            "oscuro"
-        );
-    }
-}
-
-
-// ==========================================
-// 3. MOSTRAR / OCULTAR CONTRASEÑA
-// ==========================================
-
-function mostrarOcultarPassword(idCampo, boton) {
-
-    const campo =
-        document.getElementById(idCampo);
-
-    if (campo.type === "password") {
-
-        campo.type = "text";
-        boton.innerText = "Ocultar";
-
-    } else {
-
-        campo.type = "password";
-        boton.innerText = "Mostrar";
-    }
-}
-
-
-// ==========================================
-// 4. VALIDAR CONTRASEÑA
-// ==========================================
-
-function validarPassword(password) {
-
-    const minimo8 =
-        password.length >= 8;
-
-    const mayuscula =
-        /[A-Z]/.test(password);
-
-    const minuscula =
-        /[a-z]/.test(password);
-
-    const numero =
-        /[0-9]/.test(password);
-
-    const especial =
-        /[^A-Za-z0-9]/.test(password);
-
-
-    document.getElementById("req-longitud").className =
-        minimo8 ? "requisito-si" : "requisito-no";
-
-    document.getElementById("req-mayuscula").className =
-        mayuscula ? "requisito-si" : "requisito-no";
-
-    document.getElementById("req-minuscula").className =
-        minuscula ? "requisito-si" : "requisito-no";
-
-    document.getElementById("req-numero").className =
-        numero ? "requisito-si" : "requisito-no";
-
-    document.getElementById("req-especial").className =
-        especial ? "requisito-si" : "requisito-no";
-
-
-    document.getElementById("req-longitud").innerText =
-        (minimo8 ? "✓ " : "✗ ") +
-        "Mínimo 8 caracteres";
-
-    document.getElementById("req-mayuscula").innerText =
-        (mayuscula ? "✓ " : "✗ ") +
-        "Al menos 1 letra mayúscula";
-
-    document.getElementById("req-minuscula").innerText =
-        (minuscula ? "✓ " : "✗ ") +
-        "Al menos 1 letra minúscula";
-
-    document.getElementById("req-numero").innerText =
-        (numero ? "✓ " : "✗ ") +
-        "Al menos 1 número";
-
-    document.getElementById("req-especial").innerText =
-        (especial ? "✓ " : "✗ ") +
-        "Al menos 1 carácter especial";
-
-
-    return (
-        minimo8 &&
-        mayuscula &&
-        minuscula &&
-        numero &&
-        especial
-    );
-}
-
-
-// ==========================================
-// 5. CAMBIAR CONTRASEÑA
-// ==========================================
-
-function recuperarClave(event) {
-
-    event.preventDefault();
-
-
-    const email =
-        document.getElementById("email").value.trim();
-
-    const password =
-        document.getElementById("password").value;
-
-    const repetirPassword =
-        document.getElementById("repetirPassword").value;
-
-    const mensaje =
-        document.getElementById("mensaje");
-
-
-    // Obtener usuarios
-    let usuarios =
-        JSON.parse(localStorage.getItem("usuarios_sgg")) || [];
-
-
-    // Buscar usuario por email
-    const indiceUsuario =
-        usuarios.findIndex(
-            u =>
-                u.email.toLowerCase() ===
-                email.toLowerCase()
-        );
-
-
-    if (indiceUsuario === -1) {
-
-        mensaje.style.color = "red";
-        mensaje.innerText =
-            "No existe un usuario registrado con ese correo.";
-
-        return;
+            // Actualizar Visualización
+            actualizarRequisito(listaItems[0], tieneMin8, "Mínimo 8 caracteres");
+            actualizarRequisito(listaItems[1], tieneMayus, "Al menos 1 letra mayúscula");
+            actualizarRequisito(listaItems[2], tieneMinus, "Al menos 1 letra minúscula");
+            actualizarRequisito(listaItems[3], tieneNum, "Al menos 1 número");
+            actualizarRequisito(listaItems[4], tieneEspecial, "Al menos 1 carácter especial");
+        });
     }
 
-
-    // Validar contraseña
-    if (!validarPassword(password)) {
-
-        mensaje.style.color = "red";
-        mensaje.innerText =
-            "La contraseña no cumple todos los requisitos.";
-
-        return;
+    function actualizarRequisito(elemento, seCumple, texto) {
+        if (seCumple) {
+            elemento.textContent = `✔ ${texto}`;
+            elemento.style.color = "green";
+            elemento.style.fontWeight = "bold";
+        } else {
+            elemento.textContent = `✘ ${texto}`;
+            element.style.color = "red";
+            elemento.style.fontWeight = "normal";
+        }
     }
 
+    // Evento al enviar el formulario (Registrarse)
+    form.addEventListener('submit', (e) => {
+        e.preventDefault(); // EVITA QUE SE BORRE TODO Y SE RECARGUE LA PÁGINA
 
-    // Confirmar contraseña
-    if (password !== repetirPassword) {
+        // 1. Validar Nombre y Apellido (sin números ni símbolos)
+        const regexLetras = /^[a-zA-AáéíóúÁÉÍÓÚñÑ\s]+$/;
+        if (!regexLetras.test(inputNombre.value.trim()) || !regexLetras.test(inputApellido.value.trim())) {
+            alert("El Nombre y Apellido solo deben contener letras.");
+            return;
+        }
 
-        mensaje.style.color = "red";
-        mensaje.innerText =
-            "Las contraseñas no coinciden.";
+        // 2. Validar Edad Mayor o Igual a 14 años
+        const fechaNac = new Date(inputFecha.value);
+        const hoy = new Date();
+        let edad = hoy.getFullYear() - fechaNac.getFullYear();
+        const mes = hoy.getMonth() - fechaNac.getMonth();
+        if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
+            edad--;
+        }
 
-        return;
-    }
+        if (edad < 14) {
+            alert("Debes ser mayor de 14 años para registrarte en el sistema.");
+            return;
+        }
 
+        // 3. Validar Contraseña Completa
+        const pass = inputPass.value;
+        const passValida = pass.length >= 8 && 
+                           /[A-Z]/.test(pass) && 
+                           /[a-z]/.test(pass) && 
+                           /[0-9]/.test(pass) && 
+                           /[!@#$%^&*(),.?":{}|<>]/.test(pass);
 
-    // No permitir repetir contraseña actual
-    if (usuarios[indiceUsuario].clave === password) {
+        if (!passValida) {
+            alert("La contraseña debe cumplir con TODOS los requisitos indicados en rojo.");
+            return;
+        }
 
-        mensaje.style.color = "red";
-        mensaje.innerText =
-            "La nueva contraseña debe ser diferente a la actual.";
-
-        return;
-    }
-
-
-    // Cambiar contraseña
-    usuarios[indiceUsuario].clave =
-        password;
-
-
-    // Guardar nuevamente
-    localStorage.setItem(
-        "usuarios_sgg",
-        JSON.stringify(usuarios)
-    );
-
-
-    mensaje.style.color = "green";
-    mensaje.innerText =
-        "Contraseña actualizada correctamente.";
-}
-
-
-// ==========================================
-// 6. VALIDACIÓN EN TIEMPO REAL
-// ==========================================
-
-function configurarValidacionPassword() {
-
-    const password =
-        document.getElementById("password");
-
-    const repetir =
-        document.getElementById("repetirPassword");
-
-    const boton =
-        document.getElementById("btn-recuperar");
-
-
-    function actualizar() {
-
-        const passwordValida =
-            validarPassword(password.value);
-
-        const contraseñasIguales =
-            password.value === repetir.value &&
-            repetir.value !== "";
-
-
-        boton.disabled =
-            !(passwordValida && contraseñasIguales);
-    }
-
-
-    password.addEventListener(
-        "input",
-        actualizar
-    );
-
-    repetir.addEventListener(
-        "input",
-        actualizar
-    );
-}
-
-
-// ==========================================
-// 7. AL CARGAR
-// ==========================================
-
-window.onload = function () {
-
-    cargarTema();
-
-    configurarValidacionPassword();
-
-};
+        // Si todo pasa con éxito:
+        alert("¡Registro exitoso! Redirigiendo al Login...");
+        window.location.href = "index.html";
+    });
+});
