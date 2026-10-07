@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar Contraseña</title>
+    <title>Crear Cuenta</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -11,40 +11,48 @@
     <button id="btn-tema" class="btn-tema">Cambiar Modo</button>
 
     <div class="container">
-        <h1>Recuperar Contraseña</h1>
+        <h1>Crear Cuenta</h1>
 
-        <form id="form-recuperar">
+        <form id="form-registro">
+            <label for="nombre">Nombre/s</label>
+            <input type="text" id="nombre" placeholder="Nombre/s" required>
+
+            <label for="apellido">Apellido/s</label>
+            <input type="text" id="apellido" placeholder="Apellido/s" required>
+
+            <label for="fecha">Fecha de Nacimiento</label>
+            <input type="date" id="fecha" required>
+
             <label for="email">Correo electrónico</label>
-            <input type="email" id="email" placeholder="Correo electrónico" required>
+            <input type="email" id="email" placeholder="ejemplo@correo.com" required>
 
-            <label for="nueva-pass">Nueva Contraseña</label>
-            <input type="password" id="nueva-pass" placeholder="Nueva Contraseña" required>
-            <button type="button" class="btn-mostrar" onclick="togglePassword('nueva-pass')">Mostrar</button>
+            <label for="usuario">Nombre de Usuario</label>
+            <input type="text" id="usuario" placeholder="Nombre de Usuario" required>
+
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="button" class="btn-mostrar" onclick="togglePassword('password')">Mostrar</button>
 
             <ul>
-                <li>✓ Mínimo 8 caracteres</li>
-                <li>✓ Al menos 1 letra mayúscula</li>
-                <li>✓ Al menos 1 letra minúscula</li>
-                <li>✓ Al menos 1 número</li>
-                <li>✓ Al menos 1 carácter especial</li>
+                <li>✘ Mínimo 8 caracteres</li>
+                <li>✘ Al menos 1 letra mayúscula</li>
+                <li>✘ Al menos 1 letra minúscula</li>
+                <li>✘ Al menos 1 número</li>
+                <li>✘ Al menos 1 carácter especial</li>
             </ul>
 
-            <label for="repetir-pass">Repetir Contraseña</label>
-            <input type="password" id="repetir-pass" placeholder="Repetir Contraseña" required>
-            <button type="button" class="btn-mostrar" onclick="togglePassword('repetir-pass')">Mostrar</button>
+            <button type="submit" class="btn-principal">Registrarse</button>
 
-            <button type="submit" class="btn-principal">Cambiar Contraseña</button>
-
-            <!-- LÍNEA DIVISORIA DE SEPARACIÓN -->
             <hr class="divisoria">
 
             <div class="links-container">
                 <a href="index.html" class="btn-enlace">Volver al Login</a>
-                <a href="registro.html" class="btn-enlace">Crear una cuenta</a>
+                <a href="recuperar.html" class="btn-enlace">Recuperar contraseña</a>
             </div>
         </form>
     </div>
 
+    <script src="js/registro.js"></script>
     <script>
         const btnTema = document.getElementById('btn-tema');
         if (btnTema) {
