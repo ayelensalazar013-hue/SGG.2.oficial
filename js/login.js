@@ -1,227 +1,83 @@
-// ==========================================
-// 1. USUARIOS DE PRUEBA
-// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('form-login') || document.querySelector('form');
+    const inputUsuario = document.getElementById('usuario');
+    const inputPass = document.getElementById('password');
+    const btnSubmit = document.getElementById('btn-login') || form.querySelector('button[type="submit"]');
+    const msgBox = document.getElementById('mensaje') || document.getElementById('mensaje-error');
 
-// Mantenemos los usuarios que ya tenías originalmente.
-// Se guardan dentro del mismo array usuarios_sgg.
+    let intentosFallidos = 0;
+    let bloqueado = false;
 
-function prepararUsuariosDePrueba() {
-
-    let usuarios = JSON.parse(localStorage.getItem("usuarios_sgg")) || [];
-
-    const alumnoExiste = usuarios.some(u => u.usuario === "alumno");
-    const profesorExiste = usuarios.some(u => u.usuario === "profesor");
-
-    if (!alumnoExiste) {
-        usuarios.push({
-            nombre: "Alumno",
-            apellido: "Prueba",
-            fechaNacimiento: "2000-01-01",
-            email: "alumno@sgg.com",
-            usuario: "alumno",
-            clave: "1234"
-        });
-    }
-
-    if (!profesorExiste) {
-        usuarios.push({
-            nombre: "Profesor",
-            apellido: "Prueba",
-            fechaNacimiento: "2000-01-01",
-            email: "profesor@sgg.com",
-            usuario: "profesor",
-            clave: "5678"
-        });
-    }
-
-    localStorage.setItem("usuarios_sgg", JSON.stringify(usuarios));
-}
-
-prepararUsuariosDePrueba();
-
-
-// ==========================================
-// 2. VARIABLES PARA LOS INTENTOS
-// ==========================================
-
-let intentosFallidos = 0;
-let bloqueado = false;
-
-
-// ==========================================
-// 3. LOGIN
-// ==========================================
-
-function login() {
-
-    if (bloqueado) {
-        return;
-    }
-
-    const userIngresado =
-        document.getElementById("usuario").value.trim();
-
-    const passIngresada =
-        document.getElementById("password").value;
-
-    const mensaje =
-        document.getElementById("mensaje");
-
-    const botonLogin =
-        document.getElementById("btn-login");
-
-
-    // Obtenemos los usuarios guardados
-    const usuarios =
-        JSON.parse(localStorage.getItem("usuarios_sgg")) || [];
-
-
-    // Buscamos usuario y contraseña
-    const usuarioValido = usuarios.find(
-        u =>
-            u.usuario === userIngresado &&
-            u.clave === passIngresada
-    );
-
-
-    if (usuarioValido) {
-
-        // Login correcto
-        intentosFallidos = 0;
-
-        mensaje.style.color = "green";
-        mensaje.innerText = "Login correcto";
-
-        // Guardamos el usuario que inició sesión
-        localStorage.setItem(
-            "usuarioLogueado",
-            userIngresado
-        );
-
-    } else {
-
-        // Login incorrecto
-        intentosFallidos++;
-
-        mensaje.style.color = "red";
-
-        if (intentosFallidos >= 3) {
-
-            bloqueado = true;
-
-            botonLogin.disabled = true;
-
-            mensaje.innerText =
-                "3 intentos incorrectos. Esperá 30 segundos.";
-
-            setTimeout(function () {
-
-                bloqueado = false;
-                intentosFallidos = 0;
-
-                botonLogin.disabled = false;
-
-                mensaje.innerText = "";
-
-            }, 30000);
-
-        } else {
-
-            mensaje.innerText =
-                "Datos incorrectos. Intento " +
-                intentosFallidos +
-                " de 3.";
+    // Cargar usuarios por defecto si el localStorage está vacío
+    (function inicializarUsuariosDemo() {
+        let usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
+        if (usuarios.length === 0) {
+            usuarios.push(
+                { nombre: "Alumno", apellido: "Prueba", fecha: "2000-01-01", email: "alumno@sgg.com", usuario: "alumno", password: "1234Password!" },
+                { nombre: "Profesor", apellido: "Prueba", fecha: "1990-01-01", email: "profesor@sgg.com", usuario: "profesor", password: "5678Password!" }
+            );
+            localStorage.setItem('usuarios_sgg', JSON.stringify(usuarios));
         }
+    })();
+
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (bloqueado) return;
+
+            msgBox.textContent = "";
+
+            const userOrEmail = inputUsuario.value.trim();
+            const passIngresada = inputPass.value;
+
+            // Leer array unificado de usuarios
+            const usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
+
+            // Validar credenciales
+            const usuarioValido = usuarios.find(u => 
+                (u.usuario === userOrEmail || u.email === userOrEmail) && 
+                (u.password === passIngresada || u.clave === passIngresada)
+            );
+
+            if (usuarioValido) {
+                intentosFallidos = 0;
+                msgBox.style.color = "var(--success-color)";
+                msgBox.textContent = "¡Inicio de sesión exitoso! Redirigiendo...";
+
+                localStorage.setItem('usuarioLogueado', JSON.stringify(usuarioValido));
+
+                setTimeout(() => {
+                    window.location.href = "principal.html";
+                }, 1500);
+
+            } else {
+                intentosFallidos++;
+                msgBox.style.color = "var(--error-color)";
+
+                if (intentosFallidos >= 3) {
+                    bloqueado = true;
+                    btnSubmit.disabled = true;
+
+                    let segundos = 30;
+                    msgBox.textContent = `3 intentos incorrectos. Espera ${segundos} segundos.`;
+
+                    const contador = setInterval(() => {
+                        segundos--;
+                        if (segundos > 0) {
+                            msgBox.textContent = `3 intentos incorrectos. Espera ${segundos} segundos.`;
+                        } else {
+                            clearInterval(contador);
+                            bloqueado = false;
+                            intentosFallidos = 0;
+                            btnSubmit.disabled = false;
+                            msgBox.textContent = "Puedes volver a intentarlo.";
+                        }
+                    }, 1000);
+
+                } else {
+                    msgBox.textContent = `Datos incorrectos. Intento ${intentosFallidos} de 3.`;
+                }
+            }
+        });
     }
-}
-
-
-// ==========================================
-// 4. CAMBIAR TEMA
-// ==========================================
-
-function cambiarTema() {
-
-    const temaActual =
-        document.body.getAttribute("data-tema");
-
-    if (temaActual === "oscuro") {
-
-        document.body.removeAttribute("data-tema");
-
-        localStorage.setItem(
-            "temaGuardado",
-            "claro"
-        );
-
-    } else {
-
-        document.body.setAttribute(
-            "data-tema",
-            "oscuro"
-        );
-
-        localStorage.setItem(
-            "temaGuardado",
-            "oscuro"
-        );
-    }
-}
-
-
-// ==========================================
-// 5. CARGAR TEMA GUARDADO
-// ==========================================
-
-function cargarTema() {
-
-    const temaGuardado =
-        localStorage.getItem("temaGuardado");
-
-    if (temaGuardado === "oscuro") {
-
-        document.body.setAttribute(
-            "data-tema",
-            "oscuro"
-        );
-
-    } else {
-
-        document.body.removeAttribute(
-            "data-tema"
-        );
-    }
-}
-
-
-// ==========================================
-// 6. MOSTRAR / OCULTAR CONTRASEÑA
-// ==========================================
-
-function mostrarOcultarPassword(idCampo, boton) {
-
-    const campo =
-        document.getElementById(idCampo);
-
-    if (campo.type === "password") {
-
-        campo.type = "text";
-        boton.innerText = "Ocultar";
-
-    } else {
-
-        campo.type = "password";
-        boton.innerText = "Mostrar";
-    }
-}
-
-
-// ==========================================
-// 7. AL CARGAR LA PÁGINA
-// ==========================================
-
-window.onload = function () {
-
-    cargarTema();
-
-};
+});
