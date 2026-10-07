@@ -3,52 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
+    <title>SGG - Iniciar Sesión</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <button id="btn-tema" class="btn-tema">Cambiar Modo</button>
+    <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()">Cambiar Modo</button>
 
     <div class="container">
         <h1>Iniciar Sesión</h1>
         
         <form id="form-login">
-            <label for="usuario">Nombre de Usuario</label>
-            <input type="text" id="usuario" name="usuario" placeholder="Nombre de Usuario" required>
+            <label for="usuario">Usuario o Email:</label>
+            <input type="text" id="usuario" name="usuario" required placeholder="Ingresá tu usuario o correo">
 
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" placeholder="Contraseña" required>
-            <button type="button" class="btn-mostrar" onclick="togglePassword('password')">Mostrar</button>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required placeholder="Ingresá tu contraseña">
+            
+            <button type="button" class="btn-mostrar" onclick="mostrarOcultarPassword('password', this)">Mostrar</button>
 
-            <button type="submit" class="btn-principal">Ingresar</button>
-
-            <!-- LÍNEA DIVISORIA Y BOTONES -->
-            <hr class="divisoria">
-
-            <div class="links-container">
-                <a href="registro.html" class="btn-enlace">Crear una cuenta</a>
-                <a href="recuperar.html" class="btn-enlace">¿Olvidaste tu contraseña?</a>
-            </div>
+            <button type="submit" class="btn-principal" id="btn-login">Ingresar</button>
         </form>
+
+        <div id="mensaje"></div>
+
+        <hr class="divisoria">
+
+        <div class="links-container">
+            <a href="registro.html" class="btn-enlace">Crear cuenta</a>
+            <a href="recuperar.html" class="btn-enlace">Recuperar contraseña</a>
+        </div>
     </div>
 
-    <script>
-        const btnTema = document.getElementById('btn-tema');
-        if (btnTema) {
-            btnTema.addEventListener('click', () => {
-                document.body.classList.toggle('modo-oscuro');
-            });
-        }
-
-        function togglePassword(idInput) {
-            const input = document.getElementById(idInput);
-            if (input.type === "password") {
-                input.type = "text";
-            } else {
-                input.type = "password";
-            }
-        }
-    </script>
+    <script src="js/login.js"></script>
 </body>
 </html>
