@@ -31,19 +31,20 @@
 
             <label for="password">Contraseña</label>
             <input type="password" id="password" placeholder="Contraseña" required>
-            <button type="button" class="btn-mostrar" onclick="togglePassword('password')">Mostrar</button>
+            <button type="button" class="btn-mostrar" id="btn-mostrar-pass">Mostrar</button>
 
-            <ul>
-                <li>✓ Mínimo 8 caracteres</li>
-                <li>✓ Al menos 1 letra mayúscula</li>
-                <li>✓ Al menos 1 letra minúscula</li>
-                <li>✓ Al menos 1 número</li>
-                <li>✓ Al menos 1 carácter especial</li>
+            <ul id="lista-requisitos" style="list-style: none; padding-left: 0; text-align: left; margin-top: 10px;">
+                <li id="req-min" style="color: #c62828;">✘ Mínimo 8 caracteres</li>
+                <li id="req-mayus" style="color: #c62828;">✘ Al menos 1 letra mayúscula</li>
+                <li id="req-minus" style="color: #c62828;">✘ Al menos 1 letra minúscula</li>
+                <li id="req-num" style="color: #c62828;">✘ Al menos 1 número</li>
+                <li id="req-esp" style="color: #c62828;">✘ Al menos 1 carácter especial</li>
             </ul>
+
+            <div id="mensaje-error" style="color: #c62828; font-weight: bold; margin: 15px 0; text-align: center;"></div>
 
             <button type="submit" class="btn-principal">Registrarse</button>
 
-            <!-- LÍNEA DIVISORIA DE SEPARACIÓN -->
             <hr class="divisoria">
 
             <div class="links-container">
@@ -53,7 +54,9 @@
         </form>
     </div>
 
+    <script src="js/registro.js"></script>
     <script>
+        // Botón cambiar modo
         const btnTema = document.getElementById('btn-tema');
         if (btnTema) {
             btnTema.addEventListener('click', () => {
@@ -61,13 +64,19 @@
             });
         }
 
-        function togglePassword(idInput) {
-            const input = document.getElementById(idInput);
-            if (input.type === "password") {
-                input.type = "text";
-            } else {
-                input.type = "password";
-            }
+        // Botón Mostrar / Ocultar Contraseña
+        const btnMostrar = document.getElementById('btn-mostrar-pass');
+        const inputPass = document.getElementById('password');
+        if (btnMostrar && inputPass) {
+            btnMostrar.addEventListener('click', () => {
+                if (inputPass.type === "password") {
+                    inputPass.type = "text";
+                    btnMostrar.textContent = "Ocultar";
+                } else {
+                    inputPass.type = "password";
+                    btnMostrar.textContent = "Mostrar";
+                }
+            });
         }
     </script>
 </body>
