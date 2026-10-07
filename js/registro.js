@@ -14,6 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const reqNum = document.getElementById('req-num');
     const reqEsp = document.getElementById('req-esp');
 
+    // 1. RESTRICCIÓN EN TIEMPO REAL: Bloquear números y caracteres especiales al tipear
+    const bloquearCaracteresInvalidos = (input) => {
+        // Permite solo letras (incluye ñ, Ñ y acentos) y espacios
+        input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    };
+
+    if (inputNombre) {
+        inputNombre.addEventListener('input', () => bloquearCaracteresInvalidos(inputNombre));
+    }
+    if (inputApellido) {
+        inputApellido.addEventListener('input', () => bloquearCaracteresInvalidos(inputApellido));
+    }
+
     // Función para actualizar visualmente cada ítem de la contraseña
     function actualizarEstado(elemento, condicion, texto) {
         if (condicion) {
@@ -27,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // EVALUACIÓN EN TIEMPO REAL MIENTRAS SE ESCRIBE LA CONTRASEÑA
+    // EVALUACIÓN EN TIEMPO REAL DE LA CONTRASEÑA
     if (inputPass) {
         inputPass.addEventListener('input', () => {
             const pass = inputPass.value;
@@ -42,10 +55,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // CONTROL AL PRESIONAR "REGISTRARSE"
     form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Evita recargar la página
+        e.preventDefault();
         msgBox.textContent = "";
 
-        // 1. VALIDACIÓN DE FECHA Y EDAD (MÍNIMO 14 AÑOS)
+        // A. VALIDACIÓN DE NOMBRE Y APELLIDO
+        const regexSoloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+        const nombreVal = inputNombre.value.trim();
+        const apellidoVal = inputApellido.value.trim();
+
+        if (!nombreVal || !regexSoloLetras.test(nombreVal)) {
+            msgBox.textContent = "El nombre solo puede contener letras y espacios.";
+            return;
+        }
+
+        if (!apellidoVal || !regexSoloLetras.test(apellidoVal)) {
+            msgBox.textContent = "El apellido solo puede contener letras y espacios.";
+            return;
+        }
+
+        // B. VALIDACIÓN DE FECHA Y EDAD (MÍNIMO 14 AÑOS)
         if (!inputFecha.value) {
             msgBox.textContent = "Por favor, ingresa tu fecha de nacimiento.";
             return;
@@ -65,14 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 2. VALIDACIÓN DE NOMBRE Y APELLIDO (SOLO LETRAS)
-        const regexLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-        if (!regexLetras.test(inputNombre.value.trim()) || !regexLetras.test(inputApellido.value.trim())) {
-            msgBox.textContent = "El Nombre y Apellido solo deben contener letras.";
-            return;
-        }
-
-        // 3. VALIDACIÓN ESTRICTA DE CONTRASEÑA
+        // C. VALIDACIÓN ESTRICTA DE CONTRASEÑA
         const pass = inputPass.value;
         const cumpleMin = pass.length >= 8;
         const cumpleMayus = /[A-Z]/.test(pass);
@@ -85,10 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 4. SI TODO ESTÁ CORRECTO, GUARDAR EN LOCALSTORAGE
+        // D. GUARDAR EN LOCALSTORAGE
         const nuevoUsuario = {
-            nombre: inputNombre.value.trim(),
-            apellido: inputApellido.value.trim(),
+            nombre: nombreVal,
+            apellido: apellidoVal,
             fecha: inputFecha.value,
             email: inputEmail.value.trim(),
             usuario: document.getElementById('usuario').value.trim(),
@@ -97,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
         
-        // Verificar si el correo ya existe
         const existe = usuarios.some(u => u.email === nuevoUsuario.email);
         if (existe) {
             msgBox.textContent = "El correo electrónico ya se encuentra registrado.";
@@ -107,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
         usuarios.push(nuevoUsuario);
         localStorage.setItem('usuarios_sgg', JSON.stringify(usuarios));
 
-        // Muestra éxito en el texto de abajo y redirige
         msgBox.style.color = "#2e7d32";
         msgBox.textContent = "¡Registro exitoso! Redirigiendo al Login...";
         
