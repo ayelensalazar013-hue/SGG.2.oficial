@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const reqNum = document.getElementById('req-num');
     const reqEsp = document.getElementById('req-esp');
 
-    // Función auxiliar para actualizar visualmente cada ítem
+    // Función para actualizar visualmente cada ítem de la contraseña
     function actualizarEstado(elemento, condicion, texto) {
         if (condicion) {
             elemento.textContent = `✓ ${texto}`;
@@ -27,24 +27,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // EVALUACIÓN EN TIEMPO REAL MIENTRAS EL USUARIO ESCRIBE LA CONTRASEÑA
-    inputPass.addEventListener('input', () => {
-        const pass = inputPass.value;
+    // EVALUACIÓN EN TIEMPO REAL MIENTRAS SE ESCRIBE LA CONTRASEÑA
+    if (inputPass) {
+        inputPass.addEventListener('input', () => {
+            const pass = inputPass.value;
 
-        actualizarEstado(reqMin, pass.length >= 8, "Mínimo 8 caracteres");
-        actualizarEstado(reqMayus, /[A-Z]/.test(pass), "Al menos 1 letra mayúscula");
-        actualizarEstado(reqMinus, /[a-z]/.test(pass), "Al menos 1 letra minúscula");
-        actualizarEstado(reqNum, /[0-9]/.test(pass), "Al menos 1 número");
-        actualizarEstado(reqEsp, /[!@#$%^&*(),.?":{}|<>]/.test(pass), "Al menos 1 carácter especial");
-    });
+            actualizarEstado(reqMin, pass.length >= 8, "Mínimo 8 caracteres");
+            actualizarEstado(reqMayus, /[A-Z]/.test(pass), "Al menos 1 letra mayúscula");
+            actualizarEstado(reqMinus, /[a-z]/.test(pass), "Al menos 1 letra minúscula");
+            actualizarEstado(reqNum, /[0-9]/.test(pass), "Al menos 1 número");
+            actualizarEstado(reqEsp, /[!@#$%^&*(),.?":{}|<>]/.test(pass), "Al menos 1 carácter especial");
+        });
+    }
 
-    // CONTROL STRICTO AL TOCAR "REGISTRARSE"
+    // CONTROL AL PRESIONAR "REGISTRARSE"
     form.addEventListener('submit', (e) => {
-        // Bloquear recarga automática
-        e.preventDefault();
+        e.preventDefault(); // Evita recargar la página
         msgBox.textContent = "";
 
-        // 1. VALIDACIÓN DE EDAD (MÍNIMO 14 AÑOS)
+        // 1. VALIDACIÓN DE FECHA Y EDAD (MÍNIMO 14 AÑOS)
         if (!inputFecha.value) {
             msgBox.textContent = "Por favor, ingresa tu fecha de nacimiento.";
             return;
@@ -61,12 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (edad < 14) {
             msgBox.textContent = `No puedes registrarte: tienes ${edad} años y la edad mínima es 14.`;
-            alert(`Registro rechazado: Tienes ${edad} años. Debes tener al menos 14 años para crear una cuenta.`);
             return;
         }
 
         // 2. VALIDACIÓN DE NOMBRE Y APELLIDO (SOLO LETRAS)
-        const regexLetras = /^[a-zA-AáéíóúÁÉÍÓÚñÑ\s]+$/;
+        const regexLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
         if (!regexLetras.test(inputNombre.value.trim()) || !regexLetras.test(inputApellido.value.trim())) {
             msgBox.textContent = "El Nombre y Apellido solo deben contener letras.";
             return;
@@ -81,8 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cumpleEsp = /[!@#$%^&*(),.?":{}|<>]/.test(pass);
 
         if (!cumpleMin || !cumpleMayus || !cumpleMinus || !cumpleNum || !cumpleEsp) {
-            msgBox.textContent = "La contraseña NO cumple con todos los requisitos. Revisa las cruces rojas.";
-            alert("Error: La contraseña no cumple con todos los requisitos de seguridad requeridos.");
+            msgBox.textContent = "La contraseña no cumple con todos los requisitos necesarios.";
             return;
         }
 
@@ -102,14 +101,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const existe = usuarios.some(u => u.email === nuevoUsuario.email);
         if (existe) {
             msgBox.textContent = "El correo electrónico ya se encuentra registrado.";
-            alert("Este correo ya está en uso por otro usuario.");
             return;
         }
 
         usuarios.push(nuevoUsuario);
         localStorage.setItem('usuarios_sgg', JSON.stringify(usuarios));
 
-        alert("¡Cuenta creada exitosamente! Redirigiendo a la pantalla de inicio de sesión...");
-        window.location.href = "index.html";
+        // Muestra éxito en el texto de abajo y redirige
+        msgBox.style.color = "#2e7d32";
+        msgBox.textContent = "¡Registro exitoso! Redirigiendo al Login...";
+        
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 1500);
     });
 });
