@@ -3,72 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar Contraseña</title>
+    <title>SGG - Recuperar Contraseña</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <button id="btn-tema" class="btn-tema">Cambiar Modo</button>
+    <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()">Cambiar Modo</button>
 
     <div class="container">
         <h1>Recuperar Contraseña</h1>
-
+        
         <form id="form-recuperar">
-            <label for="email">Correo electrónico registrado</label>
-            <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+            <label for="email">Correo Electrónico Registrado:</label>
+            <input type="email" id="email" name="email" required placeholder="Ingresá tu email">
 
-            <label for="password">Nueva Contraseña</label>
-            <input type="password" id="password" placeholder="Nueva Contraseña" required>
-            <button type="button" class="btn-mostrar" id="btn-mostrar-pass">Mostrar</button>
+            <label for="nuevaPassword">Nueva Contraseña:</label>
+            <input type="password" id="nuevaPassword" name="nuevaPassword" required placeholder="Ingresá tu nueva clave">
 
-            <ul id="lista-requisitos" style="list-style: none; padding-left: 0; text-align: left; margin-top: 10px;">
-                <li id="req-min" style="color: #c62828;">✘ Mínimo 8 caracteres</li>
-                <li id="req-mayus" style="color: #c62828;">✘ Al menos 1 letra mayúscula</li>
-                <li id="req-minus" style="color: #c62828;">✘ Al menos 1 letra minúscula</li>
-                <li id="req-num" style="color: #c62828;">✘ Al menos 1 número</li>
-                <li id="req-esp" style="color: #c62828;">✘ Al menos 1 carácter especial</li>
-            </ul>
+            <label for="confirmarPassword">Confirmar Nueva Contraseña:</label>
+            <input type="password" id="confirmarPassword" name="confirmarPassword" required placeholder="Repetía la contraseña">
+            
+            <button type="button" class="btn-mostrar" onclick="mostrarOcultarPassword('nuevaPassword', this)">Mostrar</button>
 
-            <label for="confirm-password" style="margin-top: 15px; display: block;">Repetir Nueva Contraseña</label>
-            <input type="password" id="confirm-password" placeholder="Repetir Nueva Contraseña" required>
-
-            <div id="mensaje-error" style="color: #c62828; font-weight: bold; margin: 15px 0; text-align: center;"></div>
-
-            <button type="submit" class="btn-principal">Actualizar Contraseña</button>
-
-            <hr class="divisoria">
-
-            <div class="links-container">
-                <a href="index.html" class="btn-enlace">Volver al Login</a>
-                <a href="registro.html" class="btn-enlace">Crear Cuenta</a>
-            </div>
+            <button type="submit" class="btn-principal" id="btn-recuperar">Actualizar Contraseña</button>
         </form>
+
+        <div id="mensaje"></div>
+
+        <hr class="divisoria">
+
+        <div class="links-container">
+            <a href="index.html" class="btn-enlace">Volver al Login</a>
+        </div>
     </div>
 
     <script src="js/recuperar.js"></script>
-    <script>
-        // Cambiar tema
-        const btnTema = document.getElementById('btn-tema');
-        if (btnTema) {
-            btnTema.addEventListener('click', () => {
-                document.body.classList.toggle('modo-oscuro');
-            });
-        }
-
-        // Mostrar / Ocultar contraseña
-        const btnMostrar = document.getElementById('btn-mostrar-pass');
-        const inputPass = document.getElementById('password');
-        if (btnMostrar && inputPass) {
-            btnMostrar.addEventListener('click', () => {
-                if (inputPass.type === "password") {
-                    inputPass.type = "text";
-                    btnMostrar.textContent = "Ocultar";
-                } else {
-                    inputPass.type = "password";
-                    btnMostrar.textContent = "Mostrar";
-                }
-            });
-        }
-    </script>
 </body>
 </html>
