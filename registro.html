@@ -41,7 +41,6 @@
                 <input type="password" id="pass" placeholder="Creá una contraseña segura" required>
             </div>
 
-            <!-- Lista interactiva de reglas -->
             <ul class="password-rules">
                 <li id="rule-length" class="rule-item invalid">✖ Mínimo 8 caracteres</li>
                 <li id="rule-upper" class="rule-item invalid">✖ Al menos 1 mayúscula</li>
@@ -50,9 +49,7 @@
                 <li id="rule-spec" class="rule-item invalid">✖ Al menos 1 símbolo (!@#$%^&*)</li>
             </ul>
 
-            <!-- Botón funcional para mostrar/ocultar contraseña -->
             <button type="button" id="btnMostrar" class="btn-marrón-secundario">Mostrar</button>
-
             <button type="submit" id="btnRegistrarse" class="btn-marrón" disabled>Registrarse</button>
         </form>
 
@@ -64,6 +61,136 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Modo Claro / Oscuro
+        const btnTema = document.getElementById("btnTema");
+        const temaGuardado = localStorage.getItem("tema") || "oscuro";
+        if (temaGuardado === "oscuro") {
+            document.body.classList.add("modo-noche");
+            document.body.setAttribute("data-tema", "oscuro");
+        } else {
+            document.body.classList.remove("modo-noche");
+            document.body.setAttribute("data-tema", "claro");
+        }
+
+        if (btnTema) {
+            btnTema.addEventListener("click", () => {
+                document.body.classList.toggle("modo-noche");
+                const esOscuro = document.body.classList.contains("modo-noche");
+                document.body.setAttribute("data-tema", esOscuro ? "oscuro" : "claro");
+                localStorage.setItem("tema", esOscuro ? "oscuro" : "claro");
+            });
+        }
+
+        // Mostrar / Ocultar Contraseña
+        const btnMostrar = document.getElementById("btnMostrar");
+        if (btnMostrar) {
+            btnMostrar.addEventListener("click", () => {
+                const passInput = document.getElementById("pass");
+                if (passInput.type === "password") {
+                    passInput.type = "text";
+                    btnMostrar.textContent = "Ocultar";
+                } else {
+                    passInput.type = "password";
+                    btnMostrar.textContent = "Mostrar";
+                }
+            });
+        }
+
+        // Evaluación de 5 Reglas
+        const passInput = document.getElementById("pass");
+        const btnRegistrarse = document.getElementById("btnRegistrarse");
+
+        function evaluarReglas(texto) {
+            const reglas = {
+                "rule-length": texto.length >= 8,
+                "rule-upper": /[A-Z]/.test(texto),
+                "rule-lower": /[a-z]/.test(texto),
+                "rule-num": /[0-9]/.test(texto),
+                "rule-spec": /[!@#$%^&*(),.?":{}|<>]/.test(texto)
+            };
+
+            let todasOK = true;
+            Object.keys(reglas).forEach(id => {
+                const el = document.getElementById(id);
+                const cumple = reglas[id];
+                if (el) {
+                    el.className = `rule-item ${cumple ? 'valid' : 'invalid'}`;
+                    const textoBase = el.textContent.replace(/^[✔✖]\s*/, "");
+                    el.textContent = `${cumple ? '✔' : '✖'} ${textoBase}`;
+                }
+                if (!cumple) todasOK = false;
+            });
+
+            btnRegistrarse.disabled = !todasOK;
+        }
+
+        if (passInput) {
+            passInput.addEventListener("input", (e) => evaluarReglas(e.target.value));
+        }
+
+        // Sin números en Nombre/Apellido
+        const inputNombre = document.getElementById("nombre");
+        const inputApellido = document.getElementById("apellido");
+        [inputNombre, inputApellido].forEach(input => {
+            if (input) {
+                input.addEventListener("input", (e) => {
+                    e.target.value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
+                });
+            }
+        });
+
+        // Envío de Formulario
+        const formRegistro = document.getElementById("formRegistro");
+        const mensajeError = document.getElementById("mensajeError");
+
+        if (formRegistro) {
+            formRegistro.addEventListener("submit", (e) => {
+                e.preventDefault();
+                mensajeError.textContent = "";
+
+                const nombre = inputNombre.value.trim();
+                const apellido = inputApellido.value.trim();
+                const fechaNac = new Date(document.getElementById("fechaNacimiento").value);
+                const email = document.getElementById("email").value.trim();
+                const usuario = document.getElementById("usuario").value.trim();
+                const pass = passInput.value;
+
+                // Validación Edad (+14 años)
+                const hoy = new Date();
+                let edad = hoy.getFullYear() - fechaNac.getFullYear();
+                const m = hoy.getMonth() - fechaNac.getMonth();
+                if (m < 0 || (m === 0 && hoy.getDate() < fechaNac.getDate())) {
+                    edad--;
+                }
+
+                if (isNaN(edad) || edad < 14) {
+                    mensajeError.textContent = `Debes tener al menos 14 años para registrarte. Edad actual: ${isNaN(edad) ? 0 : edad} años.`;
+                    return;
+                }
+
+                // RegEx de Email Corporativo
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+                if (!emailRegex.test(email)) {
+                    mensajeError.textContent = "El correo electrónico debe incluir un formato válido (ej: usuario@dominio.com).";
+                    return;
+                }
+
+                const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios") || "[]");
+                if (usuariosGuardados.some(u => u.email === email)) {
+                    mensajeError.textContent = "El correo ingresado ya se encuentra registrado.";
+                    return;
+                }
+
+                usuariosGuardados.push({ nombre, apellido, email, usuario, pass });
+                localStorage.setItem("usuarios", JSON.stringify(usuariosGuardados));
+
+                alert("¡Registro exitoso! Redirigiendo al inicio de sesión...");
+                window.location.href = "login.html";
+            });
+        }
+    });
+    </script>
 </body>
 </html>
