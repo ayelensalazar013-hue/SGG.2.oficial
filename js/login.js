@@ -1,4 +1,4 @@
-// CONTROL DE MODO DÍA / NOCHE
+// CONTROL DE MODO DÍA / NOCHE (RF-02)
 const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
 if (btnTema) {
     if (localStorage.getItem('tema_sgg') === 'oscuro') {
@@ -11,26 +11,20 @@ if (btnTema) {
     });
 }
 
-// FUNCIONALIDAD DEL BOTÓN MOSTRAR / OCULTAR
-document.addEventListener('DOMContentLoaded', () => {
-    const btnMostrar = document.querySelector('.btn-mostrar') || document.getElementById('btnTogglePass');
-    const inputPass = document.getElementById('password') || document.getElementById('loginPass');
-
-    if (btnMostrar && inputPass) {
-        btnMostrar.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (inputPass.type === 'password') {
-                inputPass.type = 'text';
-                btnMostrar.textContent = 'Ocultar';
-            } else {
-                inputPass.type = 'password';
-                btnMostrar.textContent = 'Mostrar';
-            }
-        });
+// FUNCIÓN PARA MOSTRAR / OCULTAR CONTRASEÑA
+window.mostrarOcultarPassword = function(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    if (input.type === 'password') {
+        input.type = 'text';
+        if (btn) btn.textContent = 'Ocultar';
+    } else {
+        input.type = 'password';
+        if (btn) btn.textContent = 'Mostrar';
     }
-});
+};
 
-// INICIO DE SESIÓN
+// INICIO DE SESIÓN (RF-01)
 const formLogin = document.getElementById('form-login') || document.getElementById('formLogin');
 if (formLogin) {
     let intentosFallidos = 0;
@@ -54,6 +48,7 @@ if (formLogin) {
             localStorage.setItem('usuario_activo_sgg', JSON.stringify(usuarioEncontrado));
             loginMsg.className = 'msg-box success';
             loginMsg.textContent = '¡Inicio de sesión exitoso! Redirigiendo...';
+            // Redirige a panel.html (el archivo real de tu repositorio)
             setTimeout(() => window.location.href = 'panel.html', 1000);
         } else {
             intentosFallidos++;
