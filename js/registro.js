@@ -1,4 +1,4 @@
-// CONTROL DE MODO DÍA / NOCHE
+// CONTROL DE MODO DÍA / NOCHE (RF-02)
 const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
 if (btnTema) {
     if (localStorage.getItem('tema_sgg') === 'oscuro') {
@@ -11,66 +11,45 @@ if (btnTema) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // BOTÓN MOSTRAR / OCULTAR EN REGISTRO
-    const btnMostrar = document.querySelector('.btn-mostrar') || document.getElementById('btnToggleRegPass');
-    const regPassInput = document.getElementById('regPass') || document.getElementById('regPassword') || document.getElementById('password');
-
-    if (btnMostrar && regPassInput) {
-        btnMostrar.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (regPassInput.type === 'password') {
-                regPassInput.type = 'text';
-                btnMostrar.textContent = 'Ocultar';
-            } else {
-                regPassInput.type = 'password';
-                btnMostrar.textContent = 'Mostrar';
-            }
-        });
-    }
-
-    // VALIDACIÓN DE LAS 5 REGLAS EN VIVO (TILDES Y CRUCES)
-    if (regPassInput) {
-        regPassInput.addEventListener('input', () => {
-            const val = regPassInput.value;
-            actualizarRegla('ruleLen', val.length >= 8, 'Mínimo 8 caracteres');
-            actualizarRegla('ruleMayus', /[A-Z]/.test(val), 'Al menos una mayúscula');
-            actualizarRegla('ruleMinus', /[a-z]/.test(val), 'Al menos una minúscula');
-            actualizarRegla('ruleNum', /[0-9]/.test(val), 'Al menos un número');
-            actualizarRegla('ruleSim', /[!@#$%^&*]/.test(val), 'Al menos un símbolo (!@#$%^&*)');
-        });
-    }
-
-    function actualizarRegla(id, cumple, texto) {
-        const el = document.getElementById(id);
-        if (el) {
-            if (cumple) {
-                el.style.color = '#2e7d32';
-                el.textContent = `✔ ${texto}`;
-            } else {
-                el.style.color = '#c62828';
-                el.textContent = `✖ ${texto}`;
-            }
-        }
-    }
-});
-
-// SUBMIT REGISTRO
 const formRegister = document.getElementById('formRegister') || document.getElementById('form-registro');
 if (formRegister) {
+    const regNombre = document.getElementById('regNombre') || document.getElementById('nombre');
+    const regApellido = document.getElementById('regApellido') || document.getElementById('apellido');
+    const regFecha = document.getElementById('regFecha') || document.getElementById('fechaNacimiento');
+    const regEmail = document.getElementById('regEmail') || document.getElementById('email');
+    const regUsername = document.getElementById('regUsername') || document.getElementById('username');
+    const regPass = document.getElementById('regPass') || document.getElementById('regPassword');
+    const regMsg = document.getElementById('regMsg') || document.getElementById('regMensaje');
+
+    // Validación de la contraseña en vivo (Tildes verdes y cruces rojas)
+    if (regPass) {
+        regPass.addEventListener('input', () => {
+            const val = regPass.value;
+            validarRegla('ruleLen', val.length >= 8, 'Mínimo 8 caracteres');
+            validarRegla('ruleMayus', /[A-Z]/.test(val), 'Al menos una mayúscula');
+            validarRegla('ruleMinus', /[a-z]/.test(val), 'Al menos una minúscula');
+            validarRegla('ruleNum', /[0-9]/.test(val), 'Al menos un número');
+            validarRegla('ruleSim', /[!@#$%^&*]/.test(val), 'Al menos un símbolo (!@#$%^&*)');
+        });
+    }
+
+    function validarRegla(id, condicion, texto) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (condicion) {
+            el.className = 'valid';
+            el.textContent = `✔ ${texto}`;
+        } else {
+            el.className = '';
+            el.textContent = `✖ ${texto}`;
+        }
+    }
+
     formRegister.addEventListener('submit', (e) => {
         e.preventDefault();
-        const regNombre = document.getElementById('regNombre') || document.getElementById('nombre');
-        const regApellido = document.getElementById('regApellido') || document.getElementById('apellido');
-        const regFecha = document.getElementById('regFecha') || document.getElementById('fechaNacimiento');
-        const regEmail = document.getElementById('regEmail') || document.getElementById('email');
-        const regUsername = document.getElementById('regUsername') || document.getElementById('username');
-        const regPass = document.getElementById('regPass') || document.getElementById('regPassword') || document.getElementById('password');
-        const regMsg = document.getElementById('regMsg') || document.getElementById('regMensaje') || document.getElementById('mensaje');
-
         if (regMsg) regMsg.textContent = '';
 
-        // Limpieza y validación de Nombre/Apellido
+        // Limpieza de espacios y validación sin números/símbolos en Nombre/Apellido
         const nombre = regNombre.value.trim();
         const apellido = regApellido.value.trim();
         if (/[0-9!@#$\%^&*]/.test(nombre) \vert{}\vert{} /[0-9!@#$%^&*]/.test(apellido)) {
@@ -81,7 +60,7 @@ if (formRegister) {
             return;
         }
 
-        // Validación edad >= 14
+        // Validación de edad mínima (14 años)
         const fechaNac = new Date(regFecha.value);
         const hoy = new Date();
         let edad = hoy.getFullYear() - fechaNac.getFullYear();
@@ -96,7 +75,7 @@ if (formRegister) {
             return;
         }
 
-        // Validación email
+        // Validación de formato de correo
         const email = regEmail.value.trim().toLowerCase();
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             if (regMsg) {
@@ -106,7 +85,7 @@ if (formRegister) {
             return;
         }
 
-        // Validación estricta de 5 reglas
+        // Validación de 5 reglas de contraseña
         const valPass = regPass.value;
         const cumpleClave = valPass.length >= 8 && /[A-Z]/.test(valPass) && /[a-z]/.test(valPass) && /[0-9]/.test(valPass) && /[!@#$%^&*]/.test(valPass);
         if (!cumpleClave) {
