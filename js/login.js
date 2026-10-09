@@ -1,17 +1,16 @@
-// CONTROL DE MODO DÍA / NOCHE (RF-02)
-const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
-if (btnTema) {
-    if (localStorage.getItem('tema_sgg') === 'oscuro') {
-        document.body.classList.add('modo-noche');
-    }
-    btnTema.addEventListener('click', () => {
-        document.body.classList.toggle('modo-noche');
-        const esOscuro = document.body.classList.contains('modo-noche');
-        localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
-    });
+// CONTROL GLOBAL DE CAMBIO DE TEMA (RF-02)
+window.cambiarTema = function() {
+    document.body.classList.toggle('modo-noche');
+    const esOscuro = document.body.classList.contains('modo-noche');
+    localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+};
+
+// Cargar modo guardado al iniciar
+if (localStorage.getItem('tema_sgg') === 'oscuro') {
+    document.body.classList.add('modo-noche');
 }
 
-// FUNCIÓN PARA MOSTRAR / OCULTAR CONTRASEÑA
+// FUNCIÓN GLOBAL MOSTRAR / OCULTAR CONTRASEÑA
 window.mostrarOcultarPassword = function(inputId, btn) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -35,34 +34,37 @@ if (formLogin) {
 
     formLogin.addEventListener('submit', (e) => {
         e.preventDefault();
-        loginMsg.textContent = '';
+        if (loginMsg) loginMsg.textContent = '';
 
         const userOrEmail = loginUser.value.trim().toLowerCase();
         const pass = loginPass.value;
         const usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
 
-        const usuarioEncontrado = usuarios.find(u => (u.email === userOrEmail || u.username === userOrEmail) && u.password === pass);
+        const usuarioEncontrado = usuarios.find(u => (u.email === userOrEmail || u.username === userOrEmail || u.usuario === userOrEmail) && u.password === pass);
 
         if (usuarioEncontrado) {
             intentosFallidos = 0;
             localStorage.setItem('usuario_activo_sgg', JSON.stringify(usuarioEncontrado));
-            loginMsg.className = 'msg-box success';
-            loginMsg.textContent = '¡Inicio de sesión exitoso! Redirigiendo...';
-            // Redirige a panel.html (el archivo real de tu repositorio)
+            if (loginMsg) {
+                loginMsg.className = 'msg-box success';
+                loginMsg.textContent = '¡Inicio de sesión exitoso! Redirigiendo...';
+            }
             setTimeout(() => window.location.href = 'panel.html', 1000);
         } else {
             intentosFallidos++;
-            loginMsg.className = 'msg-box error';
-            if (intentosFallidos >= 3) {
-                btnSubmit.disabled = true;
-                loginMsg.textContent = 'Demasiados intentos fallidos. Botón bloqueado por 30 segundos.';
-                setTimeout(() => {
-                    btnSubmit.disabled = false;
-                    intentosFallidos = 0;
-                    loginMsg.textContent = '';
-                }, 30000);
-            } else {
-                loginMsg.textContent = `Datos incorrectos. Intento ${intentosFallidos} de 3.`;
+            if (loginMsg) {
+                loginMsg.className = 'msg-box error';
+                if (intentosFallidos >= 3) {
+                    btnSubmit.disabled = true;
+                    loginMsg.textContent = 'Demasiados intentos fallidos. Botón bloqueado por 30 segundos.';
+                    setTimeout(() => {
+                        btnSubmit.disabled = false;
+                        intentosFallidos = 0;
+                        loginMsg.textContent = '';
+                    }, 30000);
+                } else {
+                    loginMsg.textContent = `Datos incorrectos. Intento ${intentosFallidos} de 3.`;
+                }
             }
         }
     });
