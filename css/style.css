@@ -1,30 +1,31 @@
-/* PALETA CAFÉ Y MODO NOCHE (RF-02) */
+/* PALETA Y ESTILOS EXACTOS (RF-02) */
 :root {
-    --bg-color: #f4f0e8;
-    --card-bg: #ffffff;
-    --text-color: #4a2c20;
-    --btn-color: #6e473b;
-    --btn-hover: #58372d;
-    --border-color: #cbbab0;
-    --input-bg: #fafafa;
+    --bg-color: #f3efe6;          /* Fondo crema claro */
+    --card-bg: #ffffff;          /* Tarjeta blanca */
+    --text-color: #4a2c20;        /* Marrón para títulos y etiquetas */
+    --btn-color: #6a463b;         /* Botón café */
+    --btn-hover: #56382f;         /* Botón café hover */
+    --border-color: #bfaea4;      /* Borde fino de inputs */
+    --input-bg: #faf8f5;          /* Fondo suave de los campos */
     --error-color: #c62828;
     --success-color: #2e7d32;
 }
 
+/* MODO NOCHE (Fondo carbón y tarjeta café oscura) */
 body.modo-noche {
-    --bg-color: #1a1412;
-    --card-bg: #2b2320;
+    --bg-color: #1c1816;
+    --card-bg: #2a221f;
     --text-color: #ffffff;
-    --btn-color: #8c6052;
-    --btn-hover: #734d41;
-    --border-color: #54433d;
-    --input-bg: #211a18;
+    --btn-color: #885c4d;
+    --btn-hover: #724c3f;
+    --border-color: #4d3d37;
+    --input-bg: #201a18;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 20px;
     display: flex;
@@ -34,7 +35,8 @@ body {
     box-sizing: border-box;
 }
 
-.btn-tema {
+/* BOTÓN "Cambiar Modo" */
+.btn-tema, #btn-tema {
     position: fixed;
     top: 20px;
     right: 25px;
@@ -54,13 +56,14 @@ body {
     background-color: var(--btn-hover);
 }
 
-.container, .card-container {
+/* TARJETA CENTRADA CON BORDES REDONDEADOS */
+.container, .card-container, main {
     background: var(--card-bg);
     width: 100%;
     max-width: 420px;
     padding: 40px 35px;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -71,7 +74,7 @@ h1, h2 {
     margin-top: 0;
     margin-bottom: 25px;
     color: var(--text-color);
-    font-size: 2rem;
+    font-size: 2.1rem;
     font-weight: bold;
 }
 
@@ -87,6 +90,7 @@ label {
     margin-top: 10px;
     color: var(--text-color);
     display: block;
+    font-size: 0.95rem;
 }
 
 input[type="text"],
@@ -101,7 +105,6 @@ input[type="date"] {
     box-sizing: border-box;
     width: 100%;
     font-size: 0.95rem;
-    margin-bottom: 10px;
     outline: none;
 }
 
@@ -116,8 +119,8 @@ input[type="date"] {
     font-size: 1rem;
     cursor: pointer;
     width: 100%;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 12px;
+    margin-bottom: 8px;
 }
 
 .btn-principal:hover,
@@ -125,10 +128,11 @@ input[type="date"] {
     background-color: var(--btn-hover);
 }
 
+/* REGLAS DE CONTRASEÑA */
 .password-rules {
     list-style: none;
     padding: 0;
-    margin: 8px 0 15px 0;
+    margin: 8px 0 12px 0;
     font-size: 0.88rem;
 }
 
@@ -145,13 +149,14 @@ input[type="date"] {
     margin-top: 10px;
 }
 
-.msg-box.error, #mensaje.msg-box.error { color: var(--error-color); }
-.msg-box.success, #mensaje.msg-box.success { color: var(--success-color); }
+.msg-box.error { color: var(--error-color); }
+.msg-box.success { color: var(--success-color); }
 
 .divisoria {
     border: 0;
     border-top: 1px solid var(--border-color);
-    margin: 20px 0 15px 0;
+    margin: 25px 0 15px 0;
+    opacity: 0.5;
 }
 
 .links-container {
