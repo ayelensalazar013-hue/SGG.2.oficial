@@ -1,16 +1,17 @@
-/* PALETA CAFÉ Y MODO NOCHE (RF-02) */
+/* PALETA CAFÉ - ESTILOS VISUALES ORIGINALES (RF-02) */
 :root {
     --bg-color: #f5f2eb;
     --card-bg: #ffffff;
     --text-color: #3e2723;
     --primary-color: #6d4c41;
     --primary-hover: #5d4037;
-    --border-color: #a1887f;
+    --border-color: #d7ccc8;
+    --input-border: #a1887f;
     --error-color: #c62828;
     --success-color: #2e7d32;
-    --input-bg: #fafafa;
 }
 
+/* MODO NOCHE REAL */
 body.modo-noche {
     --bg-color: #1c1917;
     --card-bg: #292524;
@@ -18,7 +19,7 @@ body.modo-noche {
     --primary-color: #8d6e63;
     --primary-hover: #a1887f;
     --border-color: #44403c;
-    --input-bg: #1c1917;
+    --input-border: #57534e;
 }
 
 body {
@@ -33,100 +34,144 @@ body {
     min-height: 90vh;
 }
 
+/* BOTÓN CAMBIAR MODO */
 .btn-tema {
     position: fixed;
-    top: 15px;
-    right: 15px;
-    background-color: var(--primary-hover);
+    top: 20px;
+    right: 20px;
+    background-color: var(--primary-color);
     color: #ffffff;
     border: none;
     padding: 10px 18px;
     border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.card-container {
+.btn-tema:hover {
+    background-color: var(--primary-hover);
+}
+
+/* CONTENEDOR TARJETA CENTRADA */
+.card-container, main, .container {
     background: var(--card-bg);
     width: 100%;
-    max-width: 420px;
-    padding: 30px;
+    max-width: 400px;
+    padding: 35px 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     border: 1px solid var(--border-color);
     box-sizing: border-box;
-}
-
-h2 {
-    text-align: center;
-    margin-top: 0;
-    color: var(--text-color);
-}
-
-.form-group {
-    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
 }
 
-.form-group label {
+h1, h2 {
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: var(--text-color);
+    font-size: 1.8rem;
     font-weight: bold;
-    margin-bottom: 5px;
 }
 
-.form-group input {
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    box-sizing: border-box;
+/* ESTRUCTURA VERTICAL DEL FORMULARIO */
+form {
+    display: flex;
+    flex-direction: column;
     width: 100%;
 }
 
-.btn-principal {
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    display: block;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"] {
+    padding: 12px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: var(--text-color);
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+body.modo-noche input {
+    background-color: #1c1917;
+}
+
+/* BOTONES MARRONES */
+.btn-principal,
+#btn-login,
+#btn-registro,
+#btn-recuperar {
     background-color: var(--primary-color);
     color: #ffffff;
     border: none;
     padding: 12px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: bold;
+    font-size: 1rem;
     cursor: pointer;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
-.btn-principal:hover {
-    background-color: var(--primary-hover);
-}
-
-.btn-mostrar {
+.btn-mostrar,
+#btnTogglePass,
+#btnToggleRegPass,
+#btnToggleRecPass {
     background-color: var(--primary-color);
     color: #ffffff;
     border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.95rem;
     cursor: pointer;
     width: 100%;
-    margin-bottom: 10px;
-    font-weight: bold;
+    margin-bottom: 15px;
 }
 
+.btn-principal:hover,
+.btn-mostrar:hover {
+    background-color: var(--primary-hover);
+}
+
+/* REGLAS DE CONTRASEÑA EN VIVO */
 .password-rules {
     list-style: none;
     padding: 0;
-    margin: 8px 0 12px 0;
+    margin: 0 0 15px 0;
     font-size: 0.85rem;
-    text-align: left;
 }
 
 .password-rules li {
     color: var(--error-color);
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     font-weight: bold;
 }
 
-.msg-box {
+/* MENSAJES Y ENLACES FOOTER */
+.msg-box, #mensaje, #regMensaje, #recMensaje {
     font-size: 0.9rem;
     font-weight: bold;
     text-align: center;
@@ -136,7 +181,7 @@ h2 {
 .msg-box.error { color: var(--error-color); }
 .msg-box.success { color: var(--success-color); }
 
-.card-footer {
+.card-footer, .links-container {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
@@ -144,9 +189,13 @@ h2 {
     border-top: 1px solid var(--border-color);
 }
 
-.card-footer a {
+.card-footer a, .links-container a {
     color: var(--text-color);
     text-decoration: none;
     font-weight: bold;
     font-size: 0.9rem;
+}
+
+.card-footer a:hover, .links-container a:hover {
+    text-decoration: underline;
 }
