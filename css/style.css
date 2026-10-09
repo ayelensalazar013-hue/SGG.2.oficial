@@ -1,194 +1,152 @@
-/* ==========================================
-   VARIABLES CSS Y PALETAS (CUMPLIMIENTO RF-02)
-   ========================================== */
+/* PALETA CAFÉ Y MODO NOCHE (RF-02) */
 :root {
-    /* Paleta Día (Marrón Claro / Neutro) */
     --bg-color: #f5f2eb;
     --card-bg: #ffffff;
-    --text-color: #3e2723;       /* Marrón oscuro alto contraste (WCAG) */
+    --text-color: #3e2723;
+    --primary-color: #6d4c41;
+    --primary-hover: #5d4037;
+    --border-color: #a1887f;
+    --error-color: #c62828;
+    --success-color: #2e7d32;
     --input-bg: #fafafa;
-    --input-border: #8d6e63;
-    --btn-bg: #6d4c41;          /* Marrón medio para botones */
-    --btn-text: #ffffff;
-    --btn-hover: #4e342e;
-    --link-color: #4e342e;       /* Marrón para enlaces con alto contraste */
-    --border-color: #d7ccc8;
-    --error-color: #c62828;      /* Rojo accesible */
-    --success-color: #2e7d32;    /* Verde accesible */
 }
 
-[data-tema="oscuro"] {
-    /* Paleta Noche (Marrón Oscuro) */
+body.modo-noche {
     --bg-color: #1c1917;
-    --card-bg: #2c2523;
+    --card-bg: #292524;
     --text-color: #f5f2eb;
-    --input-bg: #3d3432;
-    --input-border: #8d6e63;
-    --btn-bg: #8d6e63;
-    --btn-text: #ffffff;
-    --btn-hover: #a1887f;
-    --link-color: #d7ccc8;
-    --border-color: #4e342e;
-    --error-color: #ef5350;
-    --success-color: #66bb6a;
-}
-
-/* ==========================================
-   RESET Y ESTILOS BASE
-   ========================================== */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+    --primary-color: #8d6e63;
+    --primary-hover: #a1887f;
+    --border-color: #44403c;
+    --input-bg: #1c1917;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* ==========================================
-   CONTENEDOR PRINCIPAL Y TARJETAS
-   ========================================== */
-.container {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 30px;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 24px;
-    color: var(--text-color);
-    font-size: 1.8rem;
-}
-
-/* ==========================================
-   FORMULARIO Y CAMPOS
-   ========================================== */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-label {
-    font-weight: bold;
-    font-size: 0.95rem;
-    color: var(--text-color);
-    margin-top: 5px;
-}
-
-input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--input-border);
-    border-radius: 6px;
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    font-size: 1rem;
-    outline: none;
-}
-
-input:focus {
-    border-color: var(--btn-bg);
-    box-shadow: 0 0 0 2px rgba(109, 76, 65, 0.2);
-}
-
-/* ==========================================
-   BOTONES
-   ========================================== */
-.btn-principal {
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
-    border: none;
-    border-radius: 6px;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.2s ease;
-}
-
-.btn-principal:hover {
-    background-color: var(--btn-hover);
-}
-
-.btn-principal:disabled {
-    background-color: #a1887f;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-.btn-mostrar {
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
-    border: none;
-    border-radius: 6px;
-    padding: 8px;
-    font-size: 0.9rem;
-    cursor: pointer;
+    min-height: 90vh;
 }
 
 .btn-tema {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
+    top: 15px;
+    right: 15px;
+    background-color: var(--primary-hover);
+    color: #ffffff;
     border: none;
-    border-radius: 20px;
     padding: 10px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.card-container {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    box-sizing: border-box;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 0;
+    color: var(--text-color);
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.btn-principal {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    z-index: 1000;
+    width: 100%;
+    margin-top: 10px;
 }
 
-/* ==========================================
-   MENSAJES Y ENLACES
-   ========================================== */
-#mensaje {
-    margin-top: 15px;
+.btn-principal:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-mostrar {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.password-rules {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 12px 0;
+    font-size: 0.85rem;
+    text-align: left;
+}
+
+.password-rules li {
+    color: var(--error-color);
+    margin-bottom: 3px;
+    font-weight: bold;
+}
+
+.msg-box {
+    font-size: 0.9rem;
     font-weight: bold;
     text-align: center;
-    font-size: 0.95rem;
-    min-height: 20px;
+    margin-top: 10px;
 }
 
-.divisoria {
-    border: 0;
-    height: 1px;
-    background-color: var(--border-color);
-    margin: 20px 0;
-}
+.msg-box.error { color: var(--error-color); }
+.msg-box.success { color: var(--success-color); }
 
-.links-container {
+.card-footer {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
 }
 
-.btn-enlace {
-    color: var(--link-color);
+.card-footer a {
+    color: var(--text-color);
     text-decoration: none;
     font-weight: bold;
     font-size: 0.9rem;
-}
-
-.btn-enlace:hover {
-    text-decoration: underline;
 }
