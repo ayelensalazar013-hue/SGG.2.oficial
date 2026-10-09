@@ -1,19 +1,16 @@
-/* ==========================================================
-   PALETA CAFÉ / MARRÓN EXACTA A LAS CAPTURAS (RF-02)
-   ========================================================== */
+/* PALETA CAFÉ Y MODO NOCHE (RF-02) */
 :root {
-    --bg-color: #f4f0e8;          /* Fondo crema claro de la pantalla */
-    --card-bg: #ffffff;          /* Tarjeta blanca */
-    --text-color: #4a2c20;        /* Texto marrón oscuro */
-    --btn-color: #6e473b;         /* Botón café principal */
-    --btn-hover: #58372d;         /* Botón café hover */
-    --border-color: #cbbab0;      /* Borde fino de los inputs */
-    --input-bg: #fafafa;          /* Fondo de los campos */
-    --error-color: #c62828;       /* Texto de error / reglas no cumplidas */
-    --success-color: #2e7d32;     /* Texto de éxito / reglas cumplidas */
+    --bg-color: #f4f0e8;
+    --card-bg: #ffffff;
+    --text-color: #4a2c20;
+    --btn-color: #6e473b;
+    --btn-hover: #58372d;
+    --border-color: #cbbab0;
+    --input-bg: #fafafa;
+    --error-color: #c62828;
+    --success-color: #2e7d32;
 }
 
-/* MODO NOCHE (Fondo oscuro y tarjeta café oscura como en la captura) */
 body.modo-noche {
     --bg-color: #1a1412;
     --card-bg: #2b2320;
@@ -37,8 +34,7 @@ body {
     box-sizing: border-box;
 }
 
-/* BOTÓN "Cambiar Modo" EN LA ESQUINA SUPERIOR DERECHA */
-.btn-tema, #btn-tema, #btnTheme {
+.btn-tema {
     position: fixed;
     top: 20px;
     right: 25px;
@@ -51,7 +47,6 @@ body {
     font-weight: bold;
     font-size: 0.95rem;
     box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-    transition: background-color 0.2s ease;
     z-index: 1000;
 }
 
@@ -59,8 +54,7 @@ body {
     background-color: var(--btn-hover);
 }
 
-/* TARJETA CONTENEDORA DE LOS FORMULARIOS */
-.card-container, main, .container {
+.container, .card-container {
     background: var(--card-bg);
     width: 100%;
     max-width: 420px;
@@ -72,42 +66,34 @@ body {
     flex-direction: column;
 }
 
-/* TÍTULOS (Iniciar Sesión, Registro, Recuperar) */
 h1, h2 {
     text-align: center;
     margin-top: 0;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     color: var(--text-color);
-    font-size: 2.1rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    font-size: 2rem;
+    font-weight: bold;
 }
 
-/* FORMULARIO Y CAMPOS */
 form {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-.form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
 label {
-    font-weight: 800;
-    margin-bottom: 8px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    margin-top: 10px;
     color: var(--text-color);
-    font-size: 0.95rem;
+    display: block;
 }
 
 input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="date"] {
-    padding: 13px 15px;
+    padding: 12px 15px;
     border: 1px solid var(--border-color);
     border-radius: 10px;
     background-color: var(--input-bg);
@@ -115,35 +101,23 @@ input[type="date"] {
     box-sizing: border-box;
     width: 100%;
     font-size: 0.95rem;
+    margin-bottom: 10px;
     outline: none;
-    transition: border-color 0.2s ease;
 }
 
-input:focus {
-    border-color: var(--btn-color);
-}
-
-/* BOTONES PRINCIPALES Y MOSTRAR */
 .btn-principal,
-.btn-mostrar,
-#btn-login,
-#btn-registro,
-#btn-recuperar,
-#btnTogglePass,
-#btnToggleRegPass,
-#btnToggleRecPass {
+.btn-mostrar {
     background-color: var(--btn-color);
     color: #ffffff;
     border: none;
     padding: 13px;
     border-radius: 10px;
-    font-weight: 700;
+    font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
     width: 100%;
-    margin-top: 8px;
-    margin-bottom: 12px;
-    transition: background-color 0.2s ease;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .btn-principal:hover,
@@ -151,48 +125,48 @@ input:focus {
     background-color: var(--btn-hover);
 }
 
-/* LISTA DE LAS 5 REGLAS DE CONTRASEÑA CON TILDES/CRUCES (CP-03.4) */
 .password-rules {
     list-style: none;
     padding: 0;
-    margin: 5px 0 15px 0;
+    margin: 8px 0 15px 0;
     font-size: 0.88rem;
 }
 
 .password-rules li {
     color: var(--error-color);
     margin-bottom: 4px;
-    font-weight: 700;
+    font-weight: bold;
 }
 
-/* MENSAJES DE ERROR Y LÍNEA SEPARADORA */
-.msg-box, #mensaje, #regMensaje, #recMensaje {
+.msg-box, #mensaje {
     font-size: 0.92rem;
-    font-weight: 700;
+    font-weight: bold;
     text-align: center;
     margin-top: 10px;
-    margin-bottom: 5px;
 }
 
-.msg-box.error { color: var(--error-color); }
-.msg-box.success { color: var(--success-color); }
+.msg-box.error, #mensaje.msg-box.error { color: var(--error-color); }
+.msg-box.success, #mensaje.msg-box.success { color: var(--success-color); }
 
-.card-footer, .links-container {
+.divisoria {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 20px 0 15px 0;
+}
+
+.links-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
 }
 
-.card-footer a, .links-container a {
+.btn-enlace {
     color: var(--text-color);
     text-decoration: none;
-    font-weight: 800;
+    font-weight: bold;
     font-size: 0.9rem;
 }
 
-.card-footer a:hover, .links-container a:hover {
+.btn-enlace:hover {
     text-decoration: underline;
 }
