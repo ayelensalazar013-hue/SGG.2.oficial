@@ -1,17 +1,17 @@
-/* PALETA Y ESTILOS EXACTOS (RF-02) */
+/* PALETA Y ESTILOS DE TARJETA CENTRADA (RF-02) */
 :root {
-    --bg-color: #f3efe6;          /* Fondo crema claro */
+    --bg-color: #f3efe6;          /* Fondo crema */
     --card-bg: #ffffff;          /* Tarjeta blanca */
-    --text-color: #4a2c20;        /* Marrón para títulos y etiquetas */
-    --btn-color: #6a463b;         /* Botón café */
+    --text-color: #4a2c20;        /* Texto marrón */
+    --btn-color: #6a463b;         /* Botón café principal */
     --btn-hover: #56382f;         /* Botón café hover */
-    --border-color: #bfaea4;      /* Borde fino de inputs */
-    --input-bg: #faf8f5;          /* Fondo suave de los campos */
+    --border-color: #bfaea4;      /* Borde de inputs */
+    --input-bg: #faf8f5;          /* Fondo campos */
     --error-color: #c62828;
     --success-color: #2e7d32;
 }
 
-/* MODO NOCHE (Fondo carbón y tarjeta café oscura) */
+/* MODO NOCHE */
 body.modo-noche {
     --bg-color: #1c1816;
     --card-bg: #2a221f;
@@ -23,19 +23,19 @@ body.modo-noche {
 }
 
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     min-height: 95vh;
     box-sizing: border-box;
 }
 
-/* BOTÓN "Cambiar Modo" */
+/* BOTÓN "Cambiar Modo" EN LA ESQUINA */
 .btn-tema, #btn-tema {
     position: fixed;
     top: 20px;
@@ -56,17 +56,18 @@ body {
     background-color: var(--btn-hover);
 }
 
-/* TARJETA CENTRADA CON BORDES REDONDEADOS */
+/* CONTENEDOR TARJETA CENTRADA */
 .container, .card-container, main {
-    background: var(--card-bg);
-    width: 100%;
-    max-width: 420px;
-    padding: 40px 35px;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    background: var(--card-bg) !important;
+    width: 100% !important;
+    max-width: 420px !important;
+    padding: 40px 35px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin: 0 auto !important;
 }
 
 h1, h2 {
@@ -79,9 +80,9 @@ h1, h2 {
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
 }
 
 label {
@@ -103,32 +104,33 @@ input[type="date"] {
     background-color: var(--input-bg);
     color: var(--text-color);
     box-sizing: border-box;
-    width: 100%;
+    width: 100% !important;
     font-size: 0.95rem;
     outline: none;
+    display: block !important;
 }
 
 .btn-principal,
 .btn-mostrar {
-    background-color: var(--btn-color);
-    color: #ffffff;
-    border: none;
-    padding: 13px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 1rem;
+    background-color: var(--btn-color) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 13px !important;
+    border-radius: 10px !important;
+    font-weight: bold !important;
+    font-size: 1rem !important;
     cursor: pointer;
-    width: 100%;
-    margin-top: 12px;
-    margin-bottom: 8px;
+    width: 100% !important;
+    margin-top: 12px !important;
+    margin-bottom: 8px !important;
+    display: block !important;
 }
 
 .btn-principal:hover,
 .btn-mostrar:hover {
-    background-color: var(--btn-hover);
+    background-color: var(--btn-hover) !important;
 }
 
-/* REGLAS DE CONTRASEÑA */
 .password-rules {
     list-style: none;
     padding: 0;
