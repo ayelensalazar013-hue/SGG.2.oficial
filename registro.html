@@ -2,195 +2,51 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Usuario</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema SGG - Registro de Usuario">
+    <title>SGG - Registro de Usuario</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="modo-noche">
-    <button id="btnTema" class="btn-tema">Cambiar Modo</button>
+<body>
 
-    <div class="dashboard-card">
+    <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()" aria-label="Cambiar tema de color">Cambiar Modo</button>
+
+    <main class="container">
         <h1>Registro de Usuario</h1>
-        <form id="formRegistro">
-            <div class="field-group">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" placeholder="Tu nombre" required>
-            </div>
+        
+        <form id="form-registro">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre" autocomplete="given-name">
 
-            <div class="field-group">
-                <label for="apellido">Apellido:</label>
-                <input type="text" id="apellido" placeholder="Tu apellido" required>
-            </div>
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required placeholder="Tu apellido" autocomplete="family-name">
 
-            <div class="field-group">
-                <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-                <input type="date" id="fechaNacimiento" required>
-            </div>
+            <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
 
-            <div class="field-group">
-                <label for="email">Correo Electrónico:</label>
-                <input type="email" id="email" placeholder="ejemplo@correo.com" required>
-            </div>
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com" autocomplete="email">
 
-            <div class="field-group">
-                <label for="usuario">Nombre de Usuario:</label>
-                <input type="text" id="usuario" placeholder="Elegí un usuario" required>
-            </div>
+            <label for="usuario">Nombre de Usuario:</label>
+            <input type="text" id="usuario" name="usuario" required placeholder="Elegí un usuario" autocomplete="username">
 
-            <div class="field-group">
-                <label for="pass">Contraseña:</label>
-                <input type="password" id="pass" placeholder="Creá una contraseña segura" required>
-            </div>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required placeholder="Creá una contraseña segura" autocomplete="new-password">
+            
+            <button type="button" class="btn-mostrar" onclick="mostrarOcultarPassword('password', this)" aria-label="Mostrar u ocultar contraseña">Mostrar</button>
 
-            <ul class="password-rules">
-                <li id="rule-length" class="rule-item invalid">✖ Mínimo 8 caracteres</li>
-                <li id="rule-upper" class="rule-item invalid">✖ Al menos 1 mayúscula</li>
-                <li id="rule-lower" class="rule-item invalid">✖ Al menos 1 minúscula</li>
-                <li id="rule-num" class="rule-item invalid">✖ Al menos 1 número</li>
-                <li id="rule-spec" class="rule-item invalid">✖ Al menos 1 símbolo (!@#$%^&*)</li>
-            </ul>
-
-            <button type="button" id="btnMostrar" class="btn-marrón-secundario">Mostrar</button>
-            <button type="submit" id="btnRegistrarse" class="btn-marrón" disabled>Registrarse</button>
+            <button type="submit" class="btn-principal" id="btn-registro">Registrarse</button>
         </form>
 
-        <div id="mensajeError" class="error-text"></div>
+        <div id="mensaje" aria-live="polite"></div>
 
         <hr class="divisoria">
-        <div>
-            <a href="login.html" class="btn-enlace">Volver al Login</a>
-        </div>
-    </div>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Modo Claro / Oscuro
-        const btnTema = document.getElementById("btnTema");
-        const temaGuardado = localStorage.getItem("tema") || "oscuro";
-        if (temaGuardado === "oscuro") {
-            document.body.classList.add("modo-noche");
-            document.body.setAttribute("data-tema", "oscuro");
-        } else {
-            document.body.classList.remove("modo-noche");
-            document.body.setAttribute("data-tema", "claro");
-        }
+        <nav class="links-container">
+            <a href="index.html" class="btn-enlace">Volver al Login</a>
+        </nav>
+    </main>
 
-        if (btnTema) {
-            btnTema.addEventListener("click", () => {
-                document.body.classList.toggle("modo-noche");
-                const esOscuro = document.body.classList.contains("modo-noche");
-                document.body.setAttribute("data-tema", esOscuro ? "oscuro" : "claro");
-                localStorage.setItem("tema", esOscuro ? "oscuro" : "claro");
-            });
-        }
-
-        // Mostrar / Ocultar Contraseña
-        const btnMostrar = document.getElementById("btnMostrar");
-        if (btnMostrar) {
-            btnMostrar.addEventListener("click", () => {
-                const passInput = document.getElementById("pass");
-                if (passInput.type === "password") {
-                    passInput.type = "text";
-                    btnMostrar.textContent = "Ocultar";
-                } else {
-                    passInput.type = "password";
-                    btnMostrar.textContent = "Mostrar";
-                }
-            });
-        }
-
-        // Evaluación de 5 Reglas
-        const passInput = document.getElementById("pass");
-        const btnRegistrarse = document.getElementById("btnRegistrarse");
-
-        function evaluarReglas(texto) {
-            const reglas = {
-                "rule-length": texto.length >= 8,
-                "rule-upper": /[A-Z]/.test(texto),
-                "rule-lower": /[a-z]/.test(texto),
-                "rule-num": /[0-9]/.test(texto),
-                "rule-spec": /[!@#$%^&*(),.?":{}|<>]/.test(texto)
-            };
-
-            let todasOK = true;
-            Object.keys(reglas).forEach(id => {
-                const el = document.getElementById(id);
-                const cumple = reglas[id];
-                if (el) {
-                    el.className = `rule-item ${cumple ? 'valid' : 'invalid'}`;
-                    const textoBase = el.textContent.replace(/^[✔✖]\s*/, "");
-                    el.textContent = `${cumple ? '✔' : '✖'} ${textoBase}`;
-                }
-                if (!cumple) todasOK = false;
-            });
-
-            btnRegistrarse.disabled = !todasOK;
-        }
-
-        if (passInput) {
-            passInput.addEventListener("input", (e) => evaluarReglas(e.target.value));
-        }
-
-        // Sin números en Nombre/Apellido
-        const inputNombre = document.getElementById("nombre");
-        const inputApellido = document.getElementById("apellido");
-        [inputNombre, inputApellido].forEach(input => {
-            if (input) {
-                input.addEventListener("input", (e) => {
-                    e.target.value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
-                });
-            }
-        });
-
-        // Envío de Formulario
-        const formRegistro = document.getElementById("formRegistro");
-        const mensajeError = document.getElementById("mensajeError");
-
-        if (formRegistro) {
-            formRegistro.addEventListener("submit", (e) => {
-                e.preventDefault();
-                mensajeError.textContent = "";
-
-                const nombre = inputNombre.value.trim();
-                const apellido = inputApellido.value.trim();
-                const fechaNac = new Date(document.getElementById("fechaNacimiento").value);
-                const email = document.getElementById("email").value.trim();
-                const usuario = document.getElementById("usuario").value.trim();
-                const pass = passInput.value;
-
-                // Validación Edad (+14 años)
-                const hoy = new Date();
-                let edad = hoy.getFullYear() - fechaNac.getFullYear();
-                const m = hoy.getMonth() - fechaNac.getMonth();
-                if (m < 0 || (m === 0 && hoy.getDate() < fechaNac.getDate())) {
-                    edad--;
-                }
-
-                if (isNaN(edad) || edad < 14) {
-                    mensajeError.textContent = `Debes tener al menos 14 años para registrarte. Edad actual: ${isNaN(edad) ? 0 : edad} años.`;
-                    return;
-                }
-
-                // RegEx de Email Corporativo
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-                if (!emailRegex.test(email)) {
-                    mensajeError.textContent = "El correo electrónico debe incluir un formato válido (ej: usuario@dominio.com).";
-                    return;
-                }
-
-                const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios") || "[]");
-                if (usuariosGuardados.some(u => u.email === email)) {
-                    mensajeError.textContent = "El correo ingresado ya se encuentra registrado.";
-                    return;
-                }
-
-                usuariosGuardados.push({ nombre, apellido, email, usuario, pass });
-                localStorage.setItem("usuarios", JSON.stringify(usuariosGuardados));
-
-                alert("¡Registro exitoso! Redirigiendo al inicio de sesión...");
-                window.location.href = "login.html";
-            });
-        }
-    });
-    </script>
+    <script src="js/registro.js"></script>
 </body>
 </html>
