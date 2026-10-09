@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sistema SGG - Registro de Usuario">
     <title>SGG - Registro de Usuario</title>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- RUTA CORREGIDA A TU CARPETA CSS/estilo.css -->
+    <link rel="stylesheet" href="CSS/estilo.css">
 </head>
 <body>
-
     <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()" aria-label="Cambiar tema de color">Cambiar Modo</button>
 
     <main class="container">
@@ -33,8 +33,16 @@
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password" required placeholder="Creá una contraseña segura" autocomplete="new-password">
             
-            <button type="button" class="btn-mostrar" onclick="mostrarOcultarPassword('password', this)" aria-label="Mostrar u ocultar contraseña">Mostrar</button>
+            <!-- LISTA DE LAS 5 REGLAS EN VIVO (CP-03.4) -->
+            <ul class="password-rules">
+                <li id="ruleLen">✖ Mínimo 8 caracteres</li>
+                <li id="ruleMayus">✖ Al menos una mayúscula</li>
+                <li id="ruleMinus">✖ Al menos una minúscula</li>
+                <li id="ruleNum">✖ Al menos un número</li>
+                <li id="ruleSim">✖ Al menos un símbolo (!@#$%^&*)</li>
+            </ul>
 
+            <button type="button" class="btn-mostrar" onclick="mostrarOcultarPassword('password', this)" aria-label="Mostrar u ocultar contraseña">Mostrar</button>
             <button type="submit" class="btn-principal" id="btn-registro">Registrarse</button>
         </form>
 
