@@ -2,59 +2,147 @@
    VARIABLES CSS Y PALETAS (CUMPLIMIENTO RF-02)
    ========================================== */
 :root {
-    /* Modo Día */
-    --bg-color: #f4efe6;
+    /* Paleta Día (Marrón Claro / Neutro) */
+    --bg-color: #f5f2eb;
     --card-bg: #ffffff;
-    --text-color: #3e2723;
+    --text-color: #3e2723;       /* Marrón oscuro alto contraste (WCAG) */
     --input-bg: #fafafa;
-    --input-border: #a1887f;
-    --input-text: #3e2723;
-    --btn-bg: #6d4c41;
+    --input-border: #8d6e63;
+    --btn-bg: #6d4c41;          /* Marrón medio para botones */
     --btn-text: #ffffff;
     --btn-hover: #4e342e;
-    --btn-secondary-bg: #8d6e63;
-    --btn-secondary-hover: #6d4c41;
-    --link-color: #3e2723;
+    --link-color: #4e342e;       /* Marrón para enlaces con alto contraste */
     --border-color: #d7ccc8;
+    --error-color: #c62828;      /* Rojo accesible */
+    --success-color: #2e7d32;    /* Verde accesible */
 }
 
-[data-tema="oscuro"], body.modo-noche {
-    /* Modo Noche */
-    --bg-color: #1a1514;
-    --card-bg: #2b2320;
+[data-tema="oscuro"] {
+    /* Paleta Noche (Marrón Oscuro) */
+    --bg-color: #1c1917;
+    --card-bg: #2c2523;
     --text-color: #f5f2eb;
-    --input-bg: #382e2a;
-    --input-border: #5d4037;
-    --input-text: #f5f2eb;
+    --input-bg: #3d3432;
+    --input-border: #8d6e63;
     --btn-bg: #8d6e63;
     --btn-text: #ffffff;
     --btn-hover: #a1887f;
-    --btn-secondary-bg: #6d4c41;
-    --btn-secondary-hover: #5d4037;
-    --link-color: #f5f2eb;
+    --link-color: #d7ccc8;
     --border-color: #4e342e;
+    --error-color: #ef5350;
+    --success-color: #66bb6a;
 }
 
-/* RESET Y BASE */
+/* ==========================================
+   RESET Y ESTILOS BASE
+   ========================================== */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: Arial, Helvetica, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 40px 20px;
+    padding: 20px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* BOTÓN DE CAMBIO DE MODO */
+/* ==========================================
+   CONTENEDOR PRINCIPAL Y TARJETAS
+   ========================================== */
+.container {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: var(--text-color);
+    font-size: 1.8rem;
+}
+
+/* ==========================================
+   FORMULARIO Y CAMPOS
+   ========================================== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    margin-top: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    outline: none;
+}
+
+input:focus {
+    border-color: var(--btn-bg);
+    box-shadow: 0 0 0 2px rgba(109, 76, 65, 0.2);
+}
+
+/* ==========================================
+   BOTONES
+   ========================================== */
+.btn-principal {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-principal:hover {
+    background-color: var(--btn-hover);
+}
+
+.btn-principal:disabled {
+    background-color: #a1887f;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-mostrar {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border: none;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
 .btn-tema {
     position: fixed;
     top: 20px;
@@ -63,163 +151,44 @@ body {
     color: var(--btn-text);
     border: none;
     border-radius: 20px;
-    padding: 10px 20px;
-    font-size: 0.95rem;
+    padding: 10px 18px;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     z-index: 1000;
 }
 
-/* TARJETA CONTENEDORA GRANDE Y AMPLIA */
-.dashboard-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    width: 100%;
-    max-width: 520px;
-    padding: 40px 35px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    margin: auto;
-}
-
-h1 {
+/* ==========================================
+   MENSAJES Y ENLACES
+   ========================================== */
+#mensaje {
+    margin-top: 15px;
+    font-weight: bold;
     text-align: center;
-    margin-bottom: 28px;
-    color: var(--text-color);
-    font-size: 2.1rem;
-    font-weight: bold;
+    font-size: 0.95rem;
+    min-height: 20px;
 }
 
-/* ESTRUCTURA Y ESPACIADO DEL FORMULARIO */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.field-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.field-group label {
-    font-weight: bold;
-    font-size: 1.05rem;
-    color: var(--text-color);
-}
-
-.field-group input {
-    width: 100%;
-    padding: 14px 16px;
-    border: 1px solid var(--input-border);
-    border-radius: 6px;
-    background-color: var(--input-bg);
-    color: var(--input-text);
-    font-size: 1rem;
-    outline: none;
-}
-
-/* BOTONES AMPLIOS */
-.btn-marrón {
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
-    border: none;
-    border-radius: 6px;
-    padding: 14px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 6px;
-}
-
-.btn-marrón:hover {
-    background-color: var(--btn-hover);
-}
-
-.btn-marrón-secundario {
-    background-color: var(--btn-secondary-bg);
-    color: var(--btn-text);
-    border: none;
-    border-radius: 6px;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-}
-
-.btn-marrón-secundario:hover {
-    background-color: var(--btn-secondary-hover);
-}
-
-.btn-marrón:disabled, .btn-marrón-secundario:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* REGLAS DE CONTRASEÑA UX (TILDES Y CRUCES) */
-.password-rules {
-    list-style: none;
-    background: rgba(0, 0, 0, 0.05);
-    padding: 12px 16px;
-    border-radius: 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 0.9rem;
-}
-
-.rule-item.invalid {
-    color: #ef5350;
-    font-weight: bold;
-}
-
-.rule-item.valid {
-    color: #4caf50;
-    font-weight: bold;
-}
-
-/* MENSAJES Y ENLACES */
 .divisoria {
     border: 0;
     height: 1px;
     background-color: var(--border-color);
-    margin: 24px 0 16px 0;
+    margin: 20px 0;
 }
 
 .links-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    gap: 10px;
 }
 
 .btn-enlace {
     color: var(--link-color);
     text-decoration: none;
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .btn-enlace:hover {
     text-decoration: underline;
-}
-
-.error-text {
-    color: #ef5350;
-    font-weight: bold;
-    text-align: center;
-    font-size: 1rem;
-    line-height: 1.4;
-    margin-top: 10px;
-}
-
-.success-text {
-    color: #4caf50;
-    font-weight: bold;
-    text-align: center;
-    font-size: 1rem;
-    margin-top: 10px;
 }
