@@ -1,202 +1,198 @@
-/* PALETA DE COLORES CAFÉ / MARRÓN */
+/* ==========================================================
+   PALETA CAFÉ / MARRÓN EXACTA A LAS CAPTURAS (RF-02)
+   ========================================================== */
 :root {
-    --bg-color: #f5f2eb;
-    --card-bg: #ffffff;
-    --text-color: #3e2723;
-    --primary-color: #6d4c41;
-    --primary-hover: #5d4037;
-    --secondary-color: #8d6e63;
-    --border-color: #a1887f;
-    --error-color: #c62828;
-    --success-color: #2e7d32;
-    --input-bg: #fafafa;
+    --bg-color: #f4f0e8;          /* Fondo crema claro de la pantalla */
+    --card-bg: #ffffff;          /* Tarjeta blanca */
+    --text-color: #4a2c20;        /* Texto marrón oscuro */
+    --btn-color: #6e473b;         /* Botón café principal */
+    --btn-hover: #58372d;         /* Botón café hover */
+    --border-color: #cbbab0;      /* Borde fino de los inputs */
+    --input-bg: #fafafa;          /* Fondo de los campos */
+    --error-color: #c62828;       /* Texto de error / reglas no cumplidas */
+    --success-color: #2e7d32;     /* Texto de éxito / reglas cumplidas */
 }
 
-/* MODO NOCHE */
+/* MODO NOCHE (Fondo oscuro y tarjeta café oscura como en la captura) */
 body.modo-noche {
-    --bg-color: #1c1917;
-    --card-bg: #292524;
-    --text-color: #f5f2eb;
-    --primary-color: #8d6e63;
-    --primary-hover: #a1887f;
-    --secondary-color: #57534e;
-    --border-color: #44403c;
-    --input-bg: #1c1917;
+    --bg-color: #1a1412;
+    --card-bg: #2b2320;
+    --text-color: #ffffff;
+    --btn-color: #8c6052;
+    --btn-hover: #734d41;
+    --border-color: #54433d;
+    --input-bg: #211a18;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     margin: 0;
     padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 90vh;
-}
-
-/* BOTÓN MODO DÍA / NOCHE */
-.btn-tema {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    background-color: var(--primary-hover);
-    color: #ffffff;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    z-index: 1000;
-}
-
-/* TARJETA CONTENEDORA (LOGIN, REGISTRO, DASHBOARD) */
-.card-container {
-    background: var(--card-bg);
-    width: 100%;
-    max-width: 420px;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
+    min-height: 95vh;
     box-sizing: border-box;
 }
 
-.card-container.wide {
-    max-width: 750px;
+/* BOTÓN "Cambiar Modo" EN LA ESQUINA SUPERIOR DERECHA */
+.btn-tema, #btn-tema, #btnTheme {
+    position: fixed;
+    top: 20px;
+    right: 25px;
+    background-color: var(--btn-color);
+    color: #ffffff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transition: background-color 0.2s ease;
+    z-index: 1000;
 }
 
-h2, h3 {
-    text-align: center;
-    margin-top: 0;
-    color: var(--text-color);
+.btn-tema:hover {
+    background-color: var(--btn-hover);
 }
 
-/* FORMULARIOS Y CAMPOS */
-.form-group {
-    margin-bottom: 15px;
+/* TARJETA CONTENEDORA DE LOS FORMULARIOS */
+.card-container, main, .container {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 35px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
 }
 
-.form-group label {
-    font-weight: bold;
-    margin-bottom: 5px;
+/* TÍTULOS (Iniciar Sesión, Registro, Recuperar) */
+h1, h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 30px;
+    color: var(--text-color);
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
 }
 
-.form-group input, .form-group select {
-    padding: 10px;
+/* FORMULARIO Y CAMPOS */
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"] {
+    padding: 13px 15px;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 10px;
     background-color: var(--input-bg);
     color: var(--text-color);
     box-sizing: border-box;
     width: 100%;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease;
 }
 
-/* BOTONES MARRÓN */
-.btn-marrón {
-    background-color: var(--primary-color);
+input:focus {
+    border-color: var(--btn-color);
+}
+
+/* BOTONES PRINCIPALES Y MOSTRAR */
+.btn-principal,
+.btn-mostrar,
+#btn-login,
+#btn-registro,
+#btn-recuperar,
+#btnTogglePass,
+#btnToggleRegPass,
+#btnToggleRecPass {
+    background-color: var(--btn-color);
     color: #ffffff;
     border: none;
-    padding: 12px;
-    border-radius: 6px;
-    font-weight: bold;
+    padding: 13px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    transition: background-color 0.2s ease;
 }
 
-.btn-marrón:hover {
-    background-color: var(--primary-hover);
+.btn-principal:hover,
+.btn-mostrar:hover {
+    background-color: var(--btn-hover);
 }
 
-.btn-secundario {
-    background-color: var(--secondary-color);
-    color: #ffffff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-/* REGLAS DE CONTRASEÑA CON TILDES Y CRUCES */
+/* LISTA DE LAS 5 REGLAS DE CONTRASEÑA CON TILDES/CRUCES (CP-03.4) */
 .password-rules {
     list-style: none;
     padding: 0;
-    margin: 10px 0;
-    font-size: 0.85rem;
+    margin: 5px 0 15px 0;
+    font-size: 0.88rem;
 }
 
 .password-rules li {
     color: var(--error-color);
     margin-bottom: 4px;
+    font-weight: 700;
 }
 
-.password-rules li.valid {
-    color: var(--success-color);
-}
-
-/* MENSAJES Y ENLACES */
-.msg-box {
-    font-size: 0.9rem;
-    font-weight: bold;
+/* MENSAJES DE ERROR Y LÍNEA SEPARADORA */
+.msg-box, #mensaje, #regMensaje, #recMensaje {
+    font-size: 0.92rem;
+    font-weight: 700;
     text-align: center;
     margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 .msg-box.error { color: var(--error-color); }
 .msg-box.success { color: var(--success-color); }
 
-.card-footer {
+.card-footer, .links-container {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
-    padding-top: 15px;
+    align-items: center;
+    margin-top: 25px;
+    padding-top: 20px;
     border-top: 1px solid var(--border-color);
 }
 
-.card-footer a {
+.card-footer a, .links-container a {
     color: var(--text-color);
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 800;
     font-size: 0.9rem;
 }
 
-/* TABLAS Y RESUMEN EN DASHBOARD */
-.resumen-box {
-    background-color: var(--input-bg);
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    margin-bottom: 20px;
-    border: 1px solid var(--border-color);
-}
-
-.tabla-gastos {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-.tabla-gastos th, .tabla-gastos td {
-    border: 1px solid var(--border-color);
-    padding: 10px;
-    text-align: left;
-}
-
-.modal-bg {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex; justify-content: center; align-items: center;
-}
-
-.modal-box {
-    background: var(--card-bg);
-    padding: 25px;
-    border-radius: 8px;
-    text-align: center;
-    border: 1px solid var(--border-color);
+.card-footer a:hover, .links-container a:hover {
+    text-decoration: underline;
 }
