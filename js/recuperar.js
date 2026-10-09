@@ -1,4 +1,4 @@
-// CONTROL DE MODO DÍA / NOCHE
+// CONTROL DE MODO DÍA / NOCHE (RF-02)
 const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
 if (btnTema) {
     if (localStorage.getItem('tema_sgg') === 'oscuro') {
@@ -11,33 +11,13 @@ if (btnTema) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // BOTÓN MOSTRAR / OCULTAR EN RECUPERAR
-    const btnMostrar = document.querySelector('.btn-mostrar') || document.getElementById('btnToggleRecPass');
-    const newPassInput = document.getElementById('recNewPass') || document.getElementById('nuevaPassword') || document.getElementById('password');
-
-    if (btnMostrar && newPassInput) {
-        btnMostrar.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (newPassInput.type === 'password') {
-                newPassInput.type = 'text';
-                btnMostrar.textContent = 'Ocultar';
-            } else {
-                newPassInput.type = 'password';
-                btnMostrar.textContent = 'Mostrar';
-            }
-        });
-    }
-});
-
-// RECUPERAR CONTRASEÑA
 const formRecuperar = document.getElementById('formRecuperar') || document.getElementById('form-recuperar');
 if (formRecuperar) {
     formRecuperar.addEventListener('submit', (e) => {
         e.preventDefault();
-        const recMsg = document.getElementById('recMsg') || document.getElementById('recMensaje') || document.getElementById('mensaje');
+        const recMsg = document.getElementById('recMsg') || document.getElementById('recMensaje');
         const emailEl = document.getElementById('recEmail') || document.getElementById('email');
-        const newPassEl = document.getElementById('recNewPass') || document.getElementById('nuevaPassword') || document.getElementById('password');
+        const newPassEl = document.getElementById('recNewPass') || document.getElementById('nuevaPassword');
         const confirmPassEl = document.getElementById('recConfirmPass') || document.getElementById('confirmarPassword');
 
         const email = emailEl.value.trim().toLowerCase();
@@ -52,12 +32,12 @@ if (formRecuperar) {
             return;
         }
 
-        // VALIDACIÓN DE LAS 5 REGLAS EN RECUPERAR
+        // Validación estricta de las 5 reglas de contraseña al recuperar (RF-04)
         const cumpleClave = newPass.length >= 8 && /[A-Z]/.test(newPass) && /[a-z]/.test(newPass) && /[0-9]/.test(newPass) && /[!@#$%^&*]/.test(newPass);
         if (!cumpleClave) {
             if (recMsg) {
                 recMsg.className = 'msg-box error';
-                recMsg.textContent = 'La nueva contraseña debe cumplir las 5 reglas (8 caracteres, mayúscula, minúscula, número y símbolo).';
+                recMsg.textContent = 'La nueva contraseña debe cumplir con las 5 reglas (8 caracteres, mayúscula, minúscula, número y símbolo).';
             }
             return;
         }
@@ -73,7 +53,7 @@ if (formRecuperar) {
             return;
         }
 
-        // Evitar que sea igual a la actual
+        // Evitar que sea igual a la clave anterior (RF-04)
         if (usuarios[idx].password === newPass) {
             if (recMsg) {
                 recMsg.className = 'msg-box error';
