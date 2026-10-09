@@ -1,30 +1,34 @@
-// CONTROL DE MODO DÍA / NOCHE (RF-02)
-const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
-if (btnTema) {
-    if (localStorage.getItem('tema_sgg') === 'oscuro') {
-        document.body.classList.add('modo-noche');
-    }
-    btnTema.addEventListener('click', () => {
-        document.body.classList.toggle('modo-noche');
-        const esOscuro = document.body.classList.contains('modo-noche');
-        localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
-    });
+// CONTROL GLOBAL DE CAMBIO DE TEMA (RF-02)
+window.cambiarTema = function() {
+    document.body.classList.toggle('modo-noche');
+    const esOscuro = document.body.classList.contains('modo-noche');
+    localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+};
+
+if (localStorage.getItem('tema_sgg') === 'oscuro') {
+    document.body.classList.add('modo-noche');
 }
 
-const formRegister = document.getElementById('formRegister') || document.getElementById('form-registro');
-if (formRegister) {
-    const regNombre = document.getElementById('regNombre') || document.getElementById('nombre');
-    const regApellido = document.getElementById('regApellido') || document.getElementById('apellido');
-    const regFecha = document.getElementById('regFecha') || document.getElementById('fechaNacimiento');
-    const regEmail = document.getElementById('regEmail') || document.getElementById('email');
-    const regUsername = document.getElementById('regUsername') || document.getElementById('username');
-    const regPass = document.getElementById('regPass') || document.getElementById('regPassword');
-    const regMsg = document.getElementById('regMsg') || document.getElementById('regMensaje');
+// FUNCIÓN GLOBAL MOSTRAR / OCULTAR CONTRASEÑA
+window.mostrarOcultarPassword = function(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    if (input.type === 'password') {
+        input.type = 'text';
+        if (btn) btn.textContent = 'Ocultar';
+    } else {
+        input.type = 'password';
+        if (btn) btn.textContent = 'Mostrar';
+    }
+};
 
-    // Validación de la contraseña en vivo (Tildes verdes y cruces rojas)
-    if (regPass) {
-        regPass.addEventListener('input', () => {
-            const val = regPass.value;
+document.addEventListener('DOMContentLoaded', () => {
+    const regPassInput = document.getElementById('password') || document.getElementById('regPass');
+
+    // VALIDACIÓN EN VIVO CON TILDES Y CRUCES (CP-03.4)
+    if (regPassInput) {
+        regPassInput.addEventListener('input', () => {
+            const val = regPassInput.value;
             validarRegla('ruleLen', val.length >= 8, 'Mínimo 8 caracteres');
             validarRegla('ruleMayus', /[A-Z]/.test(val), 'Al menos una mayúscula');
             validarRegla('ruleMinus', /[a-z]/.test(val), 'Al menos una minúscula');
@@ -37,19 +41,31 @@ if (formRegister) {
         const el = document.getElementById(id);
         if (!el) return;
         if (condicion) {
-            el.className = 'valid';
+            el.style.color = '#2e7d32';
             el.textContent = `✔ ${texto}`;
         } else {
-            el.className = '';
+            el.style.color = '#c62828';
             el.textContent = `✖ ${texto}`;
         }
     }
+});
 
+// REGISTRO DE USUARIO (RF-03)
+const formRegister = document.getElementById('form-registro') || document.getElementById('formRegister');
+if (formRegister) {
     formRegister.addEventListener('submit', (e) => {
         e.preventDefault();
+        const regNombre = document.getElementById('nombre') || document.getElementById('regNombre');
+        const regApellido = document.getElementById('apellido') || document.getElementById('regApellido');
+        const regFecha = document.getElementById('fechaNacimiento') || document.getElementById('regFecha');
+        const regEmail = document.getElementById('email') || document.getElementById('regEmail');
+        const regUsername = document.getElementById('usuario') || document.getElementById('regUsername');
+        const regPass = document.getElementById('password') || document.getElementById('regPass');
+        const regMsg = document.getElementById('mensaje') || document.getElementById('regMensaje');
+
         if (regMsg) regMsg.textContent = '';
 
-        // Limpieza de espacios y validación sin números/símbolos en Nombre/Apellido
+        // Limpieza de espacios y validación sin números/símbolos en Nombre/Apellido (CP-03.1)
         const nombre = regNombre.value.trim();
         const apellido = regApellido.value.trim();
         if (/[0-9!@#$\%^&*]/.test(nombre) \vert{}\vert{} /[0-9!@#$%^&*]/.test(apellido)) {
@@ -60,7 +76,7 @@ if (formRegister) {
             return;
         }
 
-        // Validación de edad mínima (14 años)
+        // Mayor de 14 años (CP-03.2)
         const fechaNac = new Date(regFecha.value);
         const hoy = new Date();
         let edad = hoy.getFullYear() - fechaNac.getFullYear();
@@ -75,7 +91,7 @@ if (formRegister) {
             return;
         }
 
-        // Validación de formato de correo
+        // Formato Email (CP-03.3)
         const email = regEmail.value.trim().toLowerCase();
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             if (regMsg) {
@@ -85,7 +101,7 @@ if (formRegister) {
             return;
         }
 
-        // Validación de 5 reglas de contraseña
+        // Cumplimiento estricto de las 5 reglas
         const valPass = regPass.value;
         const cumpleClave = valPass.length >= 8 && /[A-Z]/.test(valPass) && /[a-z]/.test(valPass) && /[0-9]/.test(valPass) && /[!@#$%^&*]/.test(valPass);
         if (!cumpleClave) {
@@ -113,8 +129,8 @@ if (formRegister) {
 
         if (regMsg) {
             regMsg.className = 'msg-box success';
-            regMsg.textContent = '¡Registro exitoso! Redirigiendo...';
+            regMsg.textContent = '¡Registro exitoso! Redirigiendo al Login...';
         }
-        setTimeout(() => window.location.href = 'índice.html', 1500);
+        setTimeout(() => window.location.href = 'index.html', 1500);
     });
 }
