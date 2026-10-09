@@ -1,94 +1,74 @@
-// ==========================================
-// PERSISTENCIA DE TEMA (RF-02)
-// ==========================================
-function aplicarTemaGuardado() {
-    const temaGuardado = localStorage.getItem("temaGuardado");
-    if (temaGuardado === "oscuro") {
-        document.body.setAttribute("data-tema", "oscuro");
-    } else {
-        document.body.removeAttribute("data-tema");
+// CONTROL DE MODO DÍA / NOCHE
+const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
+if (btnTema) {
+    if (localStorage.getItem('tema_sgg') === 'oscuro') {
+        document.body.classList.add('modo-noche');
     }
+    btnTema.addEventListener('click', () => {
+        document.body.classList.toggle('modo-noche');
+        const esOscuro = document.body.classList.contains('modo-noche');
+        localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+    });
 }
 
-function cambiarTema() {
-    const temaActual = document.body.getAttribute("data-tema");
-    if (temaActual === "oscuro") {
-        document.body.removeAttribute("data-tema");
-        localStorage.setItem("temaGuardado", "claro");
-    } else {
-        document.body.setAttribute("data-tema", "oscuro");
-        localStorage.setItem("temaGuardado", "oscuro");
-    }
-}
-
-// Ejecución inmediata antes de renderizar
-aplicarTemaGuardado();
-
-// ==========================================
-// LÓGICA DE LOGIN (RF-01)
-// ==========================================
+// FUNCIONALIDAD DEL BOTÓN MOSTRAR / OCULTAR
 document.addEventListener('DOMContentLoaded', () => {
-    aplicarTemaGuardado();
+    const btnMostrar = document.querySelector('.btn-mostrar') || document.getElementById('btnTogglePass');
+    const inputPass = document.getElementById('password') || document.getElementById('loginPass');
 
-    const form = document.querySelector('form') || document.getElementById('form-login');
-    const inputUsuario = document.getElementById('usuario');
-    const inputPass = document.getElementById('password');
-    const btnSubmit = document.getElementById('btn-login') || (form ? form.querySelector('button[type="submit"]') : null);
-    const msgBox = document.getElementById('mensaje') || document.getElementById('mensaje-error');
-
-    let intentosFallidos = 0;
-    let bloqueado = false;
-
-    if (form) {
-        form.addEventListener('submit', (e) => {
+    if (btnMostrar && inputPass) {
+        btnMostrar.addEventListener('click', (e) => {
             e.preventDefault();
-            if (bloqueado) return;
-
-            const userOrEmail = inputUsuario.value.trim();
-            const passIngresada = inputPass.value;
-
-            const usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
-
-            const usuarioValido = usuarios.find(u => 
-                (u.usuario === userOrEmail || u.email === userOrEmail) && 
-                (u.password === passIngresada || u.clave === passIngresada)
-            );
-
-            if (usuarioValido) {
-                intentosFallidos = 0;
-                msgBox.style.color = "var(--success-color)";
-                msgBox.textContent = "¡Inicio de sesión exitoso! Redirigiendo...";
-                localStorage.setItem('usuarioLogueado', JSON.stringify(usuarioValido));
-
-                setTimeout(() => {
-                    window.location.href = "principal.html";
-                }, 1500);
+            if (inputPass.type === 'password') {
+                inputPass.type = 'text';
+                btnMostrar.textContent = 'Ocultar';
             } else {
-                intentosFallidos++;
-                msgBox.style.color = "var(--error-color)";
-
-                if (intentosFallidos >= 3) {
-                    bloqueado = true;
-                    if (btnSubmit) btnSubmit.disabled = true;
-                    let segundos = 30;
-                    msgBox.textContent = `3 intentos incorrectos. Esperá ${segundos} segundos.`;
-
-                    const contador = setInterval(() => {
-                        segundos--;
-                        if (segundos > 0) {
-                            msgBox.textContent = `3 intentos incorrectos. Esperá ${segundos} segundos.`;
-                        } else {
-                            clearInterval(contador);
-                            bloqueado = false;
-                            intentosFallidos = 0;
-                            if (btnSubmit) btnSubmit.disabled = false;
-                            msgBox.textContent = "";
-                        }
-                    }, 1000);
-                } else {
-                    msgBox.textContent = `Datos incorrectos. Intento ${intentosFallidos} de 3.`;
-                }
+                inputPass.type = 'password';
+                btnMostrar.textContent = 'Mostrar';
             }
         });
     }
 });
+
+// INICIO DE SESIÓN
+const formLogin = document.getElementById('form-login') || document.getElementById('formLogin');
+if (formLogin) {
+    let intentosFallidos = 0;
+    const loginUser = document.getElementById('usuario') || document.getElementById('loginUser');
+    const loginPass = document.getElementById('password') || document.getElementById('loginPass');
+    const loginMsg = document.getElementById('mensaje') || document.getElementById('loginMsg');
+    const btnSubmit = document.getElementById('btn-login') || document.getElementById('btnLoginSubmit');
+
+    formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        loginMsg.textContent = '';
+
+        const userOrEmail = loginUser.value.trim().toLowerCase();
+        const pass = loginPass.value;
+        const usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
+
+        const usuarioEncontrado = usuarios.find(u => (u.email === userOrEmail || u.username === userOrEmail) && u.password === pass);
+
+        if (usuarioEncontrado) {
+            intentosFallidos = 0;
+            localStorage.setItem('usuario_activo_sgg', JSON.stringify(usuarioEncontrado));
+            loginMsg.className = 'msg-box success';
+            loginMsg.textContent = '¡Inicio de sesión exitoso! Redirigiendo...';
+            setTimeout(() => window.location.href = 'panel.html', 1000);
+        } else {
+            intentosFallidos++;
+            loginMsg.className = 'msg-box error';
+            if (intentosFallidos >= 3) {
+                btnSubmit.disabled = true;
+                loginMsg.textContent = 'Demasiados intentos fallidos. Botón bloqueado por 30 segundos.';
+                setTimeout(() => {
+                    btnSubmit.disabled = false;
+                    intentosFallidos = 0;
+                    loginMsg.textContent = '';
+                }, 30000);
+            } else {
+                loginMsg.textContent = `Datos incorrectos. Intento ${intentosFallidos} de 3.`;
+            }
+        }
+    });
+}
