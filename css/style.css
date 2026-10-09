@@ -1,85 +1,274 @@
-/* PALETA CAFÉ Y ESTILOS DASHBOARD */
-body {
-    background-color: #f5f2eb;
-    color: #3e2723;
-    font-family: Arial, sans-serif;
+/* ==========================================
+   VARIABLES CSS Y PALETAS (MODO DÍA Y NOCHE)
+   ========================================== */
+:root {
+    /* Paleta Día (Marrón Claro / Neutro) */
+    --bg-color: #f4efe6;
+    --card-bg: #ffffff;
+    --text-color: #3e2723;
+    
+    /* Campos de texto */
+    --input-bg: #fafafa;
+    --input-border: #a1887f;
+    --input-text: #3e2723;
+    --placeholder-color: #8d6e63;
+    
+    /* Botones y Enlaces */
+    --btn-bg: #6d4c41;
+    --btn-text: #ffffff;
+    --btn-hover: #4e342e;
+    --btn-secondary-bg: #8d6e63;
+    --btn-secondary-hover: #6d4c41;
+    --link-color: #3e2723;
+    
+    /* Bordes y UI general */
+    --border-color: #d7ccc8;
+    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --error-color: #c62828;
+    --success-color: #2e7d32;
 }
 
+[data-tema="oscuro"], body.modo-noche {
+    /* Paleta Noche (Marrón Oscuro) */
+    --bg-color: #1a1514;
+    --card-bg: #2b2320;
+    --text-color: #f5f2eb;
+    
+    /* Campos de texto */
+    --input-bg: #382e2a;
+    --input-border: #5d4037;
+    --input-text: #f5f2eb;
+    --placeholder-color: #a1887f;
+    
+    /* Botones y Enlaces */
+    --btn-bg: #8d6e63;
+    --btn-text: #ffffff;
+    --btn-hover: #a1887f;
+    --btn-secondary-bg: #6d4c41;
+    --btn-secondary-hover: #5d4037;
+    --link-color: #f5f2eb;
+    
+    /* Bordes y UI general */
+    --border-color: #4e342e;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --error-color: #ef5350;
+    --success-color: #66bb6a;
+}
+
+/* ==========================================
+   RESET Y ESTILOS BASE
+   ========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ==========================================
+   BOTÓN CAMBIAR MODO (SUPERIOR DERECHO)
+   ========================================== */
 .btn-tema {
     position: fixed;
-    top: 15px;
-    right: 15px;
-    background-color: #5d4037;
-    color: #ffffff;
+    top: 20px;
+    right: 20px;
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
     border: none;
-    padding: 10px 16px;
     border-radius: 20px;
-    cursor: pointer;
+    padding: 10px 18px;
+    font-size: 0.9rem;
     font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transition: background-color 0.3s ease;
 }
 
-.dashboard-card {
-    max-width: 650px;
-    margin: 60px auto 30px auto;
-    background: #ffffff;
-    padding: 25px;
+.btn-tema:hover {
+    background-color: var(--btn-hover);
+}
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL Y TARJETAS
+   ========================================== */
+.container, .dashboard-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #d7ccc8;
-}
-
-.btn-marrón {
-    background-color: #6d4c41;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
     width: 100%;
+    max-width: 480px;
+    padding: 30px 25px;
+    box-shadow: var(--card-shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.btn-marrón-secundario {
-    background-color: #8d6e63;
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 6px;
-    cursor: pointer;
+h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: var(--text-color);
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* ==========================================
+   FORMULARIO Y CAMPOS DE ENTRADA
+   ========================================== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .field-group {
-    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
+    gap: 8px;
 }
 
 .field-group label {
     font-weight: bold;
-    margin-bottom: 5px;
-    color: #3e2723;
+    font-size: 0.95rem;
+    color: var(--text-color);
 }
 
-.field-group input, .field-group select {
-    padding: 10px;
-    border: 1px solid #a1887f;
+.field-group input, 
+.field-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--input-border);
     border-radius: 6px;
-    background-color: #fafafa;
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.3s ease;
 }
 
+.field-group input::placeholder {
+    color: var(--placeholder-color);
+    opacity: 0.7;
+}
+
+.field-group input:focus, 
+.field-group select:focus {
+    border-color: var(--btn-bg);
+    box-shadow: 0 0 0 2px rgba(109, 76, 65, 0.2);
+}
+
+/* ==========================================
+   BOTONES DEL FORMULARIO
+   ========================================== */
+.btn-principal, .btn-marrón {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s ease;
+    margin-top: 6px;
+}
+
+.btn-principal:hover, .btn-marrón:hover {
+    background-color: var(--btn-hover);
+}
+
+.btn-marrón-secundario, .btn-mostrar {
+    background-color: var(--btn-secondary-bg);
+    color: var(--btn-text);
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s ease;
+}
+
+.btn-marrón-secundario:hover, .btn-mostrar:hover {
+    background-color: var(--btn-secondary-hover);
+}
+
+.btn-principal:disabled {
+    background-color: #a1887f;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* ==========================================
+   MENSAJES, DIVISIONES Y ENLACES
+   ========================================== */
+.divisoria {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 20px 0 15px 0;
+}
+
+.links-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-enlace {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.btn-enlace:hover {
+    text-decoration: underline;
+}
+
+#mensaje {
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.95rem;
+    min-height: 20px;
+}
+
+.error-text {
+    color: var(--error-color);
+    font-weight: bold;
+}
+
+/* ==========================================
+   TABLAS Y MODALES (SI SE UTILIZAN EN DASHBOARD)
+   ========================================== */
 .resumen-box {
-    background-color: #efebe9;
+    background-color: var(--input-bg);
     padding: 15px;
     border-radius: 8px;
     text-align: center;
     margin-bottom: 20px;
-    border: 1px solid #d7ccc8;
+    border: 1px solid var(--border-color);
 }
 
 .total-monto {
     font-size: 2rem;
     font-weight: bold;
-    color: #4e342e;
+    color: var(--text-color);
 }
 
 .tabla-gastos {
@@ -89,50 +278,33 @@ body {
 }
 
 .tabla-gastos th, .tabla-gastos td {
-    border: 1px solid #d7ccc8;
+    border: 1px solid var(--border-color);
     padding: 10px;
     text-align: left;
 }
 
 .tabla-gastos th {
-    background-color: #efebe9;
-    color: #3e2723;
-}
-
-.error-text {
-    color: #c62828;
-    font-weight: bold;
+    background-color: var(--input-bg);
+    color: var(--text-color);
 }
 
 .modal-bg {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex; justify-content: center; align-items: center;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    z-index: 1000;
 }
 
 .modal-box {
-    background: white; padding: 20px; border-radius: 8px; text-align: center;
-}
-
-/* Modo Noche */
-body.modo-noche {
-    background-color: #1c1917;
-    color: #f5f2eb;
-}
-
-body.modo-noche .dashboard-card, body.modo-noche .modal-box {
-    background-color: #292524;
-    border-color: #44403c;
-}
-
-body.modo-noche .field-group input, body.modo-noche .field-group select {
-    background-color: #1c1917;
-    color: #f5f2eb;
-    border-color: #57534e;
-}
-
-body.modo-noche .resumen-box, body.modo-noche .tabla-gastos th {
-    background-color: #44403c;
-    color: #f5f2eb;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--border-color);
 }
