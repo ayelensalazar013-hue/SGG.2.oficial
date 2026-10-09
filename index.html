@@ -2,121 +2,40 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Iniciar Sesión</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema SGG - Iniciar Sesión">
+    <title>SGG - Iniciar Sesión</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="modo-noche">
-    <button id="btnTema" class="btn-tema">Cambiar Modo</button>
+<body>
 
-    <div class="dashboard-card">
+    <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()" aria-label="Cambiar modo de color">Cambiar Modo</button>
+
+    <main class="container">
         <h1>Iniciar Sesión</h1>
-        <form id="formLogin">
-            <div class="field-group">
-                <label for="loginUsuario">Usuario o Email:</label>
-                <input type="text" id="loginUsuario" placeholder="Ingresá tu usuario o correo" required>
-            </div>
+        
+        <form id="form-login">
+            <label for="usuario">Usuario o Email:</label>
+            <input type="text" id="usuario" name="usuario" required placeholder="Ingresá tu usuario o correo" autocomplete="username">
 
-            <div class="field-group">
-                <label for="loginPass">Contraseña:</label>
-                <input type="password" id="loginPass" placeholder="Ingresá tu contraseña" required>
-            </div>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required placeholder="Ingresá tu contraseña" autocomplete="current-password">
+            
+            <button type="button" class="btn-mostrar" onclick="mostrarOcultarPassword('password', this)" aria-label="Mostrar u ocultar la contraseña">Mostrar</button>
 
-            <button type="button" id="btnMostrar" class="btn-marrón-secundario">Mostrar</button>
-            <button type="submit" id="btnLogin" class="btn-marrón">Ingresar</button>
+            <button type="submit" class="btn-principal" id="btn-login">Ingresar</button>
         </form>
 
-        <div id="mensajeError" class="error-text"></div>
+        <div id="mensaje" aria-live="polite"></div>
 
         <hr class="divisoria">
-        <div class="links-container">
+
+        <nav class="links-container">
             <a href="registro.html" class="btn-enlace">Crear cuenta</a>
             <a href="recuperar.html" class="btn-enlace">Recuperar contraseña</a>
-        </div>
-    </div>
+        </nav>
+    </main>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Modo Claro / Oscuro
-        const btnTema = document.getElementById("btnTema");
-        const temaGuardado = localStorage.getItem("tema") || "oscuro";
-        if (temaGuardado === "oscuro") {
-            document.body.classList.add("modo-noche");
-            document.body.setAttribute("data-tema", "oscuro");
-        } else {
-            document.body.classList.remove("modo-noche");
-            document.body.setAttribute("data-tema", "claro");
-        }
-
-        if (btnTema) {
-            btnTema.addEventListener("click", () => {
-                document.body.classList.toggle("modo-noche");
-                const esOscuro = document.body.classList.contains("modo-noche");
-                document.body.setAttribute("data-tema", esOscuro ? "oscuro" : "claro");
-                localStorage.setItem("tema", esOscuro ? "oscuro" : "claro");
-            });
-        }
-
-        // Mostrar / Ocultar Contraseña
-        const btnMostrar = document.getElementById("btnMostrar");
-        if (btnMostrar) {
-            btnMostrar.addEventListener("click", () => {
-                const loginPass = document.getElementById("loginPass");
-                if (loginPass.type === "password") {
-                    loginPass.type = "text";
-                    btnMostrar.textContent = "Ocultar";
-                } else {
-                    loginPass.type = "password";
-                    btnMostrar.textContent = "Mostrar";
-                }
-            });
-        }
-
-        // Bloqueo de 30 Segundos en Login
-        const formLogin = document.getElementById("formLogin");
-        let intentosFallidos = 0;
-
-        if (formLogin) {
-            formLogin.addEventListener("submit", (e) => {
-                e.preventDefault();
-                const btnLogin = document.getElementById("btnLogin");
-                const mensajeError = document.getElementById("mensajeError");
-                mensajeError.textContent = "";
-
-                const userOrEmail = document.getElementById("loginUsuario").value.trim();
-                const pass = document.getElementById("loginPass").value;
-
-                const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios") || "[]");
-                const usuarioValido = usuariosGuardados.find(u => 
-                    (u.email === userOrEmail || u.usuario === userOrEmail) && u.pass === pass
-                );
-
-                if (usuarioValido) {
-                    intentosFallidos = 0;
-                    alert(`¡Bienvenido/a, ${usuarioValido.nombre}!`);
-                } else {
-                    intentosFallidos++;
-                    if (intentosFallidos >= 3) {
-                        btnLogin.disabled = true;
-                        let tiempoRestante = 30;
-                        mensajeError.textContent = `Has superado los 3 intentos fallidos. Botón bloqueado por ${tiempoRestante} segundos.`;
-
-                        const intervalo = setInterval(() => {
-                            tiempoRestante--;
-                            mensajeError.textContent = `Has superado los 3 intentos fallidos. Botón bloqueado por ${tiempoRestante} segundos.`;
-                            if (tiempoRestante <= 0) {
-                                clearInterval(intervalo);
-                                btnLogin.disabled = false;
-                                intentosFallidos = 0;
-                                mensajeError.textContent = "";
-                            }
-                        }, 1000);
-                    } else {
-                        mensajeError.textContent = `Usuario o contraseña incorrectos. Intentos restantes: ${3 - intentosFallidos}`;
-                    }
-                }
-            });
-        }
-    });
-    </script>
+    <script src="js/login.js"></script>
 </body>
 </html>
