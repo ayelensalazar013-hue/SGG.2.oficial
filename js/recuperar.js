@@ -1,24 +1,64 @@
-// CONTROL DE MODO DÍA / NOCHE (RF-02)
-const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
-if (btnTema) {
-    if (localStorage.getItem('tema_sgg') === 'oscuro') {
-        document.body.classList.add('modo-noche');
-    }
-    btnTema.addEventListener('click', () => {
-        document.body.classList.toggle('modo-noche');
-        const esOscuro = document.body.classList.contains('modo-noche');
-        localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
-    });
+// CONTROL GLOBAL DE CAMBIO DE TEMA (RF-02)
+window.cambiarTema = function() {
+    document.body.classList.toggle('modo-noche');
+    const esOscuro = document.body.classList.contains('modo-noche');
+    localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+};
+
+if (localStorage.getItem('tema_sgg') === 'oscuro') {
+    document.body.classList.add('modo-noche');
 }
 
-const formRecuperar = document.getElementById('formRecuperar') || document.getElementById('form-recuperar');
+// FUNCIÓN GLOBAL MOSTRAR / OCULTAR CONTRASEÑA
+window.mostrarOcultarPassword = function(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    if (input.type === 'password') {
+        input.type = 'text';
+        if (btn) btn.textContent = 'Ocultar';
+    } else {
+        input.type = 'password';
+        if (btn) btn.textContent = 'Mostrar';
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const newPassInput = document.getElementById('nuevaPassword') || document.getElementById('recNewPass');
+
+    // VALIDACIÓN EN VIVO EN RECUPERACIÓN (RF-04)
+    if (newPassInput) {
+        newPassInput.addEventListener('input', () => {
+            const val = newPassInput.value;
+            validarRegla('ruleLen', val.length >= 8, 'Mínimo 8 caracteres');
+            validarRegla('ruleMayus', /[A-Z]/.test(val), 'Al menos una mayúscula');
+            validarRegla('ruleMinus', /[a-z]/.test(val), 'Al menos una minúscula');
+            validarRegla('ruleNum', /[0-9]/.test(val), 'Al menos un número');
+            validarRegla('ruleSim', /[!@#$%^&*]/.test(val), 'Al menos un símbolo (!@#$%^&*)');
+        });
+    }
+
+    function validarRegla(id, condicion, texto) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (condicion) {
+            el.style.color = '#2e7d32';
+            el.textContent = `✔ ${texto}`;
+        } else {
+            el.style.color = '#c62828';
+            el.textContent = `✖ ${texto}`;
+        }
+    }
+});
+
+// RECUPERAR CONTRASEÑA (RF-04)
+const formRecuperar = document.getElementById('form-recuperar') || document.getElementById('formRecuperar');
 if (formRecuperar) {
     formRecuperar.addEventListener('submit', (e) => {
         e.preventDefault();
-        const recMsg = document.getElementById('recMsg') || document.getElementById('recMensaje');
-        const emailEl = document.getElementById('recEmail') || document.getElementById('email');
-        const newPassEl = document.getElementById('recNewPass') || document.getElementById('nuevaPassword');
-        const confirmPassEl = document.getElementById('recConfirmPass') || document.getElementById('confirmarPassword');
+        const recMsg = document.getElementById('mensaje') || document.getElementById('recMensaje');
+        const emailEl = document.getElementById('email') || document.getElementById('recEmail');
+        const newPassEl = document.getElementById('nuevaPassword') || document.getElementById('recNewPass');
+        const confirmPassEl = document.getElementById('confirmarPassword') || document.getElementById('recConfirmPass');
 
         const email = emailEl.value.trim().toLowerCase();
         const newPass = newPassEl.value;
@@ -32,12 +72,12 @@ if (formRecuperar) {
             return;
         }
 
-        // Validación estricta de las 5 reglas de contraseña al recuperar (RF-04)
+        // VALIDACIÓN DE LAS 5 REGLAS (CP-04.3)
         const cumpleClave = newPass.length >= 8 && /[A-Z]/.test(newPass) && /[a-z]/.test(newPass) && /[0-9]/.test(newPass) && /[!@#$%^&*]/.test(newPass);
         if (!cumpleClave) {
             if (recMsg) {
                 recMsg.className = 'msg-box error';
-                recMsg.textContent = 'La nueva contraseña debe cumplir con las 5 reglas (8 caracteres, mayúscula, minúscula, número y símbolo).';
+                recMsg.textContent = 'La nueva contraseña debe cumplir las 5 reglas de seguridad.';
             }
             return;
         }
@@ -53,7 +93,7 @@ if (formRecuperar) {
             return;
         }
 
-        // Evitar que sea igual a la clave anterior (RF-04)
+        // Evitar clave repetida (CP-04.2)
         if (usuarios[idx].password === newPass) {
             if (recMsg) {
                 recMsg.className = 'msg-box error';
@@ -67,8 +107,8 @@ if (formRecuperar) {
 
         if (recMsg) {
             recMsg.className = 'msg-box success';
-            recMsg.textContent = '¡Contraseña actualizada con éxito! Redirigiendo...';
+            recMsg.textContent = '¡Contraseña actualizada con éxito! Redirigiendo al Login...';
         }
-        setTimeout(() => window.location.href = 'índice.html', 1500);
+        setTimeout(() => window.location.href = 'index.html', 1500);
     });
 }
