@@ -3,274 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema SGG - Panel Principal de Gestión de Gastos">
-    <title>SGG - Gestión de Gastos</title>
-    <!-- ESTILOS EMBEBIDOS PARA GARANTIZAR COMPATIBILIDAD Y RESPONSIVIDAD -->
-    <style>
-        :root {
-            --bg-color: #f4f0e8;          /* Fondo crema claro */
-            --card-bg: #ffffff;          /* Tarjeta blanca */
-            --text-color: #4a2c20;        /* Texto marrón oscuro */
-            --btn-color: #6e473b;         /* Botón café principal */
-            --btn-hover: #58372d;         /* Botón café hover */
-            --border-color: #cbbab0;      /* Borde de campos */
-            --input-bg: #fafafa;          /* Fondo suave */
-            --error-color: #c62828;
-            --success-color: #2e7d32;
-        }
-
-        body.modo-noche {
-            --bg-color: #1a1412;
-            --card-bg: #2b2320;
-            --text-color: #ffffff;
-            --btn-color: #8c6052;
-            --btn-hover: #734d41;
-            --border-color: #54433d;
-            --input-bg: #211a18;
-        }
-
-        body {
-            background-color: var(--bg-color) !important;
-            color: var(--text-color) !important;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            min-height: 95vh;
-            box-sizing: border-box;
-        }
-
-        /* BOTÓN DE CAMBIAR MODO Y CERRAR SESIÓN */
-        .top-bar {
-            position: fixed;
-            top: 20px;
-            right: 25px;
-            display: flex;
-            gap: 10px;
-            z-index: 1000;
-        }
-
-        .btn-tema, .btn-logout {
-            background-color: var(--btn-color) !important;
-            color: #ffffff !important;
-            border: none !important;
-            padding: 10px 18px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9rem;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-        }
-
-        .btn-tema:hover, .btn-logout:hover {
-            background-color: var(--btn-hover) !important;
-        }
-
-        /* CONTENEDOR PRINCIPAL */
-        .container {
-            background: var(--card-bg) !important;
-            width: 100% !important;
-            max-width: 650px !important;
-            padding: 35px 30px !important;
-            border-radius: 18px !important;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
-            box-sizing: border-box !important;
-            margin-top: 40px;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-
-        h1 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 5px;
-            color: var(--text-color) !important;
-            font-size: 2rem;
-            font-weight: 800;
-        }
-
-        .user-welcome {
-            text-align: center;
-            font-weight: 700;
-            margin-bottom: 25px;
-            opacity: 0.85;
-            font-size: 0.95rem;
-        }
-
-        /* DASHBOARD - TARJETA DE RESUMEN (RF-09) */
-        .dashboard-summary {
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .dashboard-summary h2 {
-            margin: 0 0 8px 0;
-            font-size: 1.1rem;
-            color: var(--text-color);
-        }
-
-        .total-monto {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--btn-color);
-            margin: 0;
-        }
-
-        /* FORMULARIO DE CARGA (RF-05 / RF-07) */
-        form {
-            display: flex !important;
-            flex-direction: column !important;
-            width: 100% !important;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-
-        .form-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-weight: 800;
-            margin-bottom: 6px;
-            margin-top: 4px;
-            color: var(--text-color) !important;
-            font-size: 0.9rem;
-        }
-
-        input[type="number"],
-        input[type="date"],
-        input[type="text"],
-        select {
-            padding: 12px 14px !important;
-            border: 1px solid var(--border-color) !important;
-            border-radius: 10px !important;
-            background-color: var(--input-bg) !important;
-            color: var(--text-color) !important;
-            width: 100% !important;
-            font-size: 0.95rem;
-            box-sizing: border-box;
-            margin-bottom: 8px !important;
-            outline: none;
-        }
-
-        .btn-principal, .btn-cancelar {
-            background-color: var(--btn-color) !important;
-            color: #ffffff !important;
-            border: none !important;
-            padding: 13px !important;
-            border-radius: 10px !important;
-            font-weight: 700 !important;
-            font-size: 1rem !important;
-            cursor: pointer;
-            width: 100% !important;
-            margin-top: 10px !important;
-        }
-
-        .btn-cancelar {
-            background-color: #757575 !important;
-            margin-top: 5px !important;
-        }
-
-        .msg-box {
-            font-size: 0.92rem;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 12px;
-        }
-
-        .msg-box.error { color: var(--error-color); }
-        .msg-box.success { color: var(--success-color); }
-
-        .divisoria {
-            border: 0;
-            border-top: 1px solid var(--border-color);
-            margin: 25px 0 20px 0 !important;
-            opacity: 0.6;
-        }
-
-        /* TABLA Y HISTORIAL DINÁMICO (RF-06) */
-        .tabla-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th, td {
-            padding: 12px 10px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.9rem;
-        }
-
-        th {
-            font-weight: 800;
-            background-color: var(--input-bg);
-        }
-
-        .btn-tabla {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.8rem;
-            margin-right: 4px;
-        }
-
-        .btn-editar {
-            background-color: var(--btn-color);
-            color: white;
-        }
-
-        .btn-eliminar {
-            background-color: var(--error-color);
-            color: white;
-        }
-
-        /* MODAL DE CONFIRMACIÓN (RF-08 / BAJA LÓGICA) */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .modal-card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 15px;
-            max-width: 350px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
-
-        .modal-acciones {
-            display: flex;
-            gap: 10px;
-            margin-top: 18px;
-        }
-    </style>
+    <title>SGG - Panel de Gastos</title>
+    <!-- RUTA EXACTA A TU ARCHIVO STYLE.CSS -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="top-bar">
@@ -280,22 +15,20 @@
 
     <main class="container">
         <h1>Gestión de Gastos</h1>
-        <div class="user-welcome" id="userWelcome">Usuario: Cargando...</div>
+        <div class="user-welcome" id="userWelcome">Cargando usuario...</div>
 
-        <!-- RF-09: PANEL DE RESUMEN (DASHBOARD) -->
         <section class="dashboard-summary">
             <h2>Total Gastado</h2>
             <div class="total-monto" id="totalGastado">$0.00</div>
         </section>
 
-        <!-- RF-05 / RF-07: FORMULARIO DE CARGA Y EDICIÓN -->
         <form id="form-gasto">
             <input type="hidden" id="gastoId">
             
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto">Monto ($):</label>
-                    <input type="number" id="monto" name="monto" step="0.01" required placeholder="Ej: 1500.50">
+                    <input type="number" id="monto" name="monto" step="0.01" required placeholder="0.00">
                 </div>
                 <div class="form-group">
                     <label for="fecha">Fecha:</label>
@@ -306,7 +39,7 @@
             <div class="form-group">
                 <label for="categoria">Categoría:</label>
                 <select id="categoria" name="categoria" required>
-                    <option value="" disabled selected>Seleccione una categoría</option>
+                    <option value="" disabled selected>Seleccionar</option>
                     <option value="Alimentación">Alimentación</option>
                     <option value="Transporte">Transporte</option>
                     <option value="Servicios">Servicios</option>
@@ -317,7 +50,7 @@
 
             <div class="form-group">
                 <label for="descripcion">Descripción:</label>
-                <input type="text" id="descripcion" name="descripcion" required placeholder="Ej: Compra mensual de supermercado">
+                <input type="text" id="descripcion" name="descripcion" required placeholder="Detalle del gasto">
             </div>
 
             <button type="submit" class="btn-principal" id="btn-guardar-gasto">Guardar Gasto</button>
@@ -328,8 +61,7 @@
 
         <hr class="divisoria">
 
-        <!-- RF-06: HISTORIAL DINÁMICO DE GASTOS -->
-        <h2>Historial de Gastos</h2>
+        <h2 class="seccion-titulo">Historial de Gastos</h2>
         <div class="tabla-container">
             <table>
                 <thead>
@@ -342,17 +74,15 @@
                     </tr>
                 </thead>
                 <tbody id="tablaGastosBody">
-                    <!-- Se renderiza dinámicamente desde JS -->
                 </tbody>
             </table>
         </div>
     </main>
 
-    <!-- MODAL PARA CONFIRMACIÓN DE BAJA LÓGICA (RF-08) -->
     <div class="modal-overlay" id="modalConfirmar">
         <div class="modal-card">
-            <h3>¿Eliminar gasto?</h3>
-            <p>El registro dejará de mostrarse en la pantalla y en el total gastado.</p>
+            <h3>¿Eliminar registro?</h3>
+            <p style="font-size: 0.85rem;">El gasto cambiará a estado inactivo.</p>
             <div class="modal-acciones">
                 <button class="btn-principal" style="background-color: var(--error-color) !important;" onclick="confirmarEliminacion()">Eliminar</button>
                 <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
@@ -360,6 +90,7 @@
         </div>
     </div>
 
+    <!-- RUTA EXACTA A TU ARCHIVO GASTOS.JS -->
     <script src="js/gastos.js"></script>
 </body>
 </html>
