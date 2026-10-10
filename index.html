@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- BOTÓN FIJO EN LA ESQUINA SUPERIOR DERECHA -->
     <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()">Cambiar Modo</button>
 
-    <!-- TARJETA CENTRADA DE INICIO DE SESIÓN -->
     <main class="card-container">
         <h1>Iniciar Sesión</h1>
 
@@ -39,15 +37,11 @@
         </div>
     </main>
 
-    <!-- LÓGICA DE MODO Y AUTENTICACIÓN INTEGRADA -->
     <script>
-        // ==========================================================
-        // 1. EVALUAR MODO (INICIA EN CLARO POR DEFECTO SI NO EXISTE)
-        // ==========================================================
+        // Persistencia y cambio de modo Claro/Oscuro
         (function() {
             const temaGuardado = localStorage.getItem('tema_sgg');
             if (!temaGuardado) {
-                // Si entra por primera vez, establecer Claro
                 localStorage.setItem('tema_sgg', 'claro');
                 document.body.classList.remove('modo-noche');
             } else if (temaGuardado === 'oscuro') {
@@ -57,22 +51,15 @@
             }
         })();
 
-        // ==========================================================
-        // 2. FUNCIÓN GLOBAL PARA EL BOTÓN "CAMBIAR MODO"
-        // ==========================================================
         window.cambiarTema = function() {
             document.body.classList.toggle('modo-noche');
             const esOscuro = document.body.classList.contains('modo-noche');
             localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
         };
 
-        // ==========================================================
-        // 3. MOSTRAR / OCULTAR CONTRASEÑA
-        // ==========================================================
         window.togglePassword = function() {
             const inputPass = document.getElementById('password');
             const btnMostrar = document.getElementById('btnMostrarPass');
-            
             if (inputPass) {
                 if (inputPass.type === 'password') {
                     inputPass.type = 'text';
@@ -84,17 +71,23 @@
             }
         };
 
-        // ==========================================================
-        // 4. LÓGICA DE INICIO DE SESIÓN
-        // ==========================================================
+        // Contador de intentos fallidos y bloqueo
+        let intentosFallidos = 0;
+
         document.addEventListener('DOMContentLoaded', () => {
             const formLogin = document.getElementById('form-login');
+            const btnLogin = document.getElementById('btn-login');
+            const mensaje = document.getElementById('mensaje');
+
             if (formLogin) {
                 formLogin.addEventListener('submit', function(e) {
                     e.preventDefault();
+
+                    // Si el botón está deshabilitado por el bloqueo, no procesar
+                    if (btnLogin.disabled) return;
+
                     const emailInput = document.getElementById('email').value.trim();
                     const passwordInput = document.getElementById('password').value;
-                    const mensaje = document.getElementById('mensaje');
 
                     const usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
                     const usuarioEncontrado = usuarios.find(u => 
@@ -102,12 +95,37 @@
                     );
 
                     if (usuarioEncontrado) {
+                        intentosFallidos = 0; // Reiniciar contador si ingresa con éxito
                         localStorage.setItem('usuario_activo_sgg', JSON.stringify(usuarioEncontrado));
                         window.location.href = 'dashboard.html';
                     } else {
-                        if (mensaje) {
+                        intentosFallidos++;
+
+                        if (intentosFallidos >= 3) {
+                            // Iniciar bloqueo de 30 segundos
+                            btnLogin.disabled = true;
+                            let tiempoRestante = 30;
+
                             mensaje.className = 'msg-box error';
-                            mensaje.textContent = 'Credenciales incorrectas. Verifique e intente nuevamente.';
+                            mensaje.textContent = `Demasiados intentos fallidos. Intente de nuevo en ${tiempoRestante} segundos.`;
+
+                            const intervalo = setInterval(() => {
+                                tiempoRestante--;
+                                if (tiempoRestante > 0) {
+                                    mensaje.textContent = `Demasiados intentos fallidos. Intente de nuevo en ${tiempoRestante} segundos.`;
+                                } else {
+                                    clearInterval(intervalo);
+                                    btnLogin.disabled = false;
+                                    intentosFallidos = 0; // Se reinicia el contador de intentos
+                                    mensaje.textContent = '';
+                                    mensaje.className = 'msg-box';
+                                }
+                            }, 1000);
+
+                        } else {
+                            const intentosRestantes = 3 - intentosFallidos;
+                            mensaje.className = 'msg-box error';
+                            mensaje.textContent = `Credenciales incorrectas. Te quedan ${intentosRestantes} intento(s).`;
                         }
                     }
                 });
