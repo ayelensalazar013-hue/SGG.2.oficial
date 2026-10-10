@@ -1,4 +1,23 @@
+// ==========================================================
+// PERSISTENCIA DEL MODO (CLARO / OSCURO) EN LOCALSTORAGE
+// Se evalúa e instala inmediatamente al cargar este script
+// ==========================================================
+if (localStorage.getItem('tema_sgg') === 'oscuro') {
+    document.body.classList.add('modo-noche');
+} else {
+    document.body.classList.remove('modo-noche');
+}
+
+// FUNCIÓN DEL BOTÓN: Cambia el estado ÚNICAMENTE al hacer clic
+window.cambiarTema = function() {
+    document.body.classList.toggle('modo-noche');
+    const esOscuro = document.body.classList.contains('modo-noche');
+    localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+};
+
+// ==========================================================
 // VERIFICACIÓN DE SESIÓN (SEGURIDAD DE RUTAS)
+// ==========================================================
 const usuarioActivo = JSON.parse(localStorage.getItem('usuario_activo_sgg'));
 
 if (!usuarioActivo) {
@@ -8,19 +27,24 @@ if (!usuarioActivo) {
 let gastoAEliminarId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Nombre/email del usuario activo
+    // Re-sincronizar el tema al completarse el DOM
+    if (localStorage.getItem('tema_sgg') === 'oscuro') {
+        document.body.classList.add('modo-noche');
+    }
+
+    // Identificación de usuario activo
     const userWelcome = document.getElementById('userWelcome');
     if (userWelcome && usuarioActivo) {
         userWelcome.textContent = `Sesión activa: ${usuarioActivo.email || usuarioActivo.usuario || 'Usuario'}`;
     }
 
-    // Cargar fecha de hoy por defecto
+    // Cargar fecha actual por defecto
     const inputFecha = document.getElementById('fecha');
     if (inputFecha) {
         inputFecha.value = new Date().toISOString().split('T')[0];
     }
 
-    // Listener para guardar gasto
+    // Escuchador del formulario de gastos
     const formGasto = document.getElementById('form-gasto');
     if (formGasto) {
         formGasto.addEventListener('submit', guardarGasto);
@@ -29,24 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarGastos();
 });
 
-// ALTERNANCIA DE MODO DÍA / NOCHE
-window.cambiarTema = function() {
-    document.body.classList.toggle('modo-noche');
-    const esOscuro = document.body.classList.contains('modo-noche');
-    localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
-};
-
-if (localStorage.getItem('tema_sgg') === 'oscuro') {
-    document.body.classList.add('modo-noche');
-}
-
 // CERRAR SESIÓN
 window.cerrarSesion = function() {
     localStorage.removeItem('usuario_activo_sgg');
     window.location.href = 'index.html';
 };
 
-// RENDERIZADO DE TABLA Y TOTAL
+// RENDERIZADO DE TABLA Y TOTAL SUMADO
 function renderizarGastos() {
     const tablaBody = document.getElementById('tablaGastosBody');
     const totalMontoElem = document.getElementById('totalGastado');
@@ -55,7 +68,7 @@ function renderizarGastos() {
     tablaBody.innerHTML = '';
     const todosLosGastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     
-    // Filtrar por usuario activo y estado_activo !== false (Baja Lógica)
+    // Filtrar por usuario activo y por estado_activo !== false (Baja Lógica)
     const gastosUsuario = todosLosGastos.filter(g => 
         (g.usuarioEmail === usuarioActivo.email || g.usuarioEmail === usuarioActivo.usuario) && 
         g.estado_activo !== false
@@ -87,7 +100,7 @@ function renderizarGastos() {
     }
 }
 
-// GUARDAR / EDITAR GASTO
+// GUARDAR / EDITAR REGISTRO DE GASTO
 function guardarGasto(e) {
     e.preventDefault();
     const mensaje = document.getElementById('mensaje');
@@ -106,7 +119,7 @@ function guardarGasto(e) {
     let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
 
     if (gastoId) {
-        // Actualizar registro existente
+        // Actualización de registro
         gastos = gastos.map(g => {
             if (g.id === gastoId) {
                 return { ...g, monto, fecha, categoria, descripcion };
@@ -116,7 +129,7 @@ function guardarGasto(e) {
         mensaje.className = 'msg-box success';
         mensaje.textContent = 'Gasto actualizado correctamente.';
     } else {
-        // Crear nuevo registro
+        // Creación de nuevo registro
         const nuevoGasto = {
             id: 'gasto_' + Date.now(),
             usuarioEmail: usuarioActivo.email || usuarioActivo.usuario,
@@ -138,7 +151,7 @@ function guardarGasto(e) {
     setTimeout(() => { if (mensaje) mensaje.textContent = ''; }, 3000);
 }
 
-// PREPARAR EDICIÓN DE UN GASTO
+// CARGAR DATOS EN FORMULARIO PARA EDICIÓN
 window.prepararEdicion = function(id) {
     const gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     const gasto = gastos.find(g => g.id === id);
@@ -154,7 +167,7 @@ window.prepararEdicion = function(id) {
     document.getElementById('btn-cancelar-edicion').style.display = 'block';
 };
 
-// CANCELAR MODO EDICIÓN
+// CANCELAR Y RESETEAR MODAL DE EDICIÓN
 window.cancelarEdicion = function() {
     document.getElementById('form-gasto').reset();
     document.getElementById('gastoId').value = '';
@@ -163,7 +176,7 @@ window.cancelarEdicion = function() {
     document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
 };
 
-// MANEJO DE MODAL Y BAJA LÓGICA (SOFT DELETE)
+// MODAL DE CONFIRMACIÓN Y BAJA LÓGICA (SOFT DELETE)
 window.abrirModal = function(id) {
     gastoAEliminarId = id;
     const modal = document.getElementById('modalConfirmar');
@@ -182,7 +195,7 @@ window.confirmarEliminacion = function() {
     let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     gastos = gastos.map(g => {
         if (g.id === gastoAEliminarId) {
-            return { ...g, estado_activo: false }; // Soft Delete
+            return { ...g, estado_activo: false }; // Baja lógica
         }
         return g;
     });
