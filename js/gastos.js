@@ -1,14 +1,19 @@
 // ==========================================================
-// PERSISTENCIA DEL MODO (CLARO / OSCURO) EN LOCALSTORAGE
-// Se evalúa e instala inmediatamente al cargar este script
+// PERSISTENCIA DEL MODO (INICIA EN CLARO POR DEFECTO)
 // ==========================================================
-if (localStorage.getItem('tema_sgg') === 'oscuro') {
-    document.body.classList.add('modo-noche');
-} else {
-    document.body.classList.remove('modo-noche');
-}
+(function() {
+    const temaGuardado = localStorage.getItem('tema_sgg');
+    if (!temaGuardado) {
+        localStorage.setItem('tema_sgg', 'claro');
+        document.body.classList.remove('modo-noche');
+    } else if (temaGuardado === 'oscuro') {
+        document.body.classList.add('modo-noche');
+    } else {
+        document.body.classList.remove('modo-noche');
+    }
+})();
 
-// FUNCIÓN DEL BOTÓN: Cambia el estado ÚNICAMENTE al hacer clic
+// FUNCIÓN DEL BOTÓN: Cambia únicamente al hacer clic
 window.cambiarTema = function() {
     document.body.classList.toggle('modo-noche');
     const esOscuro = document.body.classList.contains('modo-noche');
@@ -27,24 +32,19 @@ if (!usuarioActivo) {
 let gastoAEliminarId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Re-sincronizar el tema al completarse el DOM
-    if (localStorage.getItem('tema_sgg') === 'oscuro') {
-        document.body.classList.add('modo-noche');
-    }
-
-    // Identificación de usuario activo
+    // Email del usuario activo
     const userWelcome = document.getElementById('userWelcome');
     if (userWelcome && usuarioActivo) {
         userWelcome.textContent = `Sesión activa: ${usuarioActivo.email || usuarioActivo.usuario || 'Usuario'}`;
     }
 
-    // Cargar fecha actual por defecto
+    // Fecha de hoy por defecto
     const inputFecha = document.getElementById('fecha');
     if (inputFecha) {
         inputFecha.value = new Date().toISOString().split('T')[0];
     }
 
-    // Escuchador del formulario de gastos
+    // Listener del formulario
     const formGasto = document.getElementById('form-gasto');
     if (formGasto) {
         formGasto.addEventListener('submit', guardarGasto);
@@ -53,13 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarGastos();
 });
 
-// CERRAR SESIÓN
+// CERRAR SESIÓN (Mantiene la preferencia de tema guardada)
 window.cerrarSesion = function() {
     localStorage.removeItem('usuario_activo_sgg');
     window.location.href = 'index.html';
 };
 
-// RENDERIZADO DE TABLA Y TOTAL SUMADO
+// RENDERIZADO DE TABLA Y TOTAL
 function renderizarGastos() {
     const tablaBody = document.getElementById('tablaGastosBody');
     const totalMontoElem = document.getElementById('totalGastado');
@@ -68,7 +68,7 @@ function renderizarGastos() {
     tablaBody.innerHTML = '';
     const todosLosGastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     
-    // Filtrar por usuario activo y por estado_activo !== false (Baja Lógica)
+    // Filtrar por usuario activo y estado_activo !== false (Baja Lógica)
     const gastosUsuario = todosLosGastos.filter(g => 
         (g.usuarioEmail === usuarioActivo.email || g.usuarioEmail === usuarioActivo.usuario) && 
         g.estado_activo !== false
@@ -100,7 +100,7 @@ function renderizarGastos() {
     }
 }
 
-// GUARDAR / EDITAR REGISTRO DE GASTO
+// GUARDAR / EDITAR GASTO
 function guardarGasto(e) {
     e.preventDefault();
     const mensaje = document.getElementById('mensaje');
@@ -119,7 +119,6 @@ function guardarGasto(e) {
     let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
 
     if (gastoId) {
-        // Actualización de registro
         gastos = gastos.map(g => {
             if (g.id === gastoId) {
                 return { ...g, monto, fecha, categoria, descripcion };
@@ -129,7 +128,6 @@ function guardarGasto(e) {
         mensaje.className = 'msg-box success';
         mensaje.textContent = 'Gasto actualizado correctamente.';
     } else {
-        // Creación de nuevo registro
         const nuevoGasto = {
             id: 'gasto_' + Date.now(),
             usuarioEmail: usuarioActivo.email || usuarioActivo.usuario,
@@ -151,7 +149,7 @@ function guardarGasto(e) {
     setTimeout(() => { if (mensaje) mensaje.textContent = ''; }, 3000);
 }
 
-// CARGAR DATOS EN FORMULARIO PARA EDICIÓN
+// PREPARAR EDICIÓN DE UN GASTO
 window.prepararEdicion = function(id) {
     const gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     const gasto = gastos.find(g => g.id === id);
@@ -167,7 +165,7 @@ window.prepararEdicion = function(id) {
     document.getElementById('btn-cancelar-edicion').style.display = 'block';
 };
 
-// CANCELAR Y RESETEAR MODAL DE EDICIÓN
+// CANCELAR MODO EDICIÓN
 window.cancelarEdicion = function() {
     document.getElementById('form-gasto').reset();
     document.getElementById('gastoId').value = '';
@@ -176,7 +174,7 @@ window.cancelarEdicion = function() {
     document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
 };
 
-// MODAL DE CONFIRMACIÓN Y BAJA LÓGICA (SOFT DELETE)
+// MANEJO DE MODAL Y BAJA LÓGICA (SOFT DELETE)
 window.abrirModal = function(id) {
     gastoAEliminarId = id;
     const modal = document.getElementById('modalConfirmar');
@@ -195,7 +193,7 @@ window.confirmarEliminacion = function() {
     let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     gastos = gastos.map(g => {
         if (g.id === gastoAEliminarId) {
-            return { ...g, estado_activo: false }; // Baja lógica
+            return { ...g, estado_activo: false };
         }
         return g;
     });
