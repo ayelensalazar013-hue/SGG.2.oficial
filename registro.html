@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema SGG - Registro de Usuario">
-    <title>SGG - Registro de Usuario</title>
+    <meta name="description" content="Sistema SGG - Crear cuenta de usuario">
+    <title>SGG - Crear cuenta</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <button type="button" class="btn-tema" id="btn-tema" aria-label="Cambiar tema de color">Cambiar Modo</button>
     <main class="container">
-        <h1>Registro de Usuario</h1>
+        <h1>Crear cuenta</h1>
         
         <form id="form-registro">
             <div class="form-group">
@@ -43,7 +43,7 @@
                 <input type="password" id="password" name="password" required placeholder="Creá una contraseña segura" autocomplete="new-password">
             </div>
 
-            <ul class="password-rules">
+            <ul class="password-rules" aria-live="polite">
                 <li id="ruleLen">✖ Mínimo 8 caracteres</li>
                 <li id="ruleMayus">✖ Al menos una mayúscula</li>
                 <li id="ruleMinus">✖ Al menos una minúscula</li>
