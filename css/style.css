@@ -1,35 +1,33 @@
 /* ==========================================================
-   PALETA EXACTA DE LA IMAGEN
-   #8d4925 | #c57d56 | #ffb48a | #e8c39e | #f5e1ce
+   PALETA Y ESTILOS EXACTOS SGG (RF-02)
    ========================================================== */
 :root {
-    --bg-screen: #f5e1ce;        /* Fondo general de la página */
-    --card-bg: #ffffff;          /* Tarjeta blanca limpia */
-    --text-color: #8d4925;       /* Texto y títulos en café fuerte */
-    --btn-color: #8d4925;        /* Botón café principal */
-    --btn-hover: #c57d56;        /* Botón café claro al pasar el mouse */
-    --border-color: #ffb48a;     /* Bordes finos de inputs y tarjetas */
-    --input-bg: #f5e1ce;         /* Fondo suave de los inputs */
-    --input-focus-border: #8d4925;
-    --error-color: #c62828;
-    --success-color: #2e7d32;
+    --bg-color: #f4f0e8;          /* Fondo crema suave */
+    --card-bg: #ffffff;          /* Tarjeta blanca */
+    --text-color: #4a2c20;        /* Texto marrón oscuro */
+    --btn-color: #6e473b;         /* Botón café principal */
+    --btn-hover: #58372d;         /* Botón café hover */
+    --border-color: #cbbab0;      /* Borde de inputs */
+    --input-bg: #fafafa;          /* Fondo de los campos */
+    --error-color: #c62828;       /* Rojo para cruces/errores */
+    --success-color: #2e7d32;     /* Verde para tildes/éxito */
 }
 
-/* MODO NOCHE (Ajustado con contraste sobre la misma paleta) */
+/* MODO NOCHE */
 body.modo-noche {
-    --bg-screen: #2b2320;
-    --card-bg: #1c1412;
-    --text-color: #f5e1ce;
-    --btn-color: #c57d56;
-    --btn-hover: #ffb48a;
-    --border-color: #8d4925;
-    --input-bg: #2b2320;
+    --bg-color: #1a1412;
+    --card-bg: #2b2320;
+    --text-color: #ffffff;
+    --btn-color: #8c6052;
+    --btn-hover: #734d41;
+    --border-color: #54433d;
+    --input-bg: #211a18;
 }
 
 body {
-    background-color: var(--bg-screen) !important;
+    background-color: var(--bg-color) !important;
     color: var(--text-color) !important;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 30px 20px;
     display: flex !important;
@@ -39,7 +37,7 @@ body {
     box-sizing: border-box;
 }
 
-/* BOTÓN DE CAMBIAR MODO */
+/* BOTÓN "Cambiar Modo" */
 .btn-tema, #btn-tema {
     position: fixed;
     top: 20px;
@@ -52,24 +50,22 @@ body {
     cursor: pointer;
     font-weight: bold;
     font-size: 0.95rem;
-    box-shadow: 0 4px 10px rgba(141, 73, 37, 0.2);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
     z-index: 1000;
-    transition: background-color 0.2s ease;
 }
 
 .btn-tema:hover {
     background-color: var(--btn-hover) !important;
 }
 
-/* CONTENEDOR TARJETA CENTRADA */
+/* TARJETA CENTRADA VERTICAL */
 .container, .card-container, main {
     background: var(--card-bg) !important;
     width: 100% !important;
     max-width: 420px !important;
-    padding: 45px 35px !important;
-    border-radius: 20px !important;
-    border: 1px solid var(--border-color) !important;
-    box-shadow: 0 10px 25px rgba(141, 73, 37, 0.08) !important;
+    padding: 40px 35px !important;
+    border-radius: 18px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
@@ -79,30 +75,28 @@ body {
 h1, h2 {
     text-align: center;
     margin-top: 0;
-    margin-bottom: 30px; /* Espacio debajo del título */
+    margin-bottom: 25px;
     color: var(--text-color) !important;
     font-size: 2.1rem;
-    font-weight: bold;
+    font-weight: 800;
 }
 
-/* FORMULARIO Y CONSTRUCCIÓN VERTICAL */
 form {
     display: flex !important;
     flex-direction: column !important;
     width: 100% !important;
 }
 
-/* ESPACIADO GENEROSO ENTRE CAMPOS */
 .form-group {
-    margin-bottom: 22px !important; /* Espacio entre bloque y bloque */
+    margin-bottom: 18px !important;
     display: flex !important;
     flex-direction: column !important;
 }
 
 label {
-    font-weight: bold;
-    margin-bottom: 10px !important; /* Espacio entre el texto de la etiqueta y el input */
-    margin-top: 10px !important;
+    font-weight: 800;
+    margin-bottom: 8px !important;
+    margin-top: 6px !important;
     color: var(--text-color) !important;
     display: block !important;
     font-size: 0.95rem;
@@ -112,8 +106,8 @@ input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="date"] {
-    padding: 14px 16px !important;
-    border: 1.5px solid var(--border-color) !important;
+    padding: 13px 15px !important;
+    border: 1px solid var(--border-color) !important;
     border-radius: 10px !important;
     background-color: var(--input-bg) !important;
     color: var(--text-color) !important;
@@ -122,31 +116,63 @@ input[type="date"] {
     font-size: 0.95rem;
     outline: none;
     display: block !important;
-    margin-bottom: 18px !important; /* Separación vertical adicional */
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    margin-bottom: 12px !important;
 }
 
 input:focus {
-    border-color: var(--input-focus-border) !important;
-    background-color: #ffffff !important;
+    border-color: var(--btn-color) !important;
 }
 
-/* BOTONES MARRONES ESPACIADOS */
+/* CUADRO DE 5 REGLAS DE CONTRASEÑA EN VIVO */
+.password-rules {
+    list-style: none;
+    padding: 12px 15px;
+    margin: 5px 0 15px 0 !important;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 10px;
+    border: 1px dashed var(--border-color);
+}
+
+body.modo-noche .password-rules {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.password-rules li {
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    color: var(--error-color);
+    transition: color 0.2s ease;
+}
+
+.password-rules li:last-child {
+    margin-bottom: 0;
+}
+
+.password-rules li.valid {
+    color: var(--success-color) !important;
+}
+
+/* BOTONES MARRONES */
 .btn-principal,
-.btn-mostrar {
+.btn-mostrar,
+#btn-login,
+#btn-registro,
+#btn-recuperar {
     background-color: var(--btn-color) !important;
     color: #ffffff !important;
     border: none !important;
-    padding: 14px !important;
+    padding: 13px !important;
     border-radius: 10px !important;
-    font-weight: bold !important;
+    font-weight: 700 !important;
     font-size: 1rem !important;
     cursor: pointer;
     width: 100% !important;
-    margin-top: 10px !important;
-    margin-bottom: 15px !important; /* Espacio debajo del botón */
+    margin-top: 6px !important;
+    margin-bottom: 10px !important;
     display: block !important;
-    transition: background-color 0.2s ease;
 }
 
 .btn-principal:hover,
@@ -154,26 +180,11 @@ input:focus {
     background-color: var(--btn-hover) !important;
 }
 
-/* LISTA DE REGLAS DE CONTRASEÑA EN VIVO */
-.password-rules {
-    list-style: none;
-    padding: 0;
-    margin: 5px 0 20px 0 !important; /* Espacio entre la lista de reglas y el botón */
-    font-size: 0.88rem;
-}
-
-.password-rules li {
-    color: var(--error-color);
-    margin-bottom: 6px !important;
-    font-weight: bold;
-}
-
-/* MENSAJES Y PIE DE PÁGINA */
 .msg-box, #mensaje {
     font-size: 0.92rem;
-    font-weight: bold;
+    font-weight: 700;
     text-align: center;
-    margin-top: 15px !important;
+    margin-top: 10px !important;
 }
 
 .msg-box.error { color: var(--error-color); }
@@ -182,20 +193,21 @@ input:focus {
 .divisoria {
     border: 0;
     border-top: 1px solid var(--border-color);
-    margin: 25px 0 20px 0 !important;
+    margin: 20px 0 15px 0 !important;
+    opacity: 0.6;
 }
 
 .links-container, .card-footer {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    margin-top: 20px !important;
+    margin-top: 15px !important;
 }
 
 .btn-enlace, .card-footer a {
     color: var(--text-color) !important;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 800;
     font-size: 0.9rem;
 }
 
