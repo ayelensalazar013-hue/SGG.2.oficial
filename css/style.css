@@ -200,6 +200,24 @@ input:focus, select:focus {
     margin: 20px 0;
 }
 
+/* ==========================================================
+   ENLACES INFERIORES MARRÓN MARRÓN EXACTOS A TU FOTO 2
+   ========================================================== */
+.card-footer, .links-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+a, a:visited, a:active, a:hover,
+.card-footer a, .links-container a {
+    color: var(--text-color) !important;
+    text-decoration: underline !important;
+    font-weight: 800 !important;
+    font-size: 0.95rem;
+}
+
 .user-welcome {
     text-align: center;
     font-weight: 700;
