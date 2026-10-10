@@ -1,13 +1,17 @@
-window.cambiarTema = function() {
-    document.body.classList.toggle('modo-noche');
-    const esOscuro = document.body.classList.contains('modo-noche');
-    localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
-};
-
-if (localStorage.getItem('tema_sgg') === 'oscuro') {
-    document.body.classList.add('modo-noche');
+// CONTROL DE MODO DÍA / NOCHE (RF-02)
+const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
+if (btnTema) {
+    if (localStorage.getItem('tema_sgg') === 'oscuro') {
+        document.body.classList.add('modo-noche');
+    }
+    btnTema.addEventListener('click', () => {
+        document.body.classList.toggle('modo-noche');
+        const esOscuro = document.body.classList.contains('modo-noche');
+        localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+    });
 }
 
+// MOSTRAR / OCULTAR CONTRASEÑA
 window.mostrarOcultarPassword = function(inputId, btn) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -20,6 +24,7 @@ window.mostrarOcultarPassword = function(inputId, btn) {
     }
 };
 
+// INICIO DE SESIÓN (RF-01)
 const formLogin = document.getElementById('form-login') || document.getElementById('formLogin');
 if (formLogin) {
     let intentosFallidos = 0;
@@ -30,37 +35,32 @@ if (formLogin) {
 
     formLogin.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (loginMsg) loginMsg.textContent = '';
-
+        loginMsg.textContent = '';
         const userOrEmail = loginUser.value.trim().toLowerCase();
         const pass = loginPass.value;
-        const usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
 
-        const usuarioEncontrado = usuarios.find(u => (u.email === userOrEmail || u.username === userOrEmail || u.usuario === userOrEmail) && u.password === pass);
+        const usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
+        const usuarioEncontrado = usuarios.find(u => (u.email === userOrEmail || u.username === userOrEmail) && u.password === pass);
 
         if (usuarioEncontrado) {
             intentosFallidos = 0;
             localStorage.setItem('usuario_activo_sgg', JSON.stringify(usuarioEncontrado));
-            if (loginMsg) {
-                loginMsg.className = 'msg-box success';
-                loginMsg.textContent = '¡Inicio de sesión exitoso! Redirigiendo...';
-            }
+            loginMsg.className = 'msg-box success';
+            loginMsg.textContent = '¡Inicio de sesión exitoso! Redirigiendo...';
             setTimeout(() => window.location.href = 'panel.html', 1000);
         } else {
             intentosFallidos++;
-            if (loginMsg) {
-                loginMsg.className = 'msg-box error';
-                if (intentosFallidos >= 3) {
-                    btnSubmit.disabled = true;
-                    loginMsg.textContent = 'Demasiados intentos fallidos. Botón bloqueado por 30 segundos.';
-                    setTimeout(() => {
-                        btnSubmit.disabled = false;
-                        intentosFallidos = 0;
-                        loginMsg.textContent = '';
-                    }, 30000);
-                } else {
-                    loginMsg.textContent = `Datos incorrectos. Intento ${intentosFallidos} de 3.`;
-                }
+            loginMsg.className = 'msg-box error';
+            if (intentosFallidos >= 3) {
+                btnSubmit.disabled = true;
+                loginMsg.textContent = 'Demasiados intentos fallidos. Botón bloqueado por 30 segundos.';
+                setTimeout(() => {
+                    btnSubmit.disabled = false;
+                    intentosFallidos = 0;
+                    loginMsg.textContent = '';
+                }, 30000);
+            } else {
+                loginMsg.textContent = `Datos incorrectos. Intento ${intentosFallidos} de 3.`;
             }
         }
     });
