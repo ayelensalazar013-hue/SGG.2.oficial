@@ -1,5 +1,5 @@
 /* ==========================================================
-   PALETA CAFÉ / MARRÓN EXACTA CON CENTRADO PERFECTO
+   PALETA CAFÉ / MARRÓN Y BOTÓN EN ESQUINA DERECHA
    ========================================================== */
 :root {
     --bg-color: #f4f0e8;
@@ -14,7 +14,6 @@
     --success-color: #1b5e20;
 }
 
-/* MODO NOCHE */
 body.modo-noche {
     --bg-color: #120e0c;
     --card-bg: #221b18;
@@ -46,28 +45,27 @@ body {
     padding: 20px;
 }
 
-/* BOTÓN DE MODO NOCHE - SIEMPRE EN LA ESQUINA SUPERIOR DERECHA */
+/* BOTÓN "Cambiar Modo" FIJO SIEMPRE ARRIBA A LA DERECHA (EXACTO A TU FOTO) */
 .btn-tema, #btn-tema, #btnTheme {
     position: fixed !important;
     top: 20px !important;
     right: 25px !important;
     left: auto !important;
-    transform: none !important;
-    background-color: var(--btn-color);
-    color: #ffffff;
-    border: none;
-    padding: 10px 22px;
-    border-radius: 25px;
+    background-color: var(--btn-color) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 10px 22px !important;
+    border-radius: 25px !important;
     cursor: pointer;
     font-weight: bold;
     font-size: 0.95rem;
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    z-index: 9999;
     transition: background-color 0.2s ease;
-    z-index: 1000;
 }
 
 .btn-tema:hover {
-    background-color: var(--btn-hover);
+    background-color: var(--btn-hover) !important;
 }
 
 /* TARJETA CENTRADA EN EL MEDIO DE LA PANTALLA */
@@ -140,7 +138,6 @@ input:focus, select:focus {
     border-color: var(--btn-color);
 }
 
-/* BOTONES MARRONES EXACTOS DE LA IMAGEN */
 .btn-principal,
 .btn-mostrar,
 .btn-logout,
@@ -228,7 +225,6 @@ input:focus, select:focus {
     font-size: 0.95rem;
 }
 
-/* COMPONENTES DEL DASHBOARD */
 .user-welcome {
     text-align: center;
     font-weight: 700;
