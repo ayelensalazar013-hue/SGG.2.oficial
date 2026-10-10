@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- BOTÓN DE TEMA EN LA ESQUINA SUPERIOR DERECHA DE SIEMPRE -->
     <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()">Cambiar Modo</button>
 
-    <!-- TARJETA CENTRADA EN EL MEDIO -->
     <main class="container">
         <h1>Gestión de Gastos</h1>
         <div class="user-welcome" id="userWelcome">Cargando usuario...</div>
@@ -75,7 +73,6 @@
             </table>
         </div>
 
-        <!-- BOTÓN DE CERRAR SESIÓN ADENTRO DE LA TARJETA AL FINAL -->
         <hr class="divisoria">
         <button type="button" class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
     </main>
@@ -85,8 +82,8 @@
             <h3>¿Eliminar registro?</h3>
             <p style="font-size: 0.9rem;">El gasto cambiará a estado inactivo.</p>
             <div class="modal-acciones">
-                <button class="btn-principal" style="background-color: var(--error-color);" onclick="confirmarEliminacion()">Eliminar</button>
-                <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                <button type="button" class="btn-principal" style="background-color: var(--error-color);" onclick="confirmarEliminacion()">Eliminar</button>
+                <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
             </div>
         </div>
     </div>
