@@ -1,16 +1,13 @@
-// CONTROL GLOBAL DE CAMBIO DE TEMA (RF-02)
 window.cambiarTema = function() {
     document.body.classList.toggle('modo-noche');
     const esOscuro = document.body.classList.contains('modo-noche');
     localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
 };
 
-// Cargar modo guardado al iniciar
 if (localStorage.getItem('tema_sgg') === 'oscuro') {
     document.body.classList.add('modo-noche');
 }
 
-// FUNCIÓN GLOBAL MOSTRAR / OCULTAR CONTRASEÑA
 window.mostrarOcultarPassword = function(inputId, btn) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -23,7 +20,6 @@ window.mostrarOcultarPassword = function(inputId, btn) {
     }
 };
 
-// INICIO DE SESIÓN (RF-01)
 const formLogin = document.getElementById('form-login') || document.getElementById('formLogin');
 if (formLogin) {
     let intentosFallidos = 0;
