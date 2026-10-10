@@ -2,15 +2,15 @@
    PALETA CAFÉ / MARRÓN EXACTA (RF-02)
    ========================================================== */
 :root {
-    --bg-color: #f4f0e8;          /* Fondo crema claro */
+    --bg-color: #f4f0e8;          /* Fondo crema claro de la pantalla */
     --card-bg: #ffffff;          /* Tarjeta blanca */
     --text-color: #4a2c20;        /* Texto marrón oscuro */
     --btn-color: #6e473b;         /* Botón café principal */
     --btn-hover: #58372d;         /* Botón café hover */
     --border-color: #cbbab0;      /* Borde fino de los inputs */
     --input-bg: #fafafa;          /* Fondo de los campos */
-    --error-color: #c62828;       /* Texto de error */
-    --success-color: #2e7d32;     /* Texto de éxito */
+    --error-color: #c62828;       /* Texto de error / reglas no cumplidas */
+    --success-color: #2e7d32;     /* Texto de éxito / reglas cumplidas */
 }
 
 /* MODO NOCHE */
@@ -37,7 +37,7 @@ body {
     box-sizing: border-box;
 }
 
-/* BOTÓN "Cambiar Modo" */
+/* BOTÓN "Cambiar Modo" EN LA ESQUINA SUPERIOR DERECHA */
 .btn-tema, #btn-tema, #btnTheme {
     position: fixed;
     top: 20px;
@@ -151,7 +151,7 @@ input:focus {
     background-color: var(--btn-hover);
 }
 
-/* LISTA DE REGLAS DE CONTRASEÑA */
+/* LISTA DE LAS 5 REGLAS DE CONTRASEÑA */
 .password-rules {
     list-style: none;
     padding: 0;
