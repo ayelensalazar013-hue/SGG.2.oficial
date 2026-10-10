@@ -39,19 +39,26 @@
         </div>
     </main>
 
-    <!-- SCRIPT INTEGRADO DIRECTO EN INDEX.HTML -->
+    <!-- LÓGICA DE MODO Y AUTENTICACIÓN INTEGRADA -->
     <script>
         // ==========================================================
-        // 1. APLICACIÓN INMEDIATA DEL TEMA DESDE LOCALSTORAGE
+        // 1. EVALUAR MODO (INICIA EN CLARO POR DEFECTO SI NO EXISTE)
         // ==========================================================
-        if (localStorage.getItem('tema_sgg') === 'oscuro') {
-            document.body.classList.add('modo-noche');
-        } else {
-            document.body.classList.remove('modo-noche');
-        }
+        (function() {
+            const temaGuardado = localStorage.getItem('tema_sgg');
+            if (!temaGuardado) {
+                // Si entra por primera vez, establecer Claro
+                localStorage.setItem('tema_sgg', 'claro');
+                document.body.classList.remove('modo-noche');
+            } else if (temaGuardado === 'oscuro') {
+                document.body.classList.add('modo-noche');
+            } else {
+                document.body.classList.remove('modo-noche');
+            }
+        })();
 
         // ==========================================================
-        // 2. FUNCIÓN DEL BOTÓN "CAMBIAR MODO"
+        // 2. FUNCIÓN GLOBAL PARA EL BOTÓN "CAMBIAR MODO"
         // ==========================================================
         window.cambiarTema = function() {
             document.body.classList.toggle('modo-noche');
@@ -81,11 +88,6 @@
         // 4. LÓGICA DE INICIO DE SESIÓN
         // ==========================================================
         document.addEventListener('DOMContentLoaded', () => {
-            // Re-sincronizar el tema al cargar la estructura del DOM
-            if (localStorage.getItem('tema_sgg') === 'oscuro') {
-                document.body.classList.add('modo-noche');
-            }
-
             const formLogin = document.getElementById('form-login');
             if (formLogin) {
                 formLogin.addEventListener('submit', function(e) {
