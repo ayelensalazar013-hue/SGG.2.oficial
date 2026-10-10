@@ -1,26 +1,30 @@
-// ==========================================================
-// MÓDULO DE GESTIÓN DE GASTOS (CRUD) - SGG
-// ==========================================================
+const usuarioActivo = JSON.parse(localStorage.getItem('usuario_activo_sgg'));
 
-let usuarioActivo = null;
-let gastoIdAEliminar = null;
-
-// 1. SEGURIDAD DE RUTAS
-function verificarSesion() {
-    const usuarioGuardado = localStorage.getItem('usuario_activo_sgg');
-    if (!usuarioGuardado) {
-        window.location.href = 'index.html';
-        return;
-    }
-    usuarioActivo = JSON.parse(usuarioGuardado);
-    
-    const userWelcome = document.getElementById('userWelcome');
-    if (userWelcome) {
-        userWelcome.textContent = `Sesión activa: ${usuarioActivo.email || usuarioActivo.username}`;
-    }
+if (!usuarioActivo) {
+    window.location.href = 'index.html';
 }
 
-// 2. MODO NOCHE Y PERSISTENCIA
+let gastoAEliminarId = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const userWelcome = document.getElementById('userWelcome');
+    if (userWelcome && usuarioActivo) {
+        userWelcome.textContent = `Sesión activa: ${usuarioActivo.email || usuarioActivo.usuario || 'Usuario'}`;
+    }
+
+    const inputFecha = document.getElementById('fecha');
+    if (inputFecha) {
+        inputFecha.value = new Date().toISOString().split('T')[0];
+    }
+
+    const formGasto = document.getElementById('form-gasto');
+    if (formGasto) {
+        formGasto.addEventListener('submit', guardarGasto);
+    }
+
+    renderizarGastos();
+});
+
 window.cambiarTema = function() {
     document.body.classList.toggle('modo-noche');
     const esOscuro = document.body.classList.contains('modo-noche');
@@ -36,117 +40,96 @@ window.cerrarSesion = function() {
     window.location.href = 'index.html';
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    verificarSesion();
-    renderizarGastosYDashboard();
+function renderizarGastos() {
+    const tablaBody = document.getElementById('tablaGastosBody');
+    const totalMontoElem = document.getElementById('totalGastado');
+    if (!tablaBody) return;
 
-    const formGasto = document.getElementById('form-gasto');
-    if (formGasto) {
-        formGasto.addEventListener('submit', guardarGasto);
-    }
-});
-
-function obtenerGastosStorage() {
-    return JSON.parse(localStorage.getItem('gastos_sgg')) || [];
-}
-
-// 3. HISTORIAL DINÁMICO Y DASHBOARD
-function renderizarGastosYDashboard() {
-    const todosLosGastos = obtenerGastosStorage();
-    const tbody = document.getElementById('tablaGastosBody');
-    const totalElem = document.getElementById('totalGastado');
-
-    if (!tbody || !usuarioActivo) return;
-
-    tbody.innerHTML = '';
-    let totalAcumulado = 0;
-
-    const gastosUsuarioActivos = todosLosGastos.filter(gasto => 
-        gasto.email_usuario === usuarioActivo.email && gasto.estado_activo === true
+    tablaBody.innerHTML = '';
+    const todosLosGastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
+    
+    const gastosUsuario = todosLosGastos.filter(g => 
+        (g.usuarioEmail === usuarioActivo.email || g.usuarioEmail === usuarioActivo.usuario) && 
+        g.estado_activo !== false
     );
 
-    if (gastosUsuarioActivos.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No hay gastos registrados.</td></tr>`;
-    } else {
-        gastosUsuarioActivos.forEach(gasto => {
-            totalAcumulado += parseFloat(gasto.monto);
+    let totalSumado = 0;
 
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${gasto.fecha}</td>
-                <td>${gasto.categoria}</td>
-                <td>${gasto.descripcion}</td>
-                <td>$${parseFloat(gasto.monto).toFixed(2)}</td>
-                <td>
-                    <button class="btn-tabla btn-editar" onclick="prepararEdicion('${gasto.id}')">Editar</button>
-                    <button class="btn-tabla btn-eliminar" onclick="abrirModalEliminar('${gasto.id}')">Eliminar</button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
+    gastosUsuario.forEach(gasto => {
+        totalSumado += parseFloat(gasto.monto) || 0;
 
-    if (totalElem) {
-        totalElem.textContent = `$${totalAcumulado.toFixed(2)}`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${gasto.fecha}</td>
+            <td>${gasto.categoria}</td>
+            <td>${gasto.descripcion}</td>
+            <td>$${parseFloat(gasto.monto).toFixed(2)}</td>
+            <td style="white-space: nowrap;">
+                <div class="acciones-cell">
+                    <button type="button" class="btn-tabla btn-editar" onclick="prepararEdicion('${gasto.id}')">Editar</button>
+                    <button type="button" class="btn-tabla btn-eliminar" onclick="abrirModal('${gasto.id}')">Eliminar</button>
+                </div>
+            </td>
+        `;
+        tablaBody.appendChild(tr);
+    });
+
+    if (totalMontoElem) {
+        totalMontoElem.textContent = `$${totalSumado.toFixed(2)}`;
     }
 }
 
-// 4. GUARDAR Y EDITAR
 function guardarGasto(e) {
     e.preventDefault();
-    const msg = document.getElementById('mensaje');
-    if (msg) msg.textContent = '';
-
-    const idInput = document.getElementById('gastoId').value;
+    const mensaje = document.getElementById('mensaje');
+    const gastoId = document.getElementById('gastoId').value;
     const monto = parseFloat(document.getElementById('monto').value);
     const fecha = document.getElementById('fecha').value;
     const categoria = document.getElementById('categoria').value;
     const descripcion = document.getElementById('descripcion').value.trim();
 
     if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje('El monto debe ser un valor positivo mayor a cero.', 'error');
+        mensaje.className = 'msg-box error';
+        mensaje.textContent = 'El monto debe ser mayor a 0.';
         return;
     }
 
-    if (!fecha || !categoria || !descripcion) {
-        mostrarMensaje('Por favor complete todos los campos obligatorios.', 'error');
-        return;
-    }
+    let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
 
-    let todosLosGastos = obtenerGastosStorage();
-
-    if (idInput) {
-        const index = todosLosGastos.findIndex(g => g.id === idInput);
-        if (index !== -1) {
-            todosLosGastos[index].monto = monto;
-            todosLosGastos[index].fecha = fecha;
-            todosLosGastos[index].categoria = categoria;
-            todosLosGastos[index].descripcion = descripcion;
-            mostrarMensaje('Gasto actualizado con éxito.', 'success');
-        }
+    if (gastoId) {
+        gastos = gastos.map(g => {
+            if (g.id === gastoId) {
+                return { ...g, monto, fecha, categoria, descripcion };
+            }
+            return g;
+        });
+        mensaje.className = 'msg-box success';
+        mensaje.textContent = 'Gasto actualizado correctamente.';
     } else {
         const nuevoGasto = {
             id: 'gasto_' + Date.now(),
-            email_usuario: usuarioActivo.email,
-            monto: monto,
-            fecha: fecha,
-            categoria: categoria,
-            descripcion: descripcion,
+            usuarioEmail: usuarioActivo.email || usuarioActivo.usuario,
+            monto,
+            fecha,
+            categoria,
+            descripcion,
             estado_activo: true
         };
-        todosLosGastos.push(nuevoGasto);
-        mostrarMensaje('Gasto cargado correctamente.', 'success');
+        gastos.push(nuevoGasto);
+        mensaje.className = 'msg-box success';
+        mensaje.textContent = 'Gasto registrado con éxito.';
     }
 
-    localStorage.setItem('gastos_sgg', JSON.stringify(todosLosGastos));
-    resetearFormulario();
-    renderizarGastosYDashboard();
+    localStorage.setItem('gastos_sgg', JSON.stringify(gastos));
+    cancelarEdicion();
+    renderizarGastos();
+
+    setTimeout(() => { if (mensaje) mensaje.textContent = ''; }, 3000);
 }
 
 window.prepararEdicion = function(id) {
-    const todosLosGastos = obtenerGastosStorage();
-    const gasto = todosLosGastos.find(g => g.id === id);
-
+    const gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
+    const gasto = gastos.find(g => g.id === id);
     if (!gasto) return;
 
     document.getElementById('gastoId').value = gasto.id;
@@ -160,52 +143,37 @@ window.prepararEdicion = function(id) {
 };
 
 window.cancelarEdicion = function() {
-    resetearFormulario();
-};
-
-function resetearFormulario() {
     document.getElementById('form-gasto').reset();
     document.getElementById('gastoId').value = '';
     document.getElementById('btn-guardar-gasto').textContent = 'Guardar Gasto';
     document.getElementById('btn-cancelar-edicion').style.display = 'none';
-}
+    document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+};
 
-// 5. BAJA LÓGICA
-window.abrirModalEliminar = function(id) {
-    gastoIdAEliminar = id;
+window.abrirModal = function(id) {
+    gastoAEliminarId = id;
     const modal = document.getElementById('modalConfirmar');
     if (modal) modal.style.display = 'flex';
 };
 
 window.cerrarModal = function() {
-    gastoIdAEliminar = null;
+    gastoAEliminarId = null;
     const modal = document.getElementById('modalConfirmar');
     if (modal) modal.style.display = 'none';
 };
 
 window.confirmarEliminacion = function() {
-    if (!gastoIdAEliminar) return;
+    if (!gastoAEliminarId) return;
 
-    let todosLosGastos = obtenerGastosStorage();
-    const index = todosLosGastos.findIndex(g => g.id === gastoIdAEliminar);
+    let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
+    gastos = gastos.map(g => {
+        if (g.id === gastoAEliminarId) {
+            return { ...g, estado_activo: false };
+        }
+        return g;
+    });
 
-    if (index !== -1) {
-        todosLosGastos[index].estado_activo = false;
-        localStorage.setItem('gastos_sgg', JSON.stringify(todosLosGastos));
-        mostrarMensaje('Gasto eliminado correctamente.', 'success');
-    }
-
+    localStorage.setItem('gastos_sgg', JSON.stringify(gastos));
     cerrarModal();
-    renderizarGastosYDashboard();
+    renderizarGastos();
 };
-
-function mostrarMensaje(texto, tipo) {
-    const msg = document.getElementById('mensaje');
-    if (!msg) return;
-    msg.textContent = texto;
-    msg.className = `msg-box ${tipo}`;
-    setTimeout(() => {
-        msg.textContent = '';
-        msg.className = 'msg-box';
-    }, 3000);
-}
