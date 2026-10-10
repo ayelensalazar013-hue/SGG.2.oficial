@@ -3,39 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema SGG - Iniciar Sesión">
     <title>SGG - Iniciar Sesión</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <button type="button" class="btn-tema" id="btn-tema" aria-label="Cambiar modo de color">Cambiar Modo</button>
-    <main class="container">
+    <!-- BOTÓN FIJO EN LA ESQUINA SUPERIOR DERECHA -->
+    <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()">Cambiar Modo</button>
+
+    <!-- TARJETA CENTRADA DE INICIO DE SESIÓN -->
+    <main class="card-container">
         <h1>Iniciar Sesión</h1>
-        
+
         <form id="form-login">
             <div class="form-group">
-                <label for="usuario">Usuario o Email:</label>
-                <input type="text" id="usuario" name="usuario" required placeholder="Ingresá tu usuario o correo" autocomplete="username">
+                <label for="email">Usuario o Email:</label>
+                <input type="text" id="email" name="email" required placeholder="Ingresá tu usuario o correo">
             </div>
 
             <div class="form-group">
                 <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required placeholder="Ingresá tu contraseña" autocomplete="current-password">
+                <input type="password" id="password" name="password" required placeholder="Ingresá tu contraseña">
             </div>
-            
-            <button type="button" class="btn-mostrar" onclick="mostrarOcultarPassword('password', this)" aria-label="Mostrar u ocultar la contraseña">Mostrar</button>
+
+            <button type="button" class="btn-mostrar" id="btnMostrarPass" onclick="togglePassword()">Mostrar</button>
             <button type="submit" class="btn-principal" id="btn-login">Ingresar</button>
         </form>
 
-        <div id="mensaje" aria-live="polite"></div>
+        <div id="mensaje" class="msg-box" aria-live="polite"></div>
+
         <hr class="divisoria">
 
-        <nav class="links-container">
-            <a href="registro.html" class="btn-enlace">Crear cuenta</a>
-            <a href="recuperar.html" class="btn-enlace">Recuperar contraseña</a>
-        </nav>
+        <div class="card-footer">
+            <a href="registro.html">Crear cuenta</a>
+            <a href="recuperar.html">Recuperar contraseña</a>
+        </div>
     </main>
 
-    <script src="js/login.js"></script>
+    <!-- SCRIPT INTEGRADO DIRECTO EN INDEX.HTML -->
+    <script>
+        // ==========================================================
+        // 1. APLICACIÓN INMEDIATA DEL TEMA DESDE LOCALSTORAGE
+        // ==========================================================
+        if (localStorage.getItem('tema_sgg') === 'oscuro') {
+            document.body.classList.add('modo-noche');
+        } else {
+            document.body.classList.remove('modo-noche');
+        }
+
+        // ==========================================================
+        // 2. FUNCIÓN DEL BOTÓN "CAMBIAR MODO"
+        // ==========================================================
+        window.cambiarTema = function() {
+            document.body.classList.toggle('modo-noche');
+            const esOscuro = document.body.classList.contains('modo-noche');
+            localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+        };
+
+        // ==========================================================
+        // 3. MOSTRAR / OCULTAR CONTRASEÑA
+        // ==========================================================
+        window.togglePassword = function() {
+            const inputPass = document.getElementById('password');
+            const btnMostrar = document.getElementById('btnMostrarPass');
+            
+            if (inputPass) {
+                if (inputPass.type === 'password') {
+                    inputPass.type = 'text';
+                    if (btnMostrar) btnMostrar.textContent = 'Ocultar';
+                } else {
+                    inputPass.type = 'password';
+                    if (btnMostrar) btnMostrar.textContent = 'Mostrar';
+                }
+            }
+        };
+
+        // ==========================================================
+        // 4. LÓGICA DE INICIO DE SESIÓN
+        // ==========================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Re-sincronizar el tema al cargar la estructura del DOM
+            if (localStorage.getItem('tema_sgg') === 'oscuro') {
+                document.body.classList.add('modo-noche');
+            }
+
+            const formLogin = document.getElementById('form-login');
+            if (formLogin) {
+                formLogin.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const emailInput = document.getElementById('email').value.trim();
+                    const passwordInput = document.getElementById('password').value;
+                    const mensaje = document.getElementById('mensaje');
+
+                    const usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
+                    const usuarioEncontrado = usuarios.find(u => 
+                        (u.email === emailInput || u.usuario === emailInput) && u.password === passwordInput
+                    );
+
+                    if (usuarioEncontrado) {
+                        localStorage.setItem('usuario_activo_sgg', JSON.stringify(usuarioEncontrado));
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        if (mensaje) {
+                            mensaje.className = 'msg-box error';
+                            mensaje.textContent = 'Credenciales incorrectas. Verifique e intente nuevamente.';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
