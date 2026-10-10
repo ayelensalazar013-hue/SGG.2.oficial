@@ -1,5 +1,5 @@
 /* ==========================================================
-   PALETA CAFÉ / MARRÓN Y BOTÓN EN ESQUINA DERECHA
+   PALETA CAFÉ / MARRÓN EXACTA (SGG)
    ========================================================== */
 :root {
     --bg-color: #f4f0e8;
@@ -14,6 +14,7 @@
     --success-color: #1b5e20;
 }
 
+/* MODO NOCHE */
 body.modo-noche {
     --bg-color: #120e0c;
     --card-bg: #221b18;
@@ -45,12 +46,16 @@ body {
     padding: 20px;
 }
 
-/* BOTÓN "Cambiar Modo" FIJO SIEMPRE ARRIBA A LA DERECHA (EXACTO A TU FOTO) */
+/* ==========================================================
+   POSICIÓN DEL BOTÓN CAMBIAR MODO (ARRIBA A LA DERECHA)
+   ========================================================== */
 .btn-tema, #btn-tema, #btnTheme {
     position: fixed !important;
     top: 20px !important;
     right: 25px !important;
     left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
     background-color: var(--btn-color) !important;
     color: #ffffff !important;
     border: none !important;
@@ -60,7 +65,7 @@ body {
     font-weight: bold;
     font-size: 0.95rem;
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    z-index: 9999;
+    z-index: 9999 !important;
     transition: background-color 0.2s ease;
 }
 
@@ -68,7 +73,9 @@ body {
     background-color: var(--btn-hover) !important;
 }
 
-/* TARJETA CENTRADA EN EL MEDIO DE LA PANTALLA */
+/* ==========================================================
+   ESTILOS DE CONTENEDOR Y FORMULARIOS
+   ========================================================== */
 .card-container, main, .container {
     background: var(--card-bg);
     width: 100%;
