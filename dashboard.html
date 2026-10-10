@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="top-bar">
-        <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()">Cambiar Modo</button>
-        <button type="button" class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
-    </div>
+    <!-- BOTÓN DE TEMA EN LA ESQUINA SUPERIOR DERECHA DE SIEMPRE -->
+    <button type="button" class="btn-tema" id="btn-tema" onclick="cambiarTema()">Cambiar Modo</button>
 
+    <!-- TARJETA CENTRADA EN EL MEDIO -->
     <main class="container">
         <h1>Gestión de Gastos</h1>
         <div class="user-welcome" id="userWelcome">Cargando usuario...</div>
@@ -75,6 +74,10 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- BOTÓN DE CERRAR SESIÓN ADENTRO DE LA TARJETA AL FINAL -->
+        <hr class="divisoria">
+        <button type="button" class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
     </main>
 
     <div class="modal-overlay" id="modalConfirmar">
