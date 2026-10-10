@@ -1,15 +1,17 @@
-// CONTROL DE MODO DÍA / NOCHE
-const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
-if (btnTema) {
+// CONTROL DE MODO DÍA / NOCHE (RF-02)
+document.addEventListener('DOMContentLoaded', () => {
+    const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
     if (localStorage.getItem('tema_sgg') === 'oscuro') {
         document.body.classList.add('modo-noche');
     }
-    btnTema.addEventListener('click', () => {
-        document.body.classList.toggle('modo-noche');
-        const esOscuro = document.body.classList.contains('modo-noche');
-        localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
-    });
-}
+    if (btnTema) {
+        btnTema.addEventListener('click', () => {
+            document.body.classList.toggle('modo-noche');
+            const esOscuro = document.body.classList.contains('modo-noche');
+            localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+        });
+    }
+});
 
 // MOSTRAR / OCULTAR CONTRASEÑA
 window.mostrarOcultarPassword = function(inputId, btn) {
@@ -34,6 +36,7 @@ if (formRegister) {
     const regPass = document.getElementById('password') || document.getElementById('regPass');
     const regMsg = document.getElementById('mensaje') || document.getElementById('regMsg');
 
+    // Validación dinámica en vivo con tildes verdes y cruces rojas (CP-03.4)
     if (regPass) {
         regPass.addEventListener('input', () => {
             const val = regPass.value;
@@ -61,10 +64,12 @@ if (formRegister) {
         e.preventDefault();
         if (regMsg) regMsg.textContent = '';
 
-        const nombre = regNombre.value.trim();
-        const apellido = regApellido.value.trim();
+        // Limpieza de espacios en blanco múltiples en Nombre y Apellido (CP-03.1)
+        const nombre = regNombre.value.trim().replace(/\s+/g, ' ');
+        const apellido = regApellido.value.trim().replace(/\s+/g, ' ');
 
-        if (/[0-9!@#$\%^&*]/.test(nombre) \vert{}\vert{} /[0-9!@#$%^&*]/.test(apellido)) {
+        // No permite números ni símbolos en Nombre/Apellido (CP-03.1)
+        if (/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(nombre) || /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(apellido)) {
             if (regMsg) {
                 regMsg.className = 'msg-box error';
                 regMsg.textContent = 'Nombre y Apellido no pueden contener números ni símbolos.';
@@ -72,6 +77,7 @@ if (formRegister) {
             return;
         }
 
+        // Validación de edad mínima (14 años) (CP-03.2)
         const fechaNac = new Date(regFecha.value);
         const hoy = new Date();
         let edad = hoy.getFullYear() - fechaNac.getFullYear();
@@ -86,15 +92,18 @@ if (formRegister) {
             return;
         }
 
+        // Validación estricta de correo electrónico (CP-03.3)
         const email = regEmail.value.trim().toLowerCase();
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        const regexEmail = /^[^\s@]+@[^\s@]+\.(com|com\.ar|[a-z]{2,})$/i;
+        if (!regexEmail.test(email)) {
             if (regMsg) {
                 regMsg.className = 'msg-box error';
-                regMsg.textContent = 'El formato del correo no es válido.';
+                regMsg.textContent = 'El formato del correo electrónico no es válido.';
             }
             return;
         }
 
+        // Validación de las 5 reglas de contraseña (CP-03.4)
         const valPass = regPass.value;
         const cumpleClave = valPass.length >= 8 && /[A-Z]/.test(valPass) && /[a-z]/.test(valPass) && /[0-9]/.test(valPass) && /[!@#$%^&*]/.test(valPass);
 
@@ -106,11 +115,12 @@ if (formRegister) {
             return;
         }
 
+        // Comprobar que el correo o usuario no estén repetidos (CP-03.5)
         const usuarios = JSON.parse(localStorage.getItem('usuarios_sgg')) || [];
         if (usuarios.some(u => u.email === email)) {
             if (regMsg) {
                 regMsg.className = 'msg-box error';
-                regMsg.textContent = 'Este correo ya está registrado.';
+                regMsg.textContent = 'Este correo electrónico ya está registrado.';
             }
             return;
         }
@@ -123,7 +133,7 @@ if (formRegister) {
         localStorage.setItem('usuarios_sgg', JSON.stringify(usuarios));
         if (regMsg) {
             regMsg.className = 'msg-box success';
-            regMsg.textContent = '¡Registro exitoso! Redirigiendo...';
+            regMsg.textContent = '¡Registro exitoso! Redirigiendo a inicio de sesión...';
         }
 
         setTimeout(() => window.location.href = 'index.html', 1500);
