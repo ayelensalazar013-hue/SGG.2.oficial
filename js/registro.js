@@ -1,4 +1,3 @@
-// CONTROL GLOBAL DE CAMBIO DE TEMA (RF-02)
 window.cambiarTema = function() {
     document.body.classList.toggle('modo-noche');
     const esOscuro = document.body.classList.contains('modo-noche');
@@ -9,7 +8,6 @@ if (localStorage.getItem('tema_sgg') === 'oscuro') {
     document.body.classList.add('modo-noche');
 }
 
-// FUNCIÓN GLOBAL MOSTRAR / OCULTAR CONTRASEÑA
 window.mostrarOcultarPassword = function(inputId, btn) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -25,7 +23,6 @@ window.mostrarOcultarPassword = function(inputId, btn) {
 document.addEventListener('DOMContentLoaded', () => {
     const regPassInput = document.getElementById('password') || document.getElementById('regPass');
 
-    // VALIDACIÓN EN VIVO CON TILDES Y CRUCES (CP-03.4)
     if (regPassInput) {
         regPassInput.addEventListener('input', () => {
             const val = regPassInput.value;
@@ -41,16 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(id);
         if (!el) return;
         if (condicion) {
-            el.style.color = '#2e7d32';
+            el.classList.add('valid');
             el.textContent = `✔ ${texto}`;
         } else {
-            el.style.color = '#c62828';
+            el.classList.remove('valid');
             el.textContent = `✖ ${texto}`;
         }
     }
 });
 
-// REGISTRO DE USUARIO (RF-03)
 const formRegister = document.getElementById('form-registro') || document.getElementById('formRegister');
 if (formRegister) {
     formRegister.addEventListener('submit', (e) => {
@@ -65,7 +61,6 @@ if (formRegister) {
 
         if (regMsg) regMsg.textContent = '';
 
-        // Limpieza de espacios y validación sin números/símbolos en Nombre/Apellido (CP-03.1)
         const nombre = regNombre.value.trim();
         const apellido = regApellido.value.trim();
         if (/[0-9!@#$\%^&*]/.test(nombre) \vert{}\vert{} /[0-9!@#$%^&*]/.test(apellido)) {
@@ -76,7 +71,6 @@ if (formRegister) {
             return;
         }
 
-        // Mayor de 14 años (CP-03.2)
         const fechaNac = new Date(regFecha.value);
         const hoy = new Date();
         let edad = hoy.getFullYear() - fechaNac.getFullYear();
@@ -91,7 +85,6 @@ if (formRegister) {
             return;
         }
 
-        // Formato Email (CP-03.3)
         const email = regEmail.value.trim().toLowerCase();
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             if (regMsg) {
@@ -101,7 +94,6 @@ if (formRegister) {
             return;
         }
 
-        // Cumplimiento estricto de las 5 reglas
         const valPass = regPass.value;
         const cumpleClave = valPass.length >= 8 && /[A-Z]/.test(valPass) && /[a-z]/.test(valPass) && /[0-9]/.test(valPass) && /[!@#$%^&*]/.test(valPass);
         if (!cumpleClave) {
