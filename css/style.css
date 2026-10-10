@@ -209,8 +209,8 @@ input:focus, select:focus {
 }
 
 /* ==========================================================
-   ESTILO ESTRUCTURAL DEFINITIVO DE ENLACES (ESTILO CAFÉ)
-   PROHIBIDO AZUL/PÚRPURA / MARRÓN CON EXTRA NEGRITA
+   ESTILO DEFINITIVO DE ENLACES EN MARRÓN (EXTRA NEGRITA)
+   PROHIBIDO PÚRPURA/AZUL POR DEFECTO DEL NAVEGADOR
    ========================================================== */
 .card-footer, .links-container {
     display: flex !important;
@@ -228,10 +228,10 @@ a:active,
 a:focus,
 .card-footer a, 
 .links-container a {
-    color: #3d241a !important; /* Marrón café exacto de tu muestra */
+    color: #3d241a !important; /* Marrón café oscuro exacto */
     text-decoration: underline !important;
     text-underline-offset: 3px !important;
-    font-weight: 900 !important; /* Extra negrita como la captura */
+    font-weight: 900 !important; /* Extra negrita como en la muestra */
     font-size: 0.95rem !important;
     letter-spacing: -0.2px;
 }
