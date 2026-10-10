@@ -1,4 +1,3 @@
-// CONTROL GLOBAL DE CAMBIO DE TEMA (RF-02)
 window.cambiarTema = function() {
     document.body.classList.toggle('modo-noche');
     const esOscuro = document.body.classList.contains('modo-noche');
@@ -9,7 +8,6 @@ if (localStorage.getItem('tema_sgg') === 'oscuro') {
     document.body.classList.add('modo-noche');
 }
 
-// FUNCIÓN GLOBAL MOSTRAR / OCULTAR CONTRASEÑA
 window.mostrarOcultarPassword = function(inputId, btn) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -25,7 +23,6 @@ window.mostrarOcultarPassword = function(inputId, btn) {
 document.addEventListener('DOMContentLoaded', () => {
     const newPassInput = document.getElementById('nuevaPassword') || document.getElementById('recNewPass');
 
-    // VALIDACIÓN EN VIVO EN RECUPERACIÓN (RF-04)
     if (newPassInput) {
         newPassInput.addEventListener('input', () => {
             const val = newPassInput.value;
@@ -41,16 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(id);
         if (!el) return;
         if (condicion) {
-            el.style.color = '#2e7d32';
+            el.classList.add('valid');
             el.textContent = `✔ ${texto}`;
         } else {
-            el.style.color = '#c62828';
+            el.classList.remove('valid');
             el.textContent = `✖ ${texto}`;
         }
     }
 });
 
-// RECUPERAR CONTRASEÑA (RF-04)
 const formRecuperar = document.getElementById('form-recuperar') || document.getElementById('formRecuperar');
 if (formRecuperar) {
     formRecuperar.addEventListener('submit', (e) => {
@@ -72,7 +68,6 @@ if (formRecuperar) {
             return;
         }
 
-        // VALIDACIÓN DE LAS 5 REGLAS (CP-04.3)
         const cumpleClave = newPass.length >= 8 && /[A-Z]/.test(newPass) && /[a-z]/.test(newPass) && /[0-9]/.test(newPass) && /[!@#$%^&*]/.test(newPass);
         if (!cumpleClave) {
             if (recMsg) {
@@ -93,7 +88,6 @@ if (formRecuperar) {
             return;
         }
 
-        // Evitar clave repetida (CP-04.2)
         if (usuarios[idx].password === newPass) {
             if (recMsg) {
                 recMsg.className = 'msg-box error';
