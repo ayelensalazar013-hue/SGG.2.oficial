@@ -1,13 +1,17 @@
-window.cambiarTema = function() {
-    document.body.classList.toggle('modo-noche');
-    const esOscuro = document.body.classList.contains('modo-noche');
-    localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
-};
-
-if (localStorage.getItem('tema_sgg') === 'oscuro') {
-    document.body.classList.add('modo-noche');
+// CONTROL DE MODO DÍA / NOCHE
+const btnTema = document.getElementById('btn-tema') || document.getElementById('btnTheme');
+if (btnTema) {
+    if (localStorage.getItem('tema_sgg') === 'oscuro') {
+        document.body.classList.add('modo-noche');
+    }
+    btnTema.addEventListener('click', () => {
+        document.body.classList.toggle('modo-noche');
+        const esOscuro = document.body.classList.contains('modo-noche');
+        localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+    });
 }
 
+// MOSTRAR / OCULTAR CONTRASEÑA
 window.mostrarOcultarPassword = function(inputId, btn) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -20,12 +24,19 @@ window.mostrarOcultarPassword = function(inputId, btn) {
     }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const regPassInput = document.getElementById('password') || document.getElementById('regPass');
+const formRegister = document.getElementById('form-registro') || document.getElementById('formRegister');
+if (formRegister) {
+    const regNombre = document.getElementById('nombre') || document.getElementById('regNombre');
+    const regApellido = document.getElementById('apellido') || document.getElementById('regApellido');
+    const regFecha = document.getElementById('fechaNacimiento') || document.getElementById('regFecha');
+    const regEmail = document.getElementById('email') || document.getElementById('regEmail');
+    const regUsername = document.getElementById('usuario') || document.getElementById('regUsername');
+    const regPass = document.getElementById('password') || document.getElementById('regPass');
+    const regMsg = document.getElementById('mensaje') || document.getElementById('regMsg');
 
-    if (regPassInput) {
-        regPassInput.addEventListener('input', () => {
-            const val = regPassInput.value;
+    if (regPass) {
+        regPass.addEventListener('input', () => {
+            const val = regPass.value;
             validarRegla('ruleLen', val.length >= 8, 'Mínimo 8 caracteres');
             validarRegla('ruleMayus', /[A-Z]/.test(val), 'Al menos una mayúscula');
             validarRegla('ruleMinus', /[a-z]/.test(val), 'Al menos una minúscula');
@@ -38,31 +49,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(id);
         if (!el) return;
         if (condicion) {
-            el.classList.add('valid');
+            el.className = 'valid';
             el.textContent = `✔ ${texto}`;
         } else {
-            el.classList.remove('valid');
+            el.className = '';
             el.textContent = `✖ ${texto}`;
         }
     }
-});
 
-const formRegister = document.getElementById('form-registro') || document.getElementById('formRegister');
-if (formRegister) {
     formRegister.addEventListener('submit', (e) => {
         e.preventDefault();
-        const regNombre = document.getElementById('nombre') || document.getElementById('regNombre');
-        const regApellido = document.getElementById('apellido') || document.getElementById('regApellido');
-        const regFecha = document.getElementById('fechaNacimiento') || document.getElementById('regFecha');
-        const regEmail = document.getElementById('email') || document.getElementById('regEmail');
-        const regUsername = document.getElementById('usuario') || document.getElementById('regUsername');
-        const regPass = document.getElementById('password') || document.getElementById('regPass');
-        const regMsg = document.getElementById('mensaje') || document.getElementById('regMensaje');
-
         if (regMsg) regMsg.textContent = '';
 
         const nombre = regNombre.value.trim();
         const apellido = regApellido.value.trim();
+
         if (/[0-9!@#$\%^&*]/.test(nombre) \vert{}\vert{} /[0-9!@#$%^&*]/.test(apellido)) {
             if (regMsg) {
                 regMsg.className = 'msg-box error';
@@ -96,6 +97,7 @@ if (formRegister) {
 
         const valPass = regPass.value;
         const cumpleClave = valPass.length >= 8 && /[A-Z]/.test(valPass) && /[a-z]/.test(valPass) && /[0-9]/.test(valPass) && /[!@#$%^&*]/.test(valPass);
+
         if (!cumpleClave) {
             if (regMsg) {
                 regMsg.className = 'msg-box error';
@@ -117,12 +119,13 @@ if (formRegister) {
             nombre, apellido, fechaNac: regFecha.value, email,
             username: regUsername.value.trim(), password: valPass
         });
-        localStorage.setItem('usuarios_sgg', JSON.stringify(usuarios));
 
+        localStorage.setItem('usuarios_sgg', JSON.stringify(usuarios));
         if (regMsg) {
             regMsg.className = 'msg-box success';
-            regMsg.textContent = '¡Registro exitoso! Redirigiendo al Login...';
+            regMsg.textContent = '¡Registro exitoso! Redirigiendo...';
         }
+
         setTimeout(() => window.location.href = 'index.html', 1500);
     });
 }
