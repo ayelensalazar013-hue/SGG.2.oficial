@@ -5,24 +5,22 @@
 let usuarioActivo = null;
 let gastoIdAEliminar = null;
 
-// 1. SEGURIDAD DE RUTAS (REGLA DE NEGOCIO 2.1)
+// 1. SEGURIDAD DE RUTAS
 function verificarSesion() {
     const usuarioGuardado = localStorage.getItem('usuario_activo_sgg');
     if (!usuarioGuardado) {
-        // Redirección forzada inmediata a index.html si no hay sesión
         window.location.href = 'index.html';
         return;
     }
     usuarioActivo = JSON.parse(usuarioGuardado);
     
-    // Mostrar email/usuario en la pantalla
     const userWelcome = document.getElementById('userWelcome');
     if (userWelcome) {
         userWelcome.textContent = `Sesión activa: ${usuarioActivo.email || usuarioActivo.username}`;
     }
 }
 
-// 2. MODO NOCHE Y PERSISTENCIA (RF-02)
+// 2. MODO NOCHE Y PERSISTENCIA
 window.cambiarTema = function() {
     document.body.classList.toggle('modo-noche');
     const esOscuro = document.body.classList.contains('modo-noche');
@@ -33,13 +31,11 @@ if (localStorage.getItem('tema_sgg') === 'oscuro') {
     document.body.classList.add('modo-noche');
 }
 
-// CERRAR SESIÓN
 window.cerrarSesion = function() {
     localStorage.removeItem('usuario_activo_sgg');
     window.location.href = 'index.html';
 };
 
-// INITIALIZATION
 document.addEventListener('DOMContentLoaded', () => {
     verificarSesion();
     renderizarGastosYDashboard();
@@ -50,12 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// 3. OBTIENE LOS GASTOS DE LOCALSTORAGE
 function obtenerGastosStorage() {
     return JSON.parse(localStorage.getItem('gastos_sgg')) || [];
 }
 
-// 4. RF-06 & RF-09: RENDERIZADO DEL HISTORIAL DINÁMICO Y DASHBOARD
+// 3. HISTORIAL DINÁMICO Y DASHBOARD
 function renderizarGastosYDashboard() {
     const todosLosGastos = obtenerGastosStorage();
     const tbody = document.getElementById('tablaGastosBody');
@@ -66,8 +61,6 @@ function renderizarGastosYDashboard() {
     tbody.innerHTML = '';
     let totalAcumulado = 0;
 
-    // TRAZABILIDAD Y BAJA LÓGICA:
-    // Filtrar solo los gastos que pertenecen al usuario activo Y tienen estado_activo: true
     const gastosUsuarioActivos = todosLosGastos.filter(gasto => 
         gasto.email_usuario === usuarioActivo.email && gasto.estado_activo === true
     );
@@ -93,13 +86,12 @@ function renderizarGastosYDashboard() {
         });
     }
 
-    // Actualizar Panel de Resumen (RF-09)
     if (totalElem) {
         totalElem.textContent = `$${totalAcumulado.toFixed(2)}`;
     }
 }
 
-// 5. RF-05 / RF-07: CREAR Y EDITAR GASTO
+// 4. GUARDAR Y EDITAR
 function guardarGasto(e) {
     e.preventDefault();
     const msg = document.getElementById('mensaje');
@@ -111,7 +103,6 @@ function guardarGasto(e) {
     const categoria = document.getElementById('categoria').value;
     const descripcion = document.getElementById('descripcion').value.trim();
 
-    // VALIDACIÓN (RF-05): Monto mayor a 0
     if (isNaN(monto) || monto <= 0) {
         mostrarMensaje('El monto debe ser un valor positivo mayor a cero.', 'error');
         return;
@@ -125,7 +116,6 @@ function guardarGasto(e) {
     let todosLosGastos = obtenerGastosStorage();
 
     if (idInput) {
-        // ACTUALIZACIÓN (RF-07)
         const index = todosLosGastos.findIndex(g => g.id === idInput);
         if (index !== -1) {
             todosLosGastos[index].monto = monto;
@@ -135,15 +125,14 @@ function guardarGasto(e) {
             mostrarMensaje('Gasto actualizado con éxito.', 'success');
         }
     } else {
-        // CREACIÓN (RF-05)
         const nuevoGasto = {
             id: 'gasto_' + Date.now(),
-            email_usuario: usuarioActivo.email, // Clave foránea para trazabilidad
+            email_usuario: usuarioActivo.email,
             monto: monto,
             fecha: fecha,
             categoria: categoria,
             descripcion: descripcion,
-            estado_activo: true // Regla de negocio: Baja Lógica
+            estado_activo: true
         };
         todosLosGastos.push(nuevoGasto);
         mostrarMensaje('Gasto cargado correctamente.', 'success');
@@ -154,7 +143,6 @@ function guardarGasto(e) {
     renderizarGastosYDashboard();
 }
 
-// PREPARAR EDICIÓN (RF-07)
 window.prepararEdicion = function(id) {
     const todosLosGastos = obtenerGastosStorage();
     const gasto = todosLosGastos.find(g => g.id === id);
@@ -182,7 +170,7 @@ function resetearFormulario() {
     document.getElementById('btn-cancelar-edicion').style.display = 'none';
 }
 
-// 6. RF-08: ELIMINACIÓN SEGURA (BAJA LÓGICA)
+// 5. BAJA LÓGICA
 window.abrirModalEliminar = function(id) {
     gastoIdAEliminar = id;
     const modal = document.getElementById('modalConfirmar');
@@ -202,7 +190,6 @@ window.confirmarEliminacion = function() {
     const index = todosLosGastos.findIndex(g => g.id === gastoIdAEliminar);
 
     if (index !== -1) {
-        // CAMBIO DE ESTADO: Se cambia la propiedad estado_activo a false (NO se usa splice)
         todosLosGastos[index].estado_activo = false;
         localStorage.setItem('gastos_sgg', JSON.stringify(todosLosGastos));
         mostrarMensaje('Gasto eliminado correctamente.', 'success');
