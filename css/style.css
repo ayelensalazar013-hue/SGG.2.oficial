@@ -1,16 +1,16 @@
 /* ==========================================================
-   PALETA Y ESTILOS EXACTOS SGG (RF-02)
+   PALETA CAFÉ / MARRÓN EXACTA (RF-02)
    ========================================================== */
 :root {
-    --bg-color: #f4f0e8;          /* Fondo crema suave */
+    --bg-color: #f4f0e8;          /* Fondo crema claro */
     --card-bg: #ffffff;          /* Tarjeta blanca */
     --text-color: #4a2c20;        /* Texto marrón oscuro */
     --btn-color: #6e473b;         /* Botón café principal */
     --btn-hover: #58372d;         /* Botón café hover */
-    --border-color: #cbbab0;      /* Borde de inputs */
+    --border-color: #cbbab0;      /* Borde fino de los inputs */
     --input-bg: #fafafa;          /* Fondo de los campos */
-    --error-color: #c62828;       /* Rojo para cruces/errores */
-    --success-color: #2e7d32;     /* Verde para tildes/éxito */
+    --error-color: #c62828;       /* Texto de error */
+    --success-color: #2e7d32;     /* Texto de éxito */
 }
 
 /* MODO NOCHE */
@@ -25,80 +25,81 @@ body.modo-noche {
 }
 
 body {
-    background-color: var(--bg-color) !important;
-    color: var(--text-color) !important;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     margin: 0;
-    padding: 30px 20px;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-height: 95vh;
     box-sizing: border-box;
 }
 
 /* BOTÓN "Cambiar Modo" */
-.btn-tema, #btn-tema {
+.btn-tema, #btn-tema, #btnTheme {
     position: fixed;
     top: 20px;
     right: 25px;
-    background-color: var(--btn-color) !important;
-    color: #ffffff !important;
-    border: none !important;
+    background-color: var(--btn-color);
+    color: #ffffff;
+    border: none;
     padding: 10px 22px;
     border-radius: 25px;
     cursor: pointer;
     font-weight: bold;
     font-size: 0.95rem;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transition: background-color 0.2s ease;
     z-index: 1000;
 }
 
 .btn-tema:hover {
-    background-color: var(--btn-hover) !important;
+    background-color: var(--btn-hover);
 }
 
-/* TARJETA CENTRADA VERTICAL */
-.container, .card-container, main {
-    background: var(--card-bg) !important;
-    width: 100% !important;
-    max-width: 420px !important;
-    padding: 40px 35px !important;
-    border-radius: 18px !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    flex-direction: column !important;
-    margin: 0 auto !important;
+/* TARJETA CONTENEDORA DE LOS FORMULARIOS */
+.card-container, main, .container {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 35px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
+/* TÍTULOS */
 h1, h2 {
     text-align: center;
     margin-top: 0;
-    margin-bottom: 25px;
-    color: var(--text-color) !important;
+    margin-bottom: 30px;
+    color: var(--text-color);
     font-size: 2.1rem;
     font-weight: 800;
+    letter-spacing: -0.5px;
 }
 
+/* FORMULARIO Y CAMPOS */
 form {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .form-group {
-    margin-bottom: 18px !important;
-    display: flex !important;
-    flex-direction: column !important;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 label {
     font-weight: 800;
-    margin-bottom: 8px !important;
-    margin-top: 6px !important;
-    color: var(--text-color) !important;
-    display: block !important;
+    margin-bottom: 8px;
+    color: var(--text-color);
     font-size: 0.95rem;
 }
 
@@ -106,112 +107,99 @@ input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="date"] {
-    padding: 13px 15px !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 10px !important;
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-    box-sizing: border-box !important;
-    width: 100% !important;
+    padding: 13px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    box-sizing: border-box;
+    width: 100%;
     font-size: 0.95rem;
     outline: none;
-    display: block !important;
-    margin-bottom: 12px !important;
+    transition: border-color 0.2s ease;
 }
 
 input:focus {
-    border-color: var(--btn-color) !important;
+    border-color: var(--btn-color);
 }
 
-/* CUADRO DE 5 REGLAS DE CONTRASEÑA EN VIVO */
-.password-rules {
-    list-style: none;
-    padding: 12px 15px;
-    margin: 5px 0 15px 0 !important;
-    background-color: rgba(0, 0, 0, 0.03);
-    border-radius: 10px;
-    border: 1px dashed var(--border-color);
-}
-
-body.modo-noche .password-rules {
-    background-color: rgba(255, 255, 255, 0.03);
-}
-
-.password-rules li {
-    font-size: 0.88rem;
-    font-weight: 700;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    color: var(--error-color);
-    transition: color 0.2s ease;
-}
-
-.password-rules li:last-child {
-    margin-bottom: 0;
-}
-
-.password-rules li.valid {
-    color: var(--success-color) !important;
-}
-
-/* BOTONES MARRONES */
+/* BOTONES PRINCIPALES Y MOSTRAR */
 .btn-principal,
 .btn-mostrar,
 #btn-login,
 #btn-registro,
-#btn-recuperar {
-    background-color: var(--btn-color) !important;
-    color: #ffffff !important;
-    border: none !important;
-    padding: 13px !important;
-    border-radius: 10px !important;
-    font-weight: 700 !important;
-    font-size: 1rem !important;
+#btn-recuperar,
+#btnTogglePass,
+#btnToggleRegPass,
+#btnToggleRecPass {
+    background-color: var(--btn-color);
+    color: #ffffff;
+    border: none;
+    padding: 13px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
-    width: 100% !important;
-    margin-top: 6px !important;
-    margin-bottom: 10px !important;
-    display: block !important;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    transition: background-color 0.2s ease;
 }
 
 .btn-principal:hover,
 .btn-mostrar:hover {
-    background-color: var(--btn-hover) !important;
+    background-color: var(--btn-hover);
 }
 
-.msg-box, #mensaje {
+/* LISTA DE REGLAS DE CONTRASEÑA */
+.password-rules {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 15px 0;
+    font-size: 0.88rem;
+}
+
+.password-rules li {
+    color: var(--error-color);
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.password-rules li.valid {
+    color: var(--success-color);
+}
+
+/* MENSAJES DE ERROR Y LÍNEA SEPARADORA */
+.msg-box, #mensaje, #regMensaje, #recMensaje {
     font-size: 0.92rem;
     font-weight: 700;
     text-align: center;
-    margin-top: 10px !important;
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 .msg-box.error { color: var(--error-color); }
 .msg-box.success { color: var(--success-color); }
 
 .divisoria {
-    border: 0;
+    border: none;
     border-top: 1px solid var(--border-color);
-    margin: 20px 0 15px 0 !important;
-    opacity: 0.6;
+    margin: 20px 0;
 }
 
-.links-container, .card-footer {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    margin-top: 15px !important;
+.card-footer, .links-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.btn-enlace, .card-footer a {
-    color: var(--text-color) !important;
+.card-footer a, .links-container a {
+    color: var(--text-color);
     text-decoration: none;
     font-weight: 800;
     font-size: 0.9rem;
 }
 
-.btn-enlace:hover, .card-footer a:hover {
+.card-footer a:hover, .links-container a:hover {
     text-decoration: underline;
 }
-
