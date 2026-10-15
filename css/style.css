@@ -1,14 +1,14 @@
 /* ==========================================================
-   PALETA VIOLETA / LAVANDA EXACTA Y ESTÁNDAR SGG
+   PALETA VIOLETA / LAVANDA CON ALTO CONTRASTE (ACCESIBILIDAD 94+)
    ========================================================== */
 :root {
     --bg-color: #f4e8f3;          /* Fondo suave lavanda */
     --card-bg: #ffffff;          /* Tarjeta blanca limpia */
-    --text-color: #3d241a;        /* Texto oscuro legible */
-    --placeholder-color: #a473a3; /* Marcador de posición */
-    --btn-color: #996998;         /* Botón Violeta principal */
-    --btn-hover: #a473a3;         /* Hover botones */
-    --border-color: #dcbadb;      /* Bordes lila */
+    --text-color: #2b1328;        /* Violeta oscuro con contraste WCAG */
+    --placeholder-color: #724871; /* Marcador de posición legible */
+    --btn-color: #844c83;         /* Botón Violeta principal */
+    --btn-hover: #6d3d6c;         /* Hover botones */
+    --border-color: #c99ec8;      /* Bordes lila */
     --input-bg: #ffffff;         /* Fondo casillas blanco */
     --error-color: #b71c1c;
     --success-color: #1b5e20;
@@ -46,9 +46,7 @@ body {
     padding: 20px;
 }
 
-/* ==========================================================
-   BOTÓN "CAMBIAR MODO" - FIJO EXACTO ARRIBA A LA DERECHA
-   ========================================================== */
+/* BOTÓN "CAMBIAR MODO" FIJO EN LA ESQUINA */
 .btn-tema, #btn-tema, #btnTheme {
     position: fixed !important;
     top: 20px !important;
@@ -73,9 +71,7 @@ body {
     background-color: var(--btn-hover) !important;
 }
 
-/* ==========================================================
-   TARJETA CENTRADA Y ESTRUCTURA DE CONTENEDOR
-   ========================================================== */
+/* CONTENEDOR PRINCIPAL Y TARJETAS */
 .card-container, main, .container {
     background: var(--card-bg);
     width: 100%;
@@ -208,9 +204,6 @@ input:focus, select:focus {
     margin: 20px 0;
 }
 
-/* ==========================================================
-   ESTILO DE ENLACES EN VIOLETA
-   ========================================================== */
 .card-footer, .links-container {
     display: flex !important;
     justify-content: space-between !important;
@@ -227,7 +220,7 @@ a:active,
 a:focus,
 .card-footer a, 
 .links-container a {
-    color: #3d241a !important;
+    color: var(--text-color) !important;
     text-decoration: underline !important;
     text-underline-offset: 3px !important;
     font-weight: 900 !important;
@@ -272,9 +265,6 @@ body.modo-noche a:focus {
     margin: 0;
 }
 
-/* ==========================================================
-   TABLA DE HISTORIAL
-   ========================================================== */
 .tabla-container {
     width: 100%;
     overflow-x: auto;
@@ -327,9 +317,6 @@ th {
     color: #ffffff; 
 }
 
-/* ==========================================================
-   MODAL DE CONFIRMACIÓN
-   ========================================================== */
 .modal-overlay {
     display: none;
     position: fixed;
