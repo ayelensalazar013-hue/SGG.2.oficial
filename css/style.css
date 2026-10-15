@@ -1,17 +1,17 @@
 /* ==========================================================
-   PALETA VIOLETA / LAVANDA OPTIMIZADA PARA ACCESIBILIDAD (94+)
-   ========================================================= */
+   PALETA VIOLETA / LAVANDA CON ALTO CONTRASTE (ACCESIBILIDAD 94+)
+   ========================================================== */
 :root {
     --bg-color: #f4e8f3;          /* Fondo suave lavanda */
     --card-bg: #ffffff;          /* Tarjeta blanca limpia */
-    --text-color: #2b1328;        /* Violeta muy oscuro (Texto de alto contraste) */
-    --placeholder-color: #5c355a; /* Marcador de posición oscuro WCAG */
-    --btn-color: #743e73;         /* Botón Violeta de alto contraste */
+    --text-color: #2b1328;        /* Violeta oscuro con alto contraste */
+    --placeholder-color: #4a2148; /* Placeholder violeta oscuro legible WCAG */
+    --btn-color: #743e73;         /* Botón Violeta con alto contraste */
     --btn-hover: #5d2f5c;         /* Hover botones */
     --border-color: #b886b7;      /* Bordes lila */
     --input-bg: #ffffff;         /* Fondo casillas blanco */
-    --error-color: #900c0c;      /* Rojo oscuro con alto contraste WCAG */
-    --success-color: #0f5213;    /* Verde oscuro con alto contraste WCAG */
+    --error-color: #5c285a;      /* Violeta oscuro para reglas (reemplaza al rojo claro) */
+    --success-color: #125416;    /* Verde oscuro de alto contraste */
 }
 
 /* MODO NOCHE VIOLETA OSCURO */
@@ -19,12 +19,12 @@ body.modo-noche {
     --bg-color: #1e131c;
     --card-bg: #2d1d2b;
     --text-color: #ffffff;
-    --placeholder-color: #dcbadb;
+    --placeholder-color: #e5c2e4;
     --btn-color: #b981b8;
     --btn-hover: #a473a3;
     --border-color: #5e3b5c;
     --input-bg: #231722;
-    --error-color: #ff6b6b;
+    --error-color: #fcaefa;
     --success-color: #81c784;
 }
 
@@ -133,8 +133,8 @@ select {
 }
 
 ::placeholder {
-    color: var(--placeholder-color);
-    opacity: 1;
+    color: var(--placeholder-color) !important;
+    opacity: 1 !important;
 }
 
 input:focus, select:focus {
@@ -238,8 +238,8 @@ body.modo-noche a:focus {
     color: #ffffff !important;
 }
 
-/* REGLAS DE CONTRASEÑA EN RECUPERAR / REGISTRO */
-.reglas-password, .password-rules {
+/* REGLAS DE CONTRASEÑA CON VIOLETA OSCURO LEGIBLE */
+.reglas-password, .password-rules, #lista-reglas {
     list-style: none;
     padding: 0;
     margin: 10px 0 15px 0;
@@ -247,13 +247,13 @@ body.modo-noche a:focus {
     font-weight: 700;
 }
 
-.reglas-password li, .password-rules li {
+.reglas-password li, .password-rules li, #lista-reglas li {
     margin-bottom: 5px;
-    color: var(--error-color);
+    color: var(--error-color) !important;
 }
 
-.reglas-password li.valido, .password-rules li.valido {
-    color: var(--success-color);
+.reglas-password li.valido, .password-rules li.valido, #lista-reglas li.valido {
+    color: var(--success-color) !important;
 }
 
 .user-welcome {
@@ -332,7 +332,7 @@ th {
 }
 
 .btn-eliminar { 
-    background-color: var(--error-color); 
+    background-color: #8b0000; 
     color: #ffffff; 
 }
 
