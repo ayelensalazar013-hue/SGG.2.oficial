@@ -1,17 +1,17 @@
 /* ==========================================================
-   PALETA VIOLETA / LAVANDA CON ALTO CONTRASTE (ACCESIBILIDAD 94+)
-   ========================================================== */
+   PALETA VIOLETA / LAVANDA OPTIMIZADA PARA ACCESIBILIDAD (94+)
+   ========================================================= */
 :root {
     --bg-color: #f4e8f3;          /* Fondo suave lavanda */
     --card-bg: #ffffff;          /* Tarjeta blanca limpia */
-    --text-color: #2b1328;        /* Violeta oscuro con contraste WCAG */
-    --placeholder-color: #724871; /* Marcador de posición legible */
-    --btn-color: #844c83;         /* Botón Violeta principal */
-    --btn-hover: #6d3d6c;         /* Hover botones */
-    --border-color: #c99ec8;      /* Bordes lila */
+    --text-color: #2b1328;        /* Violeta muy oscuro (Texto de alto contraste) */
+    --placeholder-color: #5c355a; /* Marcador de posición oscuro WCAG */
+    --btn-color: #743e73;         /* Botón Violeta de alto contraste */
+    --btn-hover: #5d2f5c;         /* Hover botones */
+    --border-color: #b886b7;      /* Bordes lila */
     --input-bg: #ffffff;         /* Fondo casillas blanco */
-    --error-color: #b71c1c;
-    --success-color: #1b5e20;
+    --error-color: #900c0c;      /* Rojo oscuro con alto contraste WCAG */
+    --success-color: #0f5213;    /* Verde oscuro con alto contraste WCAG */
 }
 
 /* MODO NOCHE VIOLETA OSCURO */
@@ -147,6 +147,7 @@ input:focus, select:focus {
 #btn-login,
 #btn-registro,
 #btn-recuperar,
+#btn-actualizar,
 #btn-guardar-gasto {
     background-color: var(--btn-color);
     color: #ffffff;
@@ -235,6 +236,24 @@ body.modo-noche a:hover,
 body.modo-noche a:active,
 body.modo-noche a:focus {
     color: #ffffff !important;
+}
+
+/* REGLAS DE CONTRASEÑA EN RECUPERAR / REGISTRO */
+.reglas-password, .password-rules {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 15px 0;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.reglas-password li, .password-rules li {
+    margin-bottom: 5px;
+    color: var(--error-color);
+}
+
+.reglas-password li.valido, .password-rules li.valido {
+    color: var(--success-color);
 }
 
 .user-welcome {
