@@ -1,130 +1,220 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Bloquear automáticamente las fechas futuras en el calendario de la interfaz
-    const inputFecha = document.getElementById('fecha');
-    const hoy = new Date().toISOString().split('T')[0]; // Obtiene la fecha actual (YYYY-MM-DD)
+// ==========================================================
+// PERSISTENCIA DEL MODO (INICIA EN CLARO POR DEFECTO)
+// ==========================================================
+(function() {
+    const temaGuardado = localStorage.getItem('tema_sgg');
+    if (!temaGuardado) {
+        localStorage.setItem('tema_sgg', 'claro');
+        document.body.classList.remove('modo-noche');
+    } else if (temaGuardado === 'oscuro') {
+        document.body.classList.add('modo-noche');
+    } else {
+        document.body.classList.remove('modo-noche');
+    }
+})();
 
-    if (inputFecha) {
-        inputFecha.setAttribute('max', hoy); // Establece la fecha de hoy como el límite máximo seleccionable
+// FUNCIÓN DEL BOTÓN: Cambia únicamente al hacer clic
+window.cambiarTema = function() {
+    document.body.classList.toggle('modo-noche');
+    const esOscuro = document.body.classList.contains('modo-noche');
+    localStorage.setItem('tema_sgg', esOscuro ? 'oscuro' : 'claro');
+};
+
+// ==========================================================
+// VERIFICACIÓN DE SESIÓN (SEGURIDAD DE RUTAS)
+// ==========================================================
+const usuarioActivo = JSON.parse(localStorage.getItem('usuario_activo_sgg'));
+
+if (!usuarioActivo) {
+    window.location.href = 'index.html';
+}
+
+let gastoAEliminarId = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Email del usuario activo
+    const userWelcome = document.getElementById('userWelcome');
+    if (userWelcome && usuarioActivo) {
+        userWelcome.textContent = `Sesión activa: ${usuarioActivo.email || usuarioActivo.usuario || 'Usuario'}`;
     }
 
-    // Cargar historial de gastos al iniciar
-    cargarGastos();
+    // Fecha de hoy por defecto y restricción de fechas futuras en el calendario HTML
+    const inputFecha = document.getElementById('fecha');
+    if (inputFecha) {
+        const hoy = new Date().toISOString().split('T')[0];
+        inputFecha.value = hoy;
+        inputFecha.setAttribute('max', hoy);
+    }
+
+    // Listener del formulario
+    const formGasto = document.getElementById('form-gasto');
+    if (formGasto) {
+        formGasto.addEventListener('submit', guardarGasto);
+    }
+
+    renderizarGastos();
 });
 
-// 2. Función de validación de fecha
-function esFechaFutura(fechaIngresada) {
-    const hoy = new Date().toISOString().split('T')[0];
-    return fechaIngresada > hoy;
-}
+// CERRAR SESIÓN (Mantiene la preferencia de tema guardada)
+window.cerrarSesion = function() {
+    localStorage.removeItem('usuario_activo_sgg');
+    window.location.href = 'index.html';
+};
 
-// 3. Captura y procesamiento del formulario de Gastos (Carga y Edición)
-const formGasto = document.getElementById('formGasto');
+// RENDERIZADO DE TABLA Y TOTAL
+function renderizarGastos() {
+    const tablaBody = document.getElementById('tablaGastosBody');
+    const totalMontoElem = document.getElementById('totalGastado');
+    if (!tablaBody) return;
 
-if (formGasto) {
-    formGasto.addEventListener('submit', (e) => {
-        e.preventDefault(); // Evita que la página se recargue
-
-        const monto = parseFloat(document.getElementById('monto').value);
-        const fecha = document.getElementById('fecha').value;
-        const categoria = document.getElementById('categoria').value;
-        const descripcion = document.getElementById('descripcion').value;
-
-        // Validar que el monto sea un número positivo
-        if (isNaN(monto) || monto <= 0) {
-            alert("El monto debe ser un valor positivo mayor a cero.");
-            return;
-        }
-
-        // VALIDACIÓN DE FECHA FUTURA
-        if (esFechaFutura(fecha)) {
-            alert("Error: No puedes registrar ni editar un gasto con una fecha futura.");
-            return; // Frena el proceso y no guarda nada
-        }
-
-        // Si pasa las validaciones, guardamos en LocalStorage
-        guardarGasto({ monto, fecha, categoria, descripcion });
-    });
-}
-
-// 4. Función para guardar o actualizar en LocalStorage
-function guardarGasto(gastoNuevo) {
-    let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
-    const usuarioActivo = localStorage.getItem('usuarioActivo'); // Gmail/ID del usuario en sesión
-
-    const gasto = {
-        id: Date.now(),
-        usuarioEmail: usuarioActivo,
-        monto: gastoNuevo.monto,
-        fecha: gastoNuevo.fecha,
-        categoria: gastoNuevo.categoria,
-        descripcion: gastoNuevo.descripcion,
-        estado_activo: true // Baja lógica
-    };
-
-    gastos.push(gasto);
-    localStorage.setItem('gastos', JSON.stringify(gastos));
-
-    alert("Gasto registrado correctamente.");
-    formGasto.reset();
+    tablaBody.innerHTML = '';
+    const todosLosGastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     
-    // Volvemos a colocar el atributo max al limpiar el formulario
-    const hoy = new Date().toISOString().split('T')[0];
-    document.getElementById('fecha').setAttribute('max', hoy);
+    // Filtrar por usuario activo y estado_activo !== false (Baja Lógica)
+    const gastosUsuario = todosLosGastos.filter(g => 
+        (g.usuarioEmail === usuarioActivo.email || g.usuarioEmail === usuarioActivo.usuario) && 
+        g.estado_activo !== false
+    );
 
-    cargarGastos();
-}
+    let totalSumado = 0;
 
-// 5. Función para mostrar la lista de gastos en pantalla
-function cargarGastos() {
-    const tablaGastos = document.getElementById('tablaGastos');
-    const totalGastadoElem = document.getElementById('totalGastado');
-    const usuarioActivo = localStorage.getItem('usuarioActivo');
-    
-    if (!tablaGastos) return;
+    gastosUsuario.forEach(gasto => {
+        totalSumado += parseFloat(gasto.monto) || 0;
 
-    let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
-    
-    // Filtrar solo los gastos del usuario activo y que estén activos (estado_activo === true)
-    let gastosUsuario = gastos.filter(g => g.usuarioEmail === usuarioActivo && g.estado_activo === true);
-
-    tablaGastos.innerHTML = '';
-    let total = 0;
-
-    gastosUsuario.forEach(g => {
-        total += g.monto;
-
-        const fila = document.createElement('tr');
-        fila.innerHTML = `
-            <td>${g.fecha}</td>
-            <td>${g.categoria}</td>
-            <td>${g.descripcion}</td>
-            <td>$${g.monto.toFixed(2)}</td>
-            <td>
-                <button onclick="eliminarGasto(${g.id})">Eliminar</button>
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${gasto.fecha}</td>
+            <td>${gasto.categoria}</td>
+            <td>${gasto.descripcion}</td>
+            <td>$${parseFloat(gasto.monto).toFixed(2)}</td>
+            <td style="white-space: nowrap;">
+                <div class="acciones-cell">
+                    <button type="button" class="btn-tabla btn-editar" onclick="prepararEdicion('${gasto.id}')">Editar</button>
+                    <button type="button" class="btn-tabla btn-eliminar" onclick="abrirModal('${gasto.id}')">Eliminar</button>
+                </div>
             </td>
         `;
-        tablaGastos.appendChild(fila);
+        tablaBody.appendChild(tr);
     });
 
-    if (totalGastadoElem) {
-        totalGastadoElem.textContent = `$${total.toFixed(2)}`;
+    if (totalMontoElem) {
+        totalMontoElem.textContent = `$${totalSumado.toFixed(2)}`;
     }
 }
 
-// 6. Eliminación lógica (RF-08)
-function eliminarGasto(id) {
-    if (confirm("¿Estás seguro de que deseas eliminar este gasto?")) {
-        let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
-        
-        // Cambiamos el estado_activo a false sin borrar el objeto
+// GUARDAR / EDITAR GASTO
+function guardarGasto(e) {
+    e.preventDefault();
+    const mensaje = document.getElementById('mensaje');
+    const gastoId = document.getElementById('gastoId').value;
+    const monto = parseFloat(document.getElementById('monto').value);
+    const fecha = document.getElementById('fecha').value;
+    const categoria = document.getElementById('categoria').value;
+    const descripcion = document.getElementById('descripcion').value.trim();
+
+    if (isNaN(monto) || monto <= 0) {
+        mensaje.className = 'msg-box error';
+        mensaje.textContent = 'El monto debe ser mayor a 0.';
+        return;
+    }
+
+    // VALIDACIÓN DE FECHA FUTURA
+    const hoy = new Date().toISOString().split('T')[0];
+    if (fecha > hoy) {
+        mensaje.className = 'msg-box error';
+        mensaje.textContent = 'No podés ingresar una fecha futura.';
+        return;
+    }
+
+    let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
+
+    if (gastoId) {
         gastos = gastos.map(g => {
-            if (g.id === id) {
-                g.estado_activo = false;
+            if (g.id === gastoId) {
+                return { ...g, monto, fecha, categoria, descripcion };
             }
             return g;
         });
-
-        localStorage.setItem('gastos', JSON.stringify(gastos));
-        cargarGastos();
+        mensaje.className = 'msg-box success';
+        mensaje.textContent = 'Gasto actualizado correctamente.';
+    } else {
+        const nuevoGasto = {
+            id: 'gasto_' + Date.now(),
+            usuarioEmail: usuarioActivo.email || usuarioActivo.usuario,
+            monto,
+            fecha,
+            categoria,
+            descripcion,
+            estado_activo: true
+        };
+        gastos.push(nuevoGasto);
+        mensaje.className = 'msg-box success';
+        mensaje.textContent = 'Gasto registrado con éxito.';
     }
+
+    localStorage.setItem('gastos_sgg', JSON.stringify(gastos));
+    cancelarEdicion();
+    renderizarGastos();
+
+    setTimeout(() => { if (mensaje) mensaje.textContent = ''; }, 3000);
 }
+
+// PREPARAR EDICIÓN DE UN GASTO
+window.prepararEdicion = function(id) {
+    const gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
+    const gasto = gastos.find(g => g.id === id);
+    if (!gasto) return;
+
+    document.getElementById('gastoId').value = gasto.id;
+    document.getElementById('monto').value = gasto.monto;
+    document.getElementById('fecha').value = gasto.fecha;
+    document.getElementById('categoria').value = gasto.categoria;
+    document.getElementById('descripcion').value = gasto.descripcion;
+
+    document.getElementById('btn-guardar-gasto').textContent = 'Actualizar Gasto';
+    document.getElementById('btn-cancelar-edicion').style.display = 'block';
+};
+
+// CANCELAR MODO EDICIÓN
+window.cancelarEdicion = function() {
+    document.getElementById('form-gasto').reset();
+    document.getElementById('gastoId').value = '';
+    document.getElementById('btn-guardar-gasto').textContent = 'Guardar Gasto';
+    document.getElementById('btn-cancelar-edicion').style.display = 'none';
+    
+    const inputFecha = document.getElementById('fecha');
+    if (inputFecha) {
+        const hoy = new Date().toISOString().split('T')[0];
+        inputFecha.value = hoy;
+        inputFecha.setAttribute('max', hoy);
+    }
+};
+
+// MANEJO DE MODAL Y BAJA LÓGICA (SOFT DELETE)
+window.abrirModal = function(id) {
+    gastoAEliminarId = id;
+    const modal = document.getElementById('modalConfirmar');
+    if (modal) modal.style.display = 'flex';
+};
+
+window.cerrarModal = function() {
+    gastoAEliminarId = null;
+    const modal = document.getElementById('modalConfirmar');
+    if (modal) modal.style.display = 'none';
+};
+
+window.confirmarEliminacion = function() {
+    if (!gastoAEliminarId) return;
+
+    let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
+    gastos = gastos.map(g => {
+        if (g.id === gastoAEliminarId) {
+            return { ...g, estado_activo: false };
+        }
+        return g;
+    });
+
+    localStorage.setItem('gastos_sgg', JSON.stringify(gastos));
+    cerrarModal();
+    renderizarGastos();
+};
