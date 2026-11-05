@@ -24,7 +24,6 @@ window.cambiarTema = function() {
 // VERIFICACIÓN DE SESIÓN (SEGURIDAD DE RUTAS)
 // ==========================================================
 const usuarioActivo = JSON.parse(localStorage.getItem('usuario_activo_sgg'));
-
 if (!usuarioActivo) {
     window.location.href = 'index.html';
 }
@@ -37,19 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (userWelcome && usuarioActivo) {
         userWelcome.textContent = `Sesión activa: ${usuarioActivo.email || usuarioActivo.usuario || 'Usuario'}`;
     }
-
-    // Fecha de hoy por defecto
+    
+    // Fecha de hoy por defecto y restricción de fechas futuras (solo fecha actual o anteriores)
     const inputFecha = document.getElementById('fecha');
     if (inputFecha) {
-        inputFecha.value = new Date().toISOString().split('T')[0];
+        const hoy = new Date().toISOString().split('T')[0];
+        inputFecha.value = hoy;
+        inputFecha.setAttribute('max', hoy);
     }
-
+    
     // Listener del formulario
     const formGasto = document.getElementById('form-gasto');
     if (formGasto) {
         formGasto.addEventListener('submit', guardarGasto);
     }
-
     renderizarGastos();
 });
 
@@ -64,7 +64,6 @@ function renderizarGastos() {
     const tablaBody = document.getElementById('tablaGastosBody');
     const totalMontoElem = document.getElementById('totalGastado');
     if (!tablaBody) return;
-
     tablaBody.innerHTML = '';
     const todosLosGastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     
@@ -73,12 +72,9 @@ function renderizarGastos() {
         (g.usuarioEmail === usuarioActivo.email || g.usuarioEmail === usuarioActivo.usuario) && 
         g.estado_activo !== false
     );
-
     let totalSumado = 0;
-
     gastosUsuario.forEach(gasto => {
         totalSumado += parseFloat(gasto.monto) || 0;
-
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${gasto.fecha}</td>
@@ -94,7 +90,6 @@ function renderizarGastos() {
         `;
         tablaBody.appendChild(tr);
     });
-
     if (totalMontoElem) {
         totalMontoElem.textContent = `$${totalSumado.toFixed(2)}`;
     }
@@ -116,8 +111,15 @@ function guardarGasto(e) {
         return;
     }
 
-    let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
+    // VALIDACIÓN DE FECHA FUTURA (SOLO DÍA ACTUAL O ANTERIORES)
+    const hoy = new Date().toISOString().split('T')[0];
+    if (fecha > hoy) {
+        mensaje.className = 'msg-box error';
+        mensaje.textContent = 'No podés seleccionar una fecha futura.';
+        return;
+    }
 
+    let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     if (gastoId) {
         gastos = gastos.map(g => {
             if (g.id === gastoId) {
@@ -141,11 +143,9 @@ function guardarGasto(e) {
         mensaje.className = 'msg-box success';
         mensaje.textContent = 'Gasto registrado con éxito.';
     }
-
     localStorage.setItem('gastos_sgg', JSON.stringify(gastos));
     cancelarEdicion();
     renderizarGastos();
-
     setTimeout(() => { if (mensaje) mensaje.textContent = ''; }, 3000);
 }
 
@@ -154,13 +154,11 @@ window.prepararEdicion = function(id) {
     const gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     const gasto = gastos.find(g => g.id === id);
     if (!gasto) return;
-
     document.getElementById('gastoId').value = gasto.id;
     document.getElementById('monto').value = gasto.monto;
     document.getElementById('fecha').value = gasto.fecha;
     document.getElementById('categoria').value = gasto.categoria;
     document.getElementById('descripcion').value = gasto.descripcion;
-
     document.getElementById('btn-guardar-gasto').textContent = 'Actualizar Gasto';
     document.getElementById('btn-cancelar-edicion').style.display = 'block';
 };
@@ -171,7 +169,13 @@ window.cancelarEdicion = function() {
     document.getElementById('gastoId').value = '';
     document.getElementById('btn-guardar-gasto').textContent = 'Guardar Gasto';
     document.getElementById('btn-cancelar-edicion').style.display = 'none';
-    document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+    
+    const inputFecha = document.getElementById('fecha');
+    if (inputFecha) {
+        const hoy = new Date().toISOString().split('T')[0];
+        inputFecha.value = hoy;
+        inputFecha.setAttribute('max', hoy);
+    }
 };
 
 // MANEJO DE MODAL Y BAJA LÓGICA (SOFT DELETE)
@@ -180,16 +184,13 @@ window.abrirModal = function(id) {
     const modal = document.getElementById('modalConfirmar');
     if (modal) modal.style.display = 'flex';
 };
-
 window.cerrarModal = function() {
     gastoAEliminarId = null;
     const modal = document.getElementById('modalConfirmar');
     if (modal) modal.style.display = 'none';
 };
-
 window.confirmarEliminacion = function() {
     if (!gastoAEliminarId) return;
-
     let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
     gastos = gastos.map(g => {
         if (g.id === gastoAEliminarId) {
@@ -197,9 +198,7 @@ window.confirmarEliminacion = function() {
         }
         return g;
     });
-
     localStorage.setItem('gastos_sgg', JSON.stringify(gastos));
     cerrarModal();
     renderizarGastos();
 };
-
