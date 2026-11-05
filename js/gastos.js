@@ -38,12 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
         userWelcome.textContent = `Sesión activa: ${usuarioActivo.email || usuarioActivo.usuario || 'Usuario'}`;
     }
 
-    // Fecha de hoy por defecto y restricción de fechas futuras en el calendario HTML
+    // Fecha de hoy por defecto
     const inputFecha = document.getElementById('fecha');
     if (inputFecha) {
-        const hoy = new Date().toISOString().split('T')[0];
-        inputFecha.value = hoy;
-        inputFecha.setAttribute('max', hoy);
+        inputFecha.value = new Date().toISOString().split('T')[0];
     }
 
     // Listener del formulario
@@ -118,14 +116,6 @@ function guardarGasto(e) {
         return;
     }
 
-    // VALIDACIÓN DE FECHA FUTURA
-    const hoy = new Date().toISOString().split('T')[0];
-    if (fecha > hoy) {
-        mensaje.className = 'msg-box error';
-        mensaje.textContent = 'No podés ingresar una fecha futura.';
-        return;
-    }
-
     let gastos = JSON.parse(localStorage.getItem('gastos_sgg')) || [];
 
     if (gastoId) {
@@ -181,13 +171,7 @@ window.cancelarEdicion = function() {
     document.getElementById('gastoId').value = '';
     document.getElementById('btn-guardar-gasto').textContent = 'Guardar Gasto';
     document.getElementById('btn-cancelar-edicion').style.display = 'none';
-    
-    const inputFecha = document.getElementById('fecha');
-    if (inputFecha) {
-        const hoy = new Date().toISOString().split('T')[0];
-        inputFecha.value = hoy;
-        inputFecha.setAttribute('max', hoy);
-    }
+    document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
 };
 
 // MANEJO DE MODAL Y BAJA LÓGICA (SOFT DELETE)
@@ -218,3 +202,4 @@ window.confirmarEliminacion = function() {
     cerrarModal();
     renderizarGastos();
 };
+
